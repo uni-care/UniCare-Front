@@ -14,8 +14,9 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "UniCare | Artistic Universities Ecosystem",
-  description: "An artistic marketplace to lend, sell, and share high-precision resources across the engineering community.",
+  metadataBase: new URL("https://uni-care-front.vercel.app"),
+  title: "UniCare | Artistic University Students Ecosystem",
+  description: "The roots of uni students grow through the soil of art. A community-driven ecosystem for university students to share, lend, and grow together.",
 };
 
 export default function RootLayout({
