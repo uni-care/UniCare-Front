@@ -28,7 +28,7 @@ export default function Page() {
         </svg> */}
       </div>
 
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col min-h-screen pt-12">
         <main className="flex-1 flex flex-col items-center justify-center px-6 lg:px-20 py-24">
           <div className="max-w-[1200px] w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-5 flex flex-col gap-8 order-2 lg:order-1">
