@@ -5,11 +5,13 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 
+import { authApi } from "@/features/auth/api/auth-api";
 import { registerSchema, type RegisterInput } from "@/features/auth/schemas/register-schema";
 
 export function CreateAccountForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   const {
     register,
@@ -35,11 +37,25 @@ export function CreateAccountForm() {
   const role = useWatch({ control, name: "role" });
   const contactMethod = useWatch({ control, name: "contactMethod" });
 
-  const onSubmit = async () => {
+  const onSubmit = async (values: RegisterInput) => {
     setSuccessMessage("");
-    await new Promise((resolve) => setTimeout(resolve, 450));
-    setSuccessMessage("Account created successfully. You can now sign in.");
-    reset();
+    setSubmitError("");
+
+    try {
+      await authApi.register({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        password: values.password,
+        role: values.role,
+        email: values.contactMethod === "email" ? values.email : undefined,
+        phoneNumber: values.contactMethod === "phone" ? values.phoneNumber : undefined,
+      });
+      setSuccessMessage("Account created successfully. You can now sign in.");
+      reset();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to create account. Please try again.";
+      setSubmitError(message);
+    }
   };
 
   return (
@@ -224,6 +240,11 @@ export function CreateAccountForm() {
         {successMessage ? (
           <p className="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-center text-xs text-primary">
             {successMessage}
+          </p>
+        ) : null}
+        {submitError ? (
+          <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-center text-xs text-red-600">
+            {submitError}
           </p>
         ) : null}
 
