@@ -1,7 +1,9 @@
+import { LoginForm } from "@/features/auth/components/login-form";
+
 export default function LoginPage() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">(auth)/login Route</h1>
-    </div>
+    <main className="flex min-h-screen items-center justify-center bg-background-light px-4 py-16">
+      <LoginForm />
+    </main>
   );
 }
