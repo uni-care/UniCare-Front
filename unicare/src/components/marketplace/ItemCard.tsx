@@ -32,7 +32,7 @@ export default function ItemCard({
     return (
         <div className="group bg-white rounded-[2rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer">
             {/* Image Container */}
-            <div className="relative aspect-[4/3] rounded-[1.5rem] overflow-hidden bg-neutral-50 mb-4">
+            <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-neutral-50 mb-4">
                 <Image
                     src={image}
                     alt={title}
@@ -59,7 +59,7 @@ export default function ItemCard({
             </div>
 
             {/* Content */}
-            <div className="flex-grow flex flex-col">
+            <div className="grow flex flex-col">
                 <div className="flex items-start justify-between mb-1">
                     <h3 className="text-lg font-bold text-neutral-800 line-clamp-1 group-hover:text-primary transition-colors">
                         {title}

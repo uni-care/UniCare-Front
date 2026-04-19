@@ -59,11 +59,11 @@ export default function Navbar() {
                 {/* Mobile Menu Toggle Button */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden z-50 flex flex-col items-center justify-center gap-[4px] h-10 w-10 bg-primary/10 rounded-full cursor-pointer transition-colors hover:bg-primary/20"
+                    className="md:hidden z-50 flex flex-col items-center justify-center gap-1 h-10 w-10 bg-primary/10 rounded-full cursor-pointer transition-colors hover:bg-primary/20"
                 >
-                    <span className={`h-0.5 w-4 bg-neutral-700 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-[6px]' : ''}`}></span>
+                    <span className={`h-0.5 w-4 bg-neutral-700 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
                     <span className={`h-0.5 w-4 bg-neutral-700 transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
-                    <span className={`h-0.5 w-4 bg-neutral-700 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-[6px]' : ''}`}></span>
+                    <span className={`h-0.5 w-4 bg-neutral-700 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
                 </button>
 
                 {/* Mobile Nav Dropdown */}
@@ -98,7 +98,7 @@ export default function Navbar() {
                         </Link>
                     </nav>
 
-                    <div className="h-[1px] w-full bg-primary/10"></div>
+                    <div className="h-px w-full bg-primary/10"></div>
 
                     <div className="flex flex-col gap-3">
                         <button className="w-full py-3.5 rounded-full text-sm font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer">
