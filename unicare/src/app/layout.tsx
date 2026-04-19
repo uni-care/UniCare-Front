@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/shared/footer";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -38,7 +39,8 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-background-light text-[#131615] selection:bg-primary/30 relative">
         <Navbar />
-        {children}
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
