@@ -3,9 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
+
+    const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
     return (
         <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
@@ -25,23 +29,23 @@ export default function Navbar() {
                 <nav className="hidden md:flex items-center gap-8">
                     <Link
                         href="/marketplace"
-                        className="text-[13px] font-bold text-neutral-700 hover:text-primary transition-colors tracking-wide flex items-center gap-2 cursor-pointer"
+                        className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/marketplace") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
                     >
-                        <span className="material-symbols-outlined text-[20px] text-neutral-600">account_tree</span>
+                        <span className={`material-symbols-outlined text-[20px] ${isActive("/marketplace") ? "text-primary" : "text-neutral-600"}`}>account_tree</span>
                         Marketplace
                     </Link>
                     <Link
                         href="/contribute"
-                        className="text-[13px] font-bold text-neutral-700 hover:text-primary transition-colors tracking-wide flex items-center gap-2 cursor-pointer"
+                        className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/contribute") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
                     >
-                        <span className="material-symbols-outlined text-[20px] text-neutral-600">group</span>
+                        <span className={`material-symbols-outlined text-[20px] ${isActive("/contribute") ? "text-primary" : "text-neutral-600"}`}>group</span>
                         Contribute
                     </Link>
                     <Link
                         href="/about"
-                        className="text-[13px] font-bold text-neutral-700 hover:text-primary transition-colors tracking-wide flex items-center gap-2 cursor-pointer"
+                        className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/about") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
                     >
-                        <span className="material-symbols-outlined text-[20px] text-neutral-600">menu_book</span>
+                        <span className={`material-symbols-outlined text-[20px] ${isActive("/about") ? "text-primary" : "text-neutral-600"}`}>menu_book</span>
                         About
                     </Link>
                 </nav>
@@ -81,25 +85,25 @@ export default function Navbar() {
                         <Link
                             href="/marketplace"
                             onClick={() => setIsOpen(false)}
-                            className="text-base font-bold text-neutral-700 hover:text-primary transition-colors flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5"
+                            className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/marketplace") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
                         >
-                            <span className="material-symbols-outlined text-xl text-primary/60">account_tree</span>
+                            <span className={`material-symbols-outlined text-xl ${isActive("/marketplace") ? "text-primary" : "text-primary/60"}`}>account_tree</span>
                             Marketplace
                         </Link>
                         <Link
                             href="/contribute"
                             onClick={() => setIsOpen(false)}
-                            className="text-base font-bold text-neutral-700 hover:text-primary transition-colors flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5"
+                            className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/contribute") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
                         >
-                            <span className="material-symbols-outlined text-xl text-primary/60">group</span>
+                            <span className={`material-symbols-outlined text-xl ${isActive("/contribute") ? "text-primary" : "text-primary/60"}`}>group</span>
                             Contribute
                         </Link>
                         <Link
                             href="/about"
                             onClick={() => setIsOpen(false)}
-                            className="text-base font-bold text-neutral-700 hover:text-primary transition-colors flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5"
+                            className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/about") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
                         >
-                            <span className="material-symbols-outlined text-xl text-primary/60">menu_book</span>
+                            <span className={`material-symbols-outlined text-xl ${isActive("/about") ? "text-primary" : "text-primary/60"}`}>menu_book</span>
                             About
                         </Link>
                     </nav>
