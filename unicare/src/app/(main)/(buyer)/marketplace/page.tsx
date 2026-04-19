@@ -1,7 +1,53 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import ItemCard from "@/components/marketplace/ItemCard";
 import { DUMMY_ITEMS, CATEGORIES } from "./data";
 
 export default function MarketplacePage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeDepartment, setActiveDepartment] = useState(CATEGORIES[0]);
+  const [showFilters, setShowFilters] = useState(false);
+  const [activeType, setActiveType] = useState<"All" | "LEND" | "SALE">("All");
+  const [activeStatus, setActiveStatus] = useState<"All" | "Available Now" | "Low Stock">("All");
+  const [activePrice, setActivePrice] = useState<"All" | "Free" | "Paid">("All");
+
+  const filteredItems = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    return DUMMY_ITEMS.filter((item) => {
+      const matchesDepartment =
+        activeDepartment === "All Departments" || item.department === activeDepartment;
+
+      const matchesQuery = query.length === 0
+        ? true
+        : [item.title, item.category, item.department].some((field) =>
+          field.toLowerCase().includes(query)
+        );
+
+      const matchesType = activeType === "All" || item.type === activeType;
+
+      const matchesStatus =
+        activeStatus === "All" || item.status === activeStatus;
+
+      const isFree = item.price === "Free" || item.price === 0;
+      const matchesPrice =
+        activePrice === "All"
+          ? true
+          : activePrice === "Free"
+            ? isFree
+            : !isFree;
+
+      return (
+        matchesDepartment &&
+        matchesQuery &&
+        matchesType &&
+        matchesStatus &&
+        matchesPrice
+      );
+    });
+  }, [activeDepartment, activePrice, activeStatus, activeType, searchQuery]);
+
   return (
     <div className="bg-neutral-50 min-h-screen pt-28 pb-20 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
@@ -20,21 +66,72 @@ export default function MarketplacePage() {
             <input
               type="text"
               placeholder="Search resources, textbooks, tools..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
               className="w-full bg-white border border-neutral-200 rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm"
             />
           </div>
-          <button className="flex items-center justify-center gap-2 bg-white border border-neutral-200 rounded-2xl px-8 py-4 font-bold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm cursor-pointer">
+          <button
+            type="button"
+            onClick={() => setShowFilters((prev) => !prev)}
+            className="flex items-center justify-center gap-2 bg-white border border-neutral-200 rounded-2xl px-8 py-4 font-bold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm cursor-pointer"
+          >
             <span className="material-symbols-outlined text-xl">tune</span>
             Filters
           </button>
         </div>
 
+        {showFilters && (
+          <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label className="flex flex-col gap-2 text-sm font-semibold text-neutral-600">
+                Listing Type
+                <select
+                  value={activeType}
+                  onChange={(event) => setActiveType(event.target.value as typeof activeType)}
+                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700"
+                >
+                  <option value="All">All</option>
+                  <option value="LEND">Lend</option>
+                  <option value="SALE">Sale</option>
+                </select>
+              </label>
+              <label className="flex flex-col gap-2 text-sm font-semibold text-neutral-600">
+                Availability
+                <select
+                  value={activeStatus}
+                  onChange={(event) => setActiveStatus(event.target.value as typeof activeStatus)}
+                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700"
+                >
+                  <option value="All">All</option>
+                  <option value="Available Now">Available Now</option>
+                  <option value="Low Stock">Low Stock</option>
+                </select>
+              </label>
+              <label className="flex flex-col gap-2 text-sm font-semibold text-neutral-600">
+                Price
+                <select
+                  value={activePrice}
+                  onChange={(event) => setActivePrice(event.target.value as typeof activePrice)}
+                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700"
+                >
+                  <option value="All">All</option>
+                  <option value="Free">Free</option>
+                  <option value="Paid">Paid</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        )}
+
         {/* Categories Bar */}
         <div className="flex items-center gap-3 overflow-x-auto pb-4 mb-10 no-scrollbar">
-          {CATEGORIES.map((cat, i) => (
+          {CATEGORIES.map((cat) => (
             <button
               key={cat}
-              className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${i === 0
+              type="button"
+              onClick={() => setActiveDepartment(cat)}
+              className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeDepartment === cat
                 ? "bg-primary text-white shadow-lg shadow-primary/20"
                 : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
                 }`}
@@ -46,8 +143,8 @@ export default function MarketplacePage() {
 
         {/* Items Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
-          {DUMMY_ITEMS.map((item) => (
-            <ItemCard key={item.id} {...item} price={item.price as any} status={item.status as any} type={item.type as any} />
+          {filteredItems.map((item) => (
+            <ItemCard key={item.id} {...item} />
           ))}
         </div>
 
