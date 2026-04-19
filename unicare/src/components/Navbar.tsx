@@ -48,12 +48,18 @@ export default function Navbar() {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex items-center gap-4">
-                    <button className="px-6 py-2.5 rounded-full text-[13px] font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer">
+                    <Link
+                        href="/login"
+                        className="px-6 py-2.5 rounded-full text-[13px] font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
+                    >
                         Sign In
-                    </button>
-                    <button className="bg-primary text-white text-[13px] font-bold px-6 py-2.5 rounded-full shadow-lg shadow-primary/60 hover:scale-105 transition-transform active:scale-95 cursor-pointer">
+                    </Link>
+                    <Link
+                        href="/register"
+                        className="bg-primary text-white text-[13px] font-bold px-6 py-2.5 rounded-full shadow-lg shadow-primary/60 hover:scale-105 transition-transform active:scale-95 cursor-pointer"
+                    >
                         Join Ecosystem
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Mobile Menu Toggle Button */}
@@ -101,12 +107,20 @@ export default function Navbar() {
                     <div className="h-px w-full bg-primary/10"></div>
 
                     <div className="flex flex-col gap-3">
-                        <button className="w-full py-3.5 rounded-full text-sm font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer">
+                        <Link
+                            href="/login"
+                            onClick={() => setIsOpen(false)}
+                            className="w-full py-3.5 text-center rounded-full text-sm font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
+                        >
                             Sign In
-                        </button>
-                        <button className="w-full bg-primary text-white text-sm font-bold py-3.5 rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 cursor-pointer">
+                        </Link>
+                        <Link
+                            href="/register"
+                            onClick={() => setIsOpen(false)}
+                            className="w-full text-center bg-primary text-white text-sm font-bold py-3.5 rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 cursor-pointer"
+                        >
                             Join Ecosystem
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
