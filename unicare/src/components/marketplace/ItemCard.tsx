@@ -89,6 +89,12 @@ export default function ItemCard({
                         </span>
                     </div>
                 </div>
+
+                {/* Request Button */}
+                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-sm py-3 rounded-xl transition-all duration-200 cursor-pointer">
+                    <span className="material-symbols-outlined text-lg">send</span>
+                    Request Item
+                </button>
             </div>
         </div>
     );
