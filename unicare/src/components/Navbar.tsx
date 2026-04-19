@@ -68,7 +68,7 @@ export default function Navbar() {
 
                 {/* Mobile Nav Dropdown */}
                 <div
-                    className={`absolute top-20 left-0 right-0 bg-background-light/95 backdrop-blur-xl border border-primary/10 round6d-3xl p-6 flex flex-col gap-6 shadow-2xl md:hidden transition-all duration-300 origin-top ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'
+                    className={`absolute top-20 left-0 right-0 bg-background-light/95 backdrop-blur-xl border border-primary/10 rounded-3xl p-6 flex flex-col gap-6 shadow-2xl md:hidden transition-all duration-300 origin-top ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'
                         }`}
                 >
                     <nav className="flex flex-col gap-2">
