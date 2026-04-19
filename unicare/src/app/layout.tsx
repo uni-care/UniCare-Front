@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Playfair_Display } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/shared/footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/footer";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
