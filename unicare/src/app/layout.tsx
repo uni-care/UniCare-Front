@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${playfairDisplay.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${playfairDisplay.variable} h-full antialiased scroll-smooth`}
       suppressHydrationWarning
     >
       <head>
