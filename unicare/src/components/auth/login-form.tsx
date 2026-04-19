@@ -57,18 +57,16 @@ export function LoginForm() {
       <form className="space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 rounded-lg border border-primary/15 bg-primary/5 p-1">
           <button
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition ${
-              contactMethod === "email" ? "bg-white text-primary shadow-sm" : "text-neutral-600"
-            }`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold transition cursor-pointer ${contactMethod === "email" ? "bg-white text-primary shadow-sm" : "text-neutral-600"
+              }`}
             type="button"
             onClick={() => setValue("contactMethod", "email", { shouldValidate: true })}
           >
             Via Email
           </button>
           <button
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition ${
-              contactMethod === "phone" ? "bg-white text-primary shadow-sm" : "text-neutral-600"
-            }`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold transition cursor-pointer ${contactMethod === "phone" ? "bg-white text-primary shadow-sm" : "text-neutral-600"
+              }`}
             type="button"
             onClick={() => setValue("contactMethod", "phone", { shouldValidate: true })}
           >
@@ -151,7 +149,7 @@ export function LoginForm() {
         </div>
 
         <button
-          className="w-full rounded-full bg-primary py-3 text-2xl font-semibold text-white shadow-md shadow-primary/25 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full cursor-pointer rounded-full bg-primary py-3 text-2xl font-semibold text-white shadow-md shadow-primary/25 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isSubmitting}
           type="submit"
         >

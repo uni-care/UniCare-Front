@@ -68,14 +68,14 @@ export function CreateAccountForm() {
       <form className="space-y-4" noValidate onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 rounded-lg border border-primary/15 bg-primary/5 p-1">
           <button
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition ${role === "student" ? "bg-primary/10 text-[#131615]" : "text-neutral-600"}`}
+            className={`rounded-md cursor-pointer px-4 py-2 text-sm font-semibold transition ${role === "student" ? "bg-primary/10 text-[#131615]" : "text-neutral-600"}`}
             type="button"
             onClick={() => setValue("role", "student", { shouldValidate: true })}
           >
             Student
           </button>
           <button
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition ${role === "alumni" ? "bg-white text-primary shadow-sm" : "text-neutral-600"}`}
+            className={`rounded-md cursor-pointer px-4 py-2 text-sm font-semibold transition ${role === "alumni" ? "bg-white text-primary shadow-sm" : "text-neutral-600"}`}
             type="button"
             onClick={() => setValue("role", "alumni", { shouldValidate: true })}
           >
@@ -85,14 +85,14 @@ export function CreateAccountForm() {
 
         <div className="grid grid-cols-2 border-b border-primary/10">
           <button
-            className={`pb-2 text-sm font-semibold transition ${contactMethod === "email" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
+            className={`pb-2 text-sm cursor-pointer font-semibold transition ${contactMethod === "email" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
             type="button"
             onClick={() => setValue("contactMethod", "email", { shouldValidate: true })}
           >
             Via Email
           </button>
           <button
-            className={`pb-2 text-sm font-semibold transition ${contactMethod === "phone" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
+            className={`pb-2 text-sm cursor-pointer font-semibold transition ${contactMethod === "phone" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
             type="button"
             onClick={() => setValue("contactMethod", "phone", { shouldValidate: true })}
           >
@@ -230,7 +230,7 @@ export function CreateAccountForm() {
         {errors.acceptedPolicy ? <p className="text-xs text-red-600">{errors.acceptedPolicy.message}</p> : null}
 
         <button
-          className="w-full rounded-full bg-primary py-3 text-base font-semibold text-white shadow-md shadow-primary/25 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full rounded-full cursor-pointer bg-primary py-3 text-base font-semibold text-white shadow-md shadow-primary/25 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isSubmitting}
           type="submit"
         >
