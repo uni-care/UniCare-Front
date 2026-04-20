@@ -8,20 +8,20 @@ interface StepSuccessProps {
 export default function StepSuccess({ form }: StepSuccessProps) {
     return (
         <div className="bg-background-light min-h-screen pt-36 pb-20 relative overflow-hidden">
-            {/* Decorative Background */}
-            <div className="absolute top-20 left-[10%] text-primary/10 select-none pointer-events-none">
-                <span className="material-symbols-outlined text-[120px]">school</span>
+            {/* Decorative Background — hidden on small screens */}
+            <div className="hidden md:block absolute top-32 left-[5%] lg:left-[10%] text-primary/10 select-none pointer-events-none">
+                <span className="material-symbols-outlined text-[100px] lg:text-[120px]">school</span>
             </div>
-            <div className="absolute bottom-20 right-[10%] text-primary/10 select-none pointer-events-none">
-                <span className="material-symbols-outlined text-[150px]">design_services</span>
+            <div className="hidden md:block absolute bottom-24 right-[5%] lg:right-[10%] text-primary/10 select-none pointer-events-none">
+                <span className="material-symbols-outlined text-[120px] lg:text-[150px]">design_services</span>
             </div>
 
             <div className="relative max-w-[800px] mx-auto px-4 md:px-8 flex flex-col items-center">
                 {/* Success Header */}
                 <div className="flex flex-col items-center text-center mb-10 relative">
-                    <span className="material-symbols-outlined absolute -top-4 -left-8 text-primary/60 text-3xl animate-pulse">auto_awesome</span>
-                    <span className="material-symbols-outlined absolute top-10 -right-12 text-amber-500/80 text-4xl animate-pulse" style={{ animationDelay: "0.5s" }}>shutter_speed</span>
-                    <span className="material-symbols-outlined absolute -bottom-2 -left-16 text-amber-500/60 text-2xl animate-pulse" style={{ animationDelay: "0.3s" }}>star</span>
+                    <span className="material-symbols-outlined absolute -top-4 left-0 md:-left-8 text-primary/60 text-3xl animate-pulse">auto_awesome</span>
+                    <span className="material-symbols-outlined absolute top-10 right-0 md:-right-12 text-amber-500/80 text-4xl animate-pulse" style={{ animationDelay: "0.5s" }}>shutter_speed</span>
+                    <span className="material-symbols-outlined absolute -bottom-2 left-2 md:-left-16 text-amber-500/60 text-2xl animate-pulse" style={{ animationDelay: "0.3s" }}>star</span>
 
                     <div className="size-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 ring-4 ring-primary/20">
                         <span className="material-symbols-outlined text-primary text-5xl">check_circle</span>
@@ -80,19 +80,19 @@ export default function StepSuccess({ form }: StepSuccessProps) {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 mt-10 w-full max-w-md">
+                <div className="flex flex-row items-center gap-4 mt-10 w-full max-w-lg">
                     <Link
                         href="/marketplace"
-                        className="w-full flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-base transition-all shadow-md hover:shadow-lg cursor-pointer"
+                        className="flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-sm sm:text-base whitespace-nowrap transition-all shadow-md hover:shadow-lg cursor-pointer"
                     >
                         View Live Post
                         <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                     </Link>
                     <Link
                         href="/marketplace"
-                        className="w-full flex items-center justify-center h-12 px-6 bg-transparent hover:bg-neutral-100 text-neutral-600 rounded-lg font-medium text-base transition-colors cursor-pointer"
+                        className="flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-600 rounded-lg font-medium text-sm sm:text-base whitespace-nowrap transition-colors cursor-pointer"
                     >
-                        <span className="material-symbols-outlined text-[20px] mr-2 text-neutral-400">arrow_back</span>
+                        <span className="material-symbols-outlined text-[20px] text-neutral-400">arrow_back</span>
                         Back to Marketplace
                     </Link>
                 </div>
