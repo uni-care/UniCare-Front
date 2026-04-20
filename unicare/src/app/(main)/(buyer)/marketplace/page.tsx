@@ -6,9 +6,10 @@ import Link from "next/link";
 import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
-import { CATEGORIES, DUMMY_ITEMS, type MarketplaceItem } from "./data";
+import { CATEGORIES, DUMMY_ITEMS, toMarketplaceItem, type MarketplaceItem } from "./data";
 import { chatApi } from "@/features/chat/api/chat-api";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { itemsApi } from "@/features/items/api/items-api";
 
 const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
 
@@ -45,6 +46,39 @@ export default function MarketplacePage() {
   const router = useRouter();
   const { user } = useAuth();
 
+  /* ─── Fetch items from API ─── */
+  const [items, setItems] = useState<MarketplaceItem[]>(DUMMY_ITEMS);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchItems() {
+      try {
+        const apiItems = await itemsApi.getAll();
+        if (!cancelled) {
+          if (apiItems.length > 0) {
+            setItems(apiItems.map(toMarketplaceItem));
+          } else {
+            setItems(DUMMY_ITEMS);
+          }
+        }
+      } catch {
+        // Fallback to dummy data if API is unreachable
+        if (!cancelled) {
+          setItems(DUMMY_ITEMS);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    fetchItems();
+    return () => { cancelled = true; };
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -56,7 +90,7 @@ export default function MarketplacePage() {
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
-    return DUMMY_ITEMS.filter((item) => {
+    return items.filter((item) => {
       const matchesDepartment =
         activeDepartment === "All Departments" || item.department === activeDepartment;
 
@@ -87,7 +121,7 @@ export default function MarketplacePage() {
         matchesPrice
       );
     });
-  }, [activeDepartment, activePrice, activeStatus, activeType, searchQuery]);
+  }, [activeDepartment, activePrice, activeStatus, activeType, searchQuery, items]);
 
   return (
     <div className="bg-neutral-50 min-h-screen pt-28 pb-20 px-4 md:px-8">
@@ -193,24 +227,39 @@ export default function MarketplacePage() {
         </div>
 
         {/* Items Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
-          {filteredItems.map((item) => (
-            <ItemCard
-              key={item.id}
-              {...item}
-              isRequested={requestedTransactionIds.includes(item.transactionId)}
-              onRequestClick={() => setSelectedItem(item)}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <div className="size-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+            <p className="text-neutral-500 font-medium">Loading resources...</p>
+          </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <span className="material-symbols-outlined text-6xl text-neutral-300">inventory_2</span>
+            <p className="text-neutral-500 font-medium text-lg">No resources found</p>
+            <p className="text-neutral-400 text-sm">Try adjusting your filters or search query.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+            {filteredItems.map((item) => (
+              <ItemCard
+                key={item.id}
+                {...item}
+                isRequested={requestedTransactionIds.includes(item.transactionId)}
+                onRequestClick={() => setSelectedItem(item)}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Pagination/Load More */}
-        <div className="flex justify-center">
-          <button className="group flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-10 py-4 font-bold text-neutral-800 hover:border-primary/60 transition-all shadow-sm cursor-pointer">
-            View More Resources
-            <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
-          </button>
-        </div>
+        {!isLoading && filteredItems.length > 0 && (
+          <div className="flex justify-center">
+            <button className="group flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-10 py-4 font-bold text-neutral-800 hover:border-primary/60 transition-all shadow-sm cursor-pointer">
+              View More Resources
+              <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+            </button>
+          </div>
+        )}
       </div>
 
       <RequestItemModal
