@@ -1,6 +1,10 @@
 import type { StepProps } from "./types";
 
-export default function StepTerms({ form, update, onNext, onBack }: StepProps) {
+interface StepTermsProps extends StepProps {
+    isSubmitting?: boolean;
+}
+
+export default function StepTerms({ form, update, onNext, onBack, isSubmitting = false }: StepTermsProps) {
     return (
         <div className="bg-background-light min-h-screen pt-28 pb-20">
             <div className="max-w-[800px] mx-auto px-4 md:px-8 flex flex-col gap-8">
@@ -120,11 +124,20 @@ export default function StepTerms({ form, update, onNext, onBack }: StepProps) {
                         </button>
                         <button
                             onClick={onNext}
-                            disabled={!form.promise}
+                            disabled={!form.promise || isSubmitting}
                             className="md:w-48 bg-primary hover:bg-primary/90 text-white h-12 rounded-lg font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         >
-                            Post Now
-                            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                            {isSubmitting ? (
+                                <>
+                                    <div className="size-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Posting...
+                                </>
+                            ) : (
+                                <>
+                                    Post Now
+                                    <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>

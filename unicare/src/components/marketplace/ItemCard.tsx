@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 interface ItemCardProps {
-    id: number;
+    id: string;
     title: string;
     category: string;
     department: string;
@@ -15,7 +15,7 @@ interface ItemCardProps {
         initials: string;
         time: string;
     };
-    onRequestClick?: (itemId: number) => void;
+    onRequestClick?: (itemId: string) => void;
     isRequested?: boolean;
 }
 
@@ -107,11 +107,10 @@ export default function ItemCard({
                     type="button"
                     disabled={isRequested}
                     onClick={() => onRequestClick?.(id)}
-                    className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 ${
-                        isRequested
-                            ? "bg-amber-100 text-amber-700 cursor-not-allowed"
-                            : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
-                    }`}
+                    className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 ${isRequested
+                        ? "bg-amber-100 text-amber-700 cursor-not-allowed"
+                        : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
+                        }`}
                 >
                     <span className="material-symbols-outlined text-lg">send</span>
                     {isRequested ? "Requested" : "Request Item"}
