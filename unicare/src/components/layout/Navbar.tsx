@@ -95,6 +95,14 @@ export default function Navbar() {
                                     <span className="material-symbols-outlined text-[18px]">person</span>
                                     Profile
                                 </Link>
+                                <Link
+                                    href="/transactions"
+                                    onClick={() => setIsUserMenuOpen(false)}
+                                    className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-primary/10"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                                    Transactions
+                                </Link>
                                 <button
                                     type="button"
                                     onClick={async () => {
@@ -193,6 +201,14 @@ export default function Navbar() {
                                             {userInitial}
                                         </span>
                                     )}
+                                </Link>
+                                <Link
+                                    href="/transactions"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center gap-3 rounded-2xl border border-primary/20 bg-white/70 px-4 py-3 text-neutral-700 font-bold"
+                                >
+                                    <span className="material-symbols-outlined text-primary">receipt_long</span>
+                                    My Transactions
                                 </Link>
                                 <button
                                     type="button"
