@@ -1,4 +1,21 @@
-export const DUMMY_ITEMS = [
+export interface MarketplaceItem {
+  id: number;
+  title: string;
+  category: string;
+  department: string;
+  image: string;
+  price: string | number;
+  status: "Available Now" | "Low Stock";
+  type: "LEND" | "SALE";
+  rating: number;
+  user: {
+    name: string;
+    initials: string;
+    time: string;
+  };
+}
+
+export const DUMMY_ITEMS: MarketplaceItem[] = [
   {
     id: 1,
     title: "Digital Oscilloscope",

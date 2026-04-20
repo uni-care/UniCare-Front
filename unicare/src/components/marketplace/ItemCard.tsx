@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 interface ItemCardProps {
+    id: number;
     title: string;
     category: string;
     department: string;
@@ -14,9 +15,11 @@ interface ItemCardProps {
         initials: string;
         time: string;
     };
+    onRequestClick?: (itemId: number) => void;
 }
 
 export default function ItemCard({
+    id,
     title,
     category,
     department,
@@ -26,6 +29,7 @@ export default function ItemCard({
     type,
     rating,
     user,
+    onRequestClick,
 }: ItemCardProps) {
     const isFree = price === 0 || price === "Free";
 
@@ -91,7 +95,11 @@ export default function ItemCard({
                 </div>
 
                 {/* Request Button */}
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-sm py-3 rounded-xl transition-all duration-200 cursor-pointer">
+                <button
+                    type="button"
+                    onClick={() => onRequestClick?.(id)}
+                    className="mt-4 w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-sm py-3 rounded-xl transition-all duration-200 cursor-pointer"
+                >
                     <span className="material-symbols-outlined text-lg">send</span>
                     Request Item
                 </button>

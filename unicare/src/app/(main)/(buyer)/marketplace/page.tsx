@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import ItemCard from "@/components/marketplace/ItemCard";
-import { DUMMY_ITEMS, CATEGORIES } from "./data";
+import RequestItemModal from "@/components/marketplace/request-item-modal";
+import { CATEGORIES, DUMMY_ITEMS, type MarketplaceItem } from "./data";
 
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,6 +12,7 @@ export default function MarketplacePage() {
   const [activeType, setActiveType] = useState<"All" | "LEND" | "SALE">("All");
   const [activeStatus, setActiveStatus] = useState<"All" | "Available Now" | "Low Stock">("All");
   const [activePrice, setActivePrice] = useState<"All" | "Free" | "Paid">("All");
+  const [selectedItem, setSelectedItem] = useState<MarketplaceItem | null>(null);
 
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -144,7 +146,11 @@ export default function MarketplacePage() {
         {/* Items Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
           {filteredItems.map((item) => (
-            <ItemCard key={item.id} {...item} />
+            <ItemCard
+              key={item.id}
+              {...item}
+              onRequestClick={() => setSelectedItem(item)}
+            />
           ))}
         </div>
 
@@ -156,6 +162,12 @@ export default function MarketplacePage() {
           </button>
         </div>
       </div>
+
+      <RequestItemModal
+        isOpen={Boolean(selectedItem)}
+        item={selectedItem}
+        onClose={() => setSelectedItem(null)}
+      />
     </div>
   );
 }
