@@ -12,6 +12,14 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import { itemsApi } from "@/features/items/api/items-api";
 
 const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
+const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";
+
+interface RequestedItemRecord {
+  transactionId: string;
+  itemTitle: string;
+  chatId: string;
+  requestedAt: string;
+}
 
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -324,6 +332,26 @@ export default function MarketplacePage() {
             setRequestedTransactionIds((prev) =>
               prev.includes(selectedItem.transactionId) ? prev : [...prev, selectedItem.transactionId]
             );
+
+            const existingRaw = localStorage.getItem(REQUESTED_ITEMS_STORAGE_KEY);
+            const existingItems: RequestedItemRecord[] = existingRaw ? JSON.parse(existingRaw) : [];
+            const alreadySaved = existingItems.some((entry) => entry.transactionId === selectedItem.transactionId);
+
+            if (!alreadySaved) {
+              localStorage.setItem(
+                REQUESTED_ITEMS_STORAGE_KEY,
+                JSON.stringify([
+                  ...existingItems,
+                  {
+                    transactionId: selectedItem.transactionId,
+                    itemTitle: selectedItem.title,
+                    chatId: chat.chatId,
+                    requestedAt: new Date().toISOString(),
+                  },
+                ])
+              );
+            }
+
             toast.success("Request sent. Opening chat...");
             router.push(`/chat?chatId=${chat.chatId}&itemTitle=${encodeURIComponent(selectedItem.title)}`);
             return true;
