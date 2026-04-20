@@ -4,15 +4,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
-
+import { toast } from "sonner";
 import { authApi } from "@/features/auth/api/auth-api";
 import { registerSchema, type RegisterInput } from "@/features/auth/schemas/register-schema";
 import { RegistrationMethod } from "@/features/auth/types";
+import { useRouter } from "next/navigation";
 
 export function CreateAccountForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [submitError, setSubmitError] = useState("");
 
   const {
     register,
@@ -39,9 +39,6 @@ export function CreateAccountForm() {
   const contactMethod = useWatch({ control, name: "contactMethod" });
 
   const onSubmit = async (values: RegisterInput) => {
-    setSuccessMessage("");
-    setSubmitError("");
-
     try {
       await authApi.register({
         fullName: `${values.firstName} ${values.lastName}`.trim(),
@@ -53,11 +50,14 @@ export function CreateAccountForm() {
         email: values.contactMethod === "email" ? values.email : undefined,
         phoneNumber: values.contactMethod === "phone" ? values.phoneNumber : undefined,
       });
-      setSuccessMessage("Account created successfully. You can now sign in.");
+      toast.success("Account created successfully. You can now sign in.", { duration: 2000 });
       reset();
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to create account. Please try again.";
-      setSubmitError(message);
+      toast.error(message);
     }
   };
 
@@ -239,17 +239,6 @@ export function CreateAccountForm() {
         >
           {isSubmitting ? "Creating account..." : "Create Account"}
         </button>
-
-        {successMessage ? (
-          <p className="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-center text-xs text-primary">
-            {successMessage}
-          </p>
-        ) : null}
-        {submitError ? (
-          <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-center text-xs text-red-600">
-            {submitError}
-          </p>
-        ) : null}
 
         <p className="text-center text-sm text-neutral-500">
           Already have an account?{" "}

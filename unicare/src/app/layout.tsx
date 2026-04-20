@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Playfair_Display } from "next/font/google";
+import { Space_Grotesk, Playfair_Display, Geist } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/footer";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -28,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${playfairDisplay.variable} h-full antialiased scroll-smooth`}
+      className={cn("h-full", "antialiased", "scroll-smooth", spaceGrotesk.variable, playfairDisplay.variable, "font-sans", geist.variable)}
       suppressHydrationWarning
     >
       <head>
@@ -41,6 +45,15 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <Toaster
+          position="top-center"
+          richColors
+          closeButton
+          toastOptions={{
+            className:
+              "rounded-2xl border border-primary/10 bg-white text-[#131615] shadow-lg shadow-primary/10",
+          }}
+        />
       </body>
     </html>
   );

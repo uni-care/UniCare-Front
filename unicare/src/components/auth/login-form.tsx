@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { authApi } from "@/features/auth/api/auth-api";
 import { loginSchema, type LoginInput } from "@/features/auth/schemas/login-schema";
@@ -31,6 +33,8 @@ export function LoginForm() {
 
   const contactMethod = useWatch({ control, name: "contactMethod" });
 
+  const router = useRouter();
+
   const onSubmit = async (values: LoginInput) => {
     setSuccessMessage("");
     setSubmitError("");
@@ -40,10 +44,16 @@ export function LoginForm() {
         email: values.contactMethod === "email" ? values.email : values.phoneNumber,
         password: values.password,
       });
-      setSuccessMessage("Logged in successfully.");
+
+      toast.success("Logged in successfully.", {
+        duration: 2000,
+      });
+
+      router.push("/");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to log in. Please try again.";
-      setSubmitError(message);
+      const message =
+        error instanceof Error ? error.message : "Login failed. Please try again.";
+      toast.error(message);
     }
   };
 
