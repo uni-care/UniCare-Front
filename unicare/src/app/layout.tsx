@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { QueryProvider } from "@/lib/query-provider";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -42,7 +42,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background-light text-[#131615] selection:bg-primary/30 relative">
+      <body className="min-h-full flex flex-col bg-background-light text-[#131615] selection:bg-primary/30 relative" suppressHydrationWarning>
         <QueryProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
