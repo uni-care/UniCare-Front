@@ -27,6 +27,14 @@ const nextConfig: NextConfig = {
         source: "/api/chats/:path*",
         destination: `${API_URL}/api/chats/:path*`,
       },
+      {
+        source: "/hubs/chat",
+        destination: `${API_URL}/hubs/chat`,
+      },
+      {
+        source: "/hubs/chat/:path*",
+        destination: `${API_URL}/hubs/chat/:path*`,
+      },
     ];
   },
 };
