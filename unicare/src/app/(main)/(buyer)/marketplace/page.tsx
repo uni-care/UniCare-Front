@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
@@ -120,6 +121,16 @@ export default function MarketplacePage() {
             Filters
           </button>
         </div>
+
+        {/* Post Resource CTA */}
+        <Link
+          href="/post"
+          className="flex items-center justify-center gap-2 w-full bg-primary/10 hover:bg-primary hover:text-white text-primary border border-primary/20 rounded-2xl py-4 px-6 font-bold transition-all mb-8 cursor-pointer group"
+        >
+          <span className="material-symbols-outlined text-xl">upload_file</span>
+          Post a Resource
+          <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </Link>
 
         {showFilters && (
           <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm mb-8">
