@@ -42,11 +42,13 @@ export default function PostResourceWizard() {
                     price: form.exchangeType === "sell" ? parseFloat(form.price) || 1 : 0.01,
                     currency: "EGP",
                     location: form.discipline,
-                    imageUrls: form.previews.filter((p) => !p.startsWith("blob:")),
+                    imageUrls: form.previews.length > 0
+                        ? form.previews.filter((p) => !p.startsWith("blob:"))
+                        : [],
                     availableFrom: new Date().toISOString(),
                     availableTo: form.maxDuration
                         ? new Date(Date.now() + parseInt(form.maxDuration) * 86400000).toISOString()
-                        : undefined,
+                        : new Date(Date.now() + 30 * 86400000).toISOString(),
                 },
                 authToken
             );
