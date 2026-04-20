@@ -37,9 +37,8 @@ export function LoginForm() {
 
     try {
       await authApi.login({
+        email: values.contactMethod === "email" ? values.email : values.phoneNumber,
         password: values.password,
-        email: values.contactMethod === "email" ? values.email : undefined,
-        phoneNumber: values.contactMethod === "phone" ? values.phoneNumber : undefined,
       });
       setSuccessMessage("Logged in successfully.");
     } catch (error) {

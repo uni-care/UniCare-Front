@@ -7,6 +7,7 @@ import { useForm, useWatch } from "react-hook-form";
 
 import { authApi } from "@/features/auth/api/auth-api";
 import { registerSchema, type RegisterInput } from "@/features/auth/schemas/register-schema";
+import { RegistrationMethod } from "@/features/auth/types";
 
 export function CreateAccountForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,10 +44,12 @@ export function CreateAccountForm() {
 
     try {
       await authApi.register({
-        firstName: values.firstName,
-        lastName: values.lastName,
+        fullName: `${values.firstName} ${values.lastName}`.trim(),
         password: values.password,
-        role: values.role,
+        registrationMethod:
+          values.contactMethod === "email"
+            ? RegistrationMethod.Email
+            : RegistrationMethod.Phone,
         email: values.contactMethod === "email" ? values.email : undefined,
         phoneNumber: values.contactMethod === "phone" ? values.phoneNumber : undefined,
       });
