@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 import type { MarketplaceItem } from "@/app/(main)/(buyer)/marketplace/data";
 
@@ -10,9 +9,17 @@ interface RequestItemModalProps {
   isOpen: boolean;
   item: MarketplaceItem | null;
   onClose: () => void;
+  isSubmitting?: boolean;
+  onSubmit: (input: { duration: string; note: string }) => Promise<boolean> | boolean;
 }
 
-export default function RequestItemModal({ isOpen, item, onClose }: RequestItemModalProps) {
+export default function RequestItemModal({
+  isOpen,
+  item,
+  onClose,
+  onSubmit,
+  isSubmitting = false,
+}: RequestItemModalProps) {
   const [duration, setDuration] = useState("");
   const [note, setNote] = useState("");
   const [isVisible, setIsVisible] = useState(false);
@@ -34,6 +41,10 @@ export default function RequestItemModal({ isOpen, item, onClose }: RequestItemM
   }
 
   const handleClose = () => {
+    if (isSubmitting) {
+      return;
+    }
+
     setIsVisible(false);
 
     window.setTimeout(() => {
@@ -43,8 +54,12 @@ export default function RequestItemModal({ isOpen, item, onClose }: RequestItemM
     }, 220);
   };
 
-  const handleSubmit = () => {
-    toast.success(`Request sent for ${item.title}.`);
+  const handleSubmit = async () => {
+    const isSuccess = await onSubmit({ duration, note });
+    if (!isSuccess) {
+      return;
+    }
+
     handleClose();
   };
 
@@ -103,9 +118,10 @@ export default function RequestItemModal({ isOpen, item, onClose }: RequestItemM
         <button
           type="button"
           onClick={handleSubmit}
-          className="mt-5 flex cursor-pointer w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-lg font-bold text-white transition-opacity hover:opacity-90"
+          disabled={isSubmitting}
+          className="mt-5 flex cursor-pointer w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-lg font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          Send Request
+          {isSubmitting ? "Sending..." : "Send Request"}
           <span className="material-symbols-outlined text-base">send</span>
         </button>
 

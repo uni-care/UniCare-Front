@@ -16,6 +16,7 @@ interface ItemCardProps {
         time: string;
     };
     onRequestClick?: (itemId: number) => void;
+    isRequested?: boolean;
 }
 
 export default function ItemCard({
@@ -30,6 +31,7 @@ export default function ItemCard({
     rating,
     user,
     onRequestClick,
+    isRequested = false,
 }: ItemCardProps) {
     const isFree = price === 0 || price === "Free";
 
@@ -54,6 +56,12 @@ export default function ItemCard({
                         }`}>
                         {type}
                     </div>
+                    {isRequested ? (
+                        <div className="inline-flex self-start items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black tracking-widest bg-amber-100 text-amber-700 border border-amber-300">
+                            <span className="material-symbols-outlined text-[12px]">schedule</span>
+                            REQUESTED
+                        </div>
+                    ) : null}
                 </div>
 
                 {/* Favorite Button */}
@@ -97,11 +105,16 @@ export default function ItemCard({
                 {/* Request Button */}
                 <button
                     type="button"
+                    disabled={isRequested}
                     onClick={() => onRequestClick?.(id)}
-                    className="mt-4 w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-sm py-3 rounded-xl transition-all duration-200 cursor-pointer"
+                    className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-xl transition-all duration-200 ${
+                        isRequested
+                            ? "bg-amber-100 text-amber-700 cursor-not-allowed"
+                            : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
+                    }`}
                 >
                     <span className="material-symbols-outlined text-lg">send</span>
-                    Request Item
+                    {isRequested ? "Requested" : "Request Item"}
                 </button>
             </div>
         </div>

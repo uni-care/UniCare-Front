@@ -1,9 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
 import { CATEGORIES, DUMMY_ITEMS, type MarketplaceItem } from "./data";
+import { chatApi } from "@/features/chat/api/chat-api";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+
+const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
 
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,6 +19,38 @@ export default function MarketplacePage() {
   const [activeStatus, setActiveStatus] = useState<"All" | "Available Now" | "Low Stock">("All");
   const [activePrice, setActivePrice] = useState<"All" | "Free" | "Paid">("All");
   const [selectedItem, setSelectedItem] = useState<MarketplaceItem | null>(null);
+  const [requestedTransactionIds, setRequestedTransactionIds] = useState<string[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    try {
+      const raw = localStorage.getItem(REQUESTED_TRANSACTIONS_STORAGE_KEY);
+      if (!raw) {
+        return [];
+      }
+
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+
+      return parsed.filter((value): value is string => typeof value === "string" && value.length > 0);
+    } catch {
+      return [];
+    }
+  });
+  const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
+  const router = useRouter();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    localStorage.setItem(REQUESTED_TRANSACTIONS_STORAGE_KEY, JSON.stringify(requestedTransactionIds));
+  }, [requestedTransactionIds]);
 
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -149,6 +187,7 @@ export default function MarketplacePage() {
             <ItemCard
               key={item.id}
               {...item}
+              isRequested={requestedTransactionIds.includes(item.transactionId)}
               onRequestClick={() => setSelectedItem(item)}
             />
           ))}
@@ -167,6 +206,68 @@ export default function MarketplacePage() {
         isOpen={Boolean(selectedItem)}
         item={selectedItem}
         onClose={() => setSelectedItem(null)}
+        isSubmitting={isSubmittingRequest}
+        onSubmit={async ({ duration, note }) => {
+          if (!selectedItem) {
+            return false;
+          }
+
+          if (!user?.id) {
+            toast.error("Please sign in to send a request.");
+            router.push("/login");
+            return false;
+          }
+
+          if (!duration.trim()) {
+            toast.error("Please enter how long you need this item.");
+            return false;
+          }
+
+          if (selectedItem.ownerId === user.id) {
+            toast.error("You cannot request your own item.");
+            return false;
+          }
+
+          if (requestedTransactionIds.includes(selectedItem.transactionId)) {
+            toast.error("This item is already requested.");
+            return false;
+          }
+
+          setIsSubmittingRequest(true);
+          try {
+            const chat = await chatApi.getOrCreateForTransaction({
+              transactionId: selectedItem.transactionId,
+              ownerId: selectedItem.ownerId,
+              requesterId: user.id,
+            });
+
+            if (!chat.chatId) {
+              throw new Error("Unable to start chat for this request.");
+            }
+
+            const firstMessage = note.trim()
+              ? `Hi! I'd like to request "${selectedItem.title}" for ${duration.trim()}. ${note.trim()}`
+              : `Hi! I'd like to request "${selectedItem.title}" for ${duration.trim()}.`;
+
+            await chatApi.sendMessage(chat.chatId, {
+              senderId: user.id,
+              body: firstMessage,
+            });
+
+            setRequestedTransactionIds((prev) =>
+              prev.includes(selectedItem.transactionId) ? prev : [...prev, selectedItem.transactionId]
+            );
+            toast.success("Request sent. Opening chat...");
+            router.push(`/chat?chatId=${chat.chatId}&itemTitle=${encodeURIComponent(selectedItem.title)}`);
+            return true;
+          } catch (error) {
+            const message = error instanceof Error ? error.message : "Failed to send request.";
+            toast.error(message);
+            return false;
+          } finally {
+            setIsSubmittingRequest(false);
+          }
+        }}
       />
     </div>
   );
