@@ -5,7 +5,7 @@ import Footer from "@/components/layout/footer";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
-import { QueryProvider } from "@/components/shared/query-provider";
+import { QueryProvider } from "@/lib/query-provider";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
