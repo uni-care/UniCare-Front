@@ -34,6 +34,19 @@ export interface AuthResponseData {
   verificationStatus: VerificationStatus;
 }
 
+export interface UserProfile {
+  id: string;
+  fullName: string;
+  email?: string;
+  phoneNumber?: string;
+  universityName?: string;
+  facultyName?: string;
+  profilePictureUrl?: string;
+  verificationStatus: VerificationStatus;
+  isVerifiedStudent: boolean;
+  createdAt: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

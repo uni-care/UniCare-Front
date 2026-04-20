@@ -1,10 +1,12 @@
 import { axiosInstance } from "@/lib/api/axios-instance";
 
-import type { AuthResponse, LoginPayload, RegisterPayload } from "@/features/auth/types";
+import type { AuthResponse, LoginPayload, RegisterPayload, UserProfile } from "@/features/auth/types";
 
 export const AUTH_ENDPOINTS = {
   register: "/api/v1/auth/register",
   login: "/api/v1/auth/login",
+  logout: "/api/v1/auth/logout",
+  profile: "/api/v1/profile/me",
 } as const;
 
 export const authApi = {
@@ -15,5 +17,32 @@ export const authApi = {
   login: async (payload: LoginPayload): Promise<AuthResponse> => {
     const { data } = await axiosInstance.post<AuthResponse>(AUTH_ENDPOINTS.login, payload);
     return data;
+  },
+  logout: async (token: string): Promise<void> => {
+    await axiosInstance.post(
+      AUTH_ENDPOINTS.logout,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  },
+  getCurrentProfile: async (token: string): Promise<UserProfile> => {
+    const { data } = await axiosInstance.get<{ data?: UserProfile; success: boolean; message?: string }>(
+      AUTH_ENDPOINTS.profile,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!data.data) {
+      throw new Error(data.message ?? "Failed to load profile.");
+    }
+
+    return data.data;
   },
 };

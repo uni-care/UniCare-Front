@@ -4,12 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
+    const { isAuthenticated, isLoading, user } = useAuth();
 
     const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+    const userInitial = user?.fullName?.trim().charAt(0).toUpperCase() ?? "U";
 
     return (
         <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
@@ -52,18 +55,42 @@ export default function Navbar() {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex items-center gap-4">
-                    <Link
-                        href="/login"
-                        className="px-6 py-2.5 rounded-full text-[13px] font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
-                    >
-                        Sign In
-                    </Link>
-                    <Link
-                        href="/register"
-                        className="bg-primary text-white text-[13px] font-bold px-6 py-2.5 rounded-full shadow-lg shadow-primary/60 hover:scale-105 transition-transform active:scale-95 cursor-pointer"
-                    >
-                        Join Ecosystem
-                    </Link>
+                    {isLoading ? null : isAuthenticated && user ? (
+                        <Link
+                            href="/profile"
+                            className="flex items-center gap-3 rounded-full border border-primary/20 bg-white/70 px-3 py-1.5 transition-colors hover:bg-white"
+                        >
+                            <span className="text-sm font-bold text-neutral-700">{user.fullName}</span>
+                            {user.profilePictureUrl ? (
+                                <Image
+                                    src={user.profilePictureUrl}
+                                    alt={`${user.fullName} profile`}
+                                    width={40}
+                                    height={40}
+                                    className="h-10 w-10 rounded-full object-cover border border-primary/20"
+                                />
+                            ) : (
+                                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
+                                    {userInitial}
+                                </span>
+                            )}
+                        </Link>
+                    ) : (
+                        <>
+                            <Link
+                                href="/login"
+                                className="px-6 py-2.5 rounded-full text-[13px] font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
+                            >
+                                Sign In
+                            </Link>
+                            <Link
+                                href="/register"
+                                className="bg-primary text-white text-[13px] font-bold px-6 py-2.5 rounded-full shadow-lg shadow-primary/60 hover:scale-105 transition-transform active:scale-95 cursor-pointer"
+                            >
+                                Join Ecosystem
+                            </Link>
+                        </>
+                    )}
                 </div>
 
                 {/* Mobile Menu Toggle Button */}
@@ -111,20 +138,45 @@ export default function Navbar() {
                     <div className="h-px w-full bg-primary/10"></div>
 
                     <div className="flex flex-col gap-3">
-                        <Link
-                            href="/login"
-                            onClick={() => setIsOpen(false)}
-                            className="w-full py-3.5 text-center rounded-full text-sm font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
-                        >
-                            Sign In
-                        </Link>
-                        <Link
-                            href="/register"
-                            onClick={() => setIsOpen(false)}
-                            className="w-full text-center bg-primary text-white text-sm font-bold py-3.5 rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 cursor-pointer"
-                        >
-                            Join Ecosystem
-                        </Link>
+                        {isLoading ? null : isAuthenticated && user ? (
+                            <Link
+                                href="/profile"
+                                onClick={() => setIsOpen(false)}
+                                className="flex items-center justify-between rounded-2xl border border-primary/20 bg-white/70 px-4 py-3"
+                            >
+                                <span className="font-bold text-neutral-700">{user.fullName}</span>
+                                {user.profilePictureUrl ? (
+                                    <Image
+                                        src={user.profilePictureUrl}
+                                        alt={`${user.fullName} profile`}
+                                        width={40}
+                                        height={40}
+                                        className="h-10 w-10 rounded-full object-cover border border-primary/20"
+                                    />
+                                ) : (
+                                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
+                                        {userInitial}
+                                    </span>
+                                )}
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/login"
+                                    onClick={() => setIsOpen(false)}
+                                    className="w-full py-3.5 text-center rounded-full text-sm font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
+                                >
+                                    Sign In
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    onClick={() => setIsOpen(false)}
+                                    className="w-full text-center bg-primary text-white text-sm font-bold py-3.5 rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 cursor-pointer"
+                                >
+                                    Join Ecosystem
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
 

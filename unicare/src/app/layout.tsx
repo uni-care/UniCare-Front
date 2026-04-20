@@ -5,6 +5,7 @@ import Footer from "@/components/layout/footer";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import { QueryProvider } from "@/components/shared/query-provider";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -42,18 +43,20 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-background-light text-[#131615] selection:bg-primary/30 relative">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <Toaster
-          position="top-center"
-          richColors
-          closeButton
-          toastOptions={{
-            className:
-              "rounded-2xl border border-primary/10 bg-white text-[#131615] shadow-lg shadow-primary/10",
-          }}
-        />
+        <QueryProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <Toaster
+            position="top-center"
+            richColors
+            closeButton
+            toastOptions={{
+              className:
+                "rounded-2xl border border-primary/10 bg-white text-[#131615] shadow-lg shadow-primary/10",
+            }}
+          />
+        </QueryProvider>
       </body>
     </html>
   );

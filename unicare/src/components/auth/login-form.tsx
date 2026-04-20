@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { authApi } from "@/features/auth/api/auth-api";
+import { AUTH_ME_QUERY_KEY, setAuthToken } from "@/features/auth/hooks/useAuth";
 import { loginSchema, type LoginInput } from "@/features/auth/schemas/login-schema";
 
 export function LoginForm() {
@@ -34,16 +36,24 @@ export function LoginForm() {
   const contactMethod = useWatch({ control, name: "contactMethod" });
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const onSubmit = async (values: LoginInput) => {
     setSuccessMessage("");
     setSubmitError("");
 
     try {
-      await authApi.login({
+      const response = await authApi.login({
         email: values.contactMethod === "email" ? values.email : values.phoneNumber,
         password: values.password,
       });
+
+      if (!response.data?.token) {
+        throw new Error("Login succeeded but token is missing.");
+      }
+
+      setAuthToken(response.data.token);
+      await queryClient.invalidateQueries({ queryKey: AUTH_ME_QUERY_KEY });
 
       toast.success("Logged in successfully.", {
         duration: 2000,
