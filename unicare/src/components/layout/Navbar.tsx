@@ -3,13 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const pathname = usePathname();
-    const { isAuthenticated, isLoading, user } = useAuth();
+    const router = useRouter();
+    const { isAuthenticated, isLoading, user, signOut } = useAuth();
 
     const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
     const userInitial = user?.fullName?.trim().charAt(0).toUpperCase() ?? "U";
@@ -56,25 +58,57 @@ export default function Navbar() {
                 {/* Desktop Actions */}
                 <div className="hidden md:flex items-center gap-4">
                     {isLoading ? null : isAuthenticated && user ? (
-                        <Link
-                            href="/profile"
-                            className="flex items-center gap-3 rounded-full border border-primary/20 bg-white/70 px-3 py-1.5 transition-colors hover:bg-white"
-                        >
-                            <span className="text-sm font-bold text-neutral-700">{user.fullName}</span>
-                            {user.profilePictureUrl ? (
-                                <Image
-                                    src={user.profilePictureUrl}
-                                    alt={`${user.fullName} profile`}
-                                    width={40}
-                                    height={40}
-                                    className="h-10 w-10 rounded-full object-cover border border-primary/20"
-                                />
-                            ) : (
-                                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
-                                    {userInitial}
+                        <div className="relative">
+                            <button
+                                type="button"
+                                onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                                className="flex cursor-pointer items-center gap-3 rounded-full border border-primary/20 bg-white/70 px-3 py-1.5 transition-colors hover:bg-white"
+                            >
+                                <span className="text-sm font-bold text-neutral-700">{user.fullName}</span>
+                                {user.profilePictureUrl ? (
+                                    <Image
+                                        src={user.profilePictureUrl}
+                                        alt={`${user.fullName} profile`}
+                                        width={40}
+                                        height={40}
+                                        className="h-10 w-10 rounded-full object-cover border border-primary/20"
+                                    />
+                                ) : (
+                                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
+                                        {userInitial}
+                                    </span>
+                                )}
+                                <span className={`material-symbols-outlined text-[18px] text-neutral-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}>
+                                    expand_more
                                 </span>
-                            )}
-                        </Link>
+                            </button>
+
+                            <div
+                                className={`absolute right-0 top-14 w-48 rounded-2xl border border-primary/15 bg-white p-2 shadow-xl transition-all ${isUserMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
+                                    }`}
+                            >
+                                <Link
+                                    href="/profile"
+                                    onClick={() => setIsUserMenuOpen(false)}
+                                    className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-primary/10"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">person</span>
+                                    Profile
+                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={async () => {
+                                        await signOut();
+                                        setIsUserMenuOpen(false);
+                                        router.push("/login");
+                                    }}
+                                    className="flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
                     ) : (
                         <>
                             <Link
@@ -139,26 +173,40 @@ export default function Navbar() {
 
                     <div className="flex flex-col gap-3">
                         {isLoading ? null : isAuthenticated && user ? (
-                            <Link
-                                href="/profile"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center justify-between rounded-2xl border border-primary/20 bg-white/70 px-4 py-3"
-                            >
-                                <span className="font-bold text-neutral-700">{user.fullName}</span>
-                                {user.profilePictureUrl ? (
-                                    <Image
-                                        src={user.profilePictureUrl}
-                                        alt={`${user.fullName} profile`}
-                                        width={40}
-                                        height={40}
-                                        className="h-10 w-10 rounded-full object-cover border border-primary/20"
-                                    />
-                                ) : (
-                                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
-                                        {userInitial}
-                                    </span>
-                                )}
-                            </Link>
+                            <>
+                                <Link
+                                    href="/profile"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-between rounded-2xl border border-primary/20 bg-white/70 px-4 py-3"
+                                >
+                                    <span className="font-bold text-neutral-700">{user.fullName}</span>
+                                    {user.profilePictureUrl ? (
+                                        <Image
+                                            src={user.profilePictureUrl}
+                                            alt={`${user.fullName} profile`}
+                                            width={40}
+                                            height={40}
+                                            className="h-10 w-10 rounded-full object-cover border border-primary/20"
+                                        />
+                                    ) : (
+                                        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
+                                            {userInitial}
+                                        </span>
+                                    )}
+                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={async () => {
+                                        await signOut();
+                                        setIsOpen(false);
+                                        router.push("/login");
+                                    }}
+                                    className="flex w-full items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 py-3 text-sm font-bold text-red-600 transition-colors hover:bg-red-100"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                                    Logout
+                                </button>
+                            </>
                         ) : (
                             <>
                                 <Link
