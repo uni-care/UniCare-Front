@@ -72,8 +72,8 @@ export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
 export const DUMMY_ITEMS: MarketplaceItem[] = [
   {
     id: "1",
-    transactionId: "7ef73c2a-84f4-49db-8a73-3608cc7d96b5",
-    ownerId: "f6013dff-2066-4ce8-8291-67bc3bdd89d4",
+    transactionId: "a3d9f1d8-5a2e-4f4a-b7aa-8e2f6b0f9c11",
+    ownerId: "bb12a67f-9c24-4ec6-8f3f-d2ef9d86e401",
     title: "Digital Oscilloscope",
     category: "Lab Equipment",
     department: "ECE",
@@ -87,8 +87,8 @@ export const DUMMY_ITEMS: MarketplaceItem[] = [
   },
   {
     id: "2",
-    transactionId: "45ff0db0-2366-4875-9502-3072962f8127",
-    ownerId: "3902b2f7-17b7-441c-bd4f-e8046584ab74",
+    transactionId: "c2f0e5ab-1d64-4d49-96aa-34b95e4a0f22",
+    ownerId: "11f4c7be-6c7d-4a52-b676-8ab4e43c9d33",
     title: "Drafting Table",
     category: "Furniture",
     department: "Architecture",
@@ -102,8 +102,8 @@ export const DUMMY_ITEMS: MarketplaceItem[] = [
   },
   {
     id: "3",
-    transactionId: "dd02fa9f-c3fc-4207-8c8b-57f32fce76c4",
-    ownerId: "fbb90a17-d711-4e95-9392-5f09d8425f1b",
+    transactionId: "d4b7a928-6bb8-4f84-9f8d-26ab8fa21e44",
+    ownerId: "9aa13d20-8f3f-4e19-9de6-52f2fda8a655",
     title: "Arduino Starter Kit",
     category: "Microcontrollers",
     department: "ECE",
@@ -117,8 +117,8 @@ export const DUMMY_ITEMS: MarketplaceItem[] = [
   },
   {
     id: "4",
-    transactionId: "f0f7db6c-0049-48e2-992e-8f03bcf2c56e",
-    ownerId: "4ef2d73a-0edf-48cb-bd74-c6704ef625d7",
+    transactionId: "e8c1d50b-0b2b-4a2c-9db8-7df4a8e3b266",
+    ownerId: "4ed97321-c1b5-4c39-95f5-c7d4fca7f877",
     title: "Surveying Level",
     category: "Field Tools",
     department: "Civil Engineering",
@@ -132,8 +132,8 @@ export const DUMMY_ITEMS: MarketplaceItem[] = [
   },
   {
     id: "5",
-    transactionId: "bf9f4c45-cf2f-4278-abf8-0963c7af2a45",
-    ownerId: "bbce1a85-ffb6-4f64-b48f-82374821f18f",
+    transactionId: "f6a2c31d-3dc2-4c31-8ef5-a9bd8e1c7888",
+    ownerId: "7c49d2e4-4c62-4f20-86a4-f4ac0f0f1999",
     title: "Raspberry Pi 4",
     category: "Computers",
     department: "ECE",
@@ -147,8 +147,8 @@ export const DUMMY_ITEMS: MarketplaceItem[] = [
   },
   {
     id: "6",
-    transactionId: "4376d6cf-8aa3-43c6-9a23-c2f69b3faad4",
-    ownerId: "e4656f54-95cc-4f84-8f2b-5a461f8abb2f",
+    transactionId: "1f7e2b0a-7a88-4c2f-9f3f-1bc2d8d6aa10",
+    ownerId: "2aa6de2c-3f1f-4ea2-bd35-d02fd2842ab1",
     title: "Advanced Mechanics",
     category: "Books",
     department: "Mechanical",
@@ -162,8 +162,8 @@ export const DUMMY_ITEMS: MarketplaceItem[] = [
   },
   {
     id: "7",
-    transactionId: "11c12249-47d8-4eb2-a75d-0f3a3670fd64",
-    ownerId: "b8dd85d0-6d95-4935-a844-2dd67169810e",
+    transactionId: "2c5ad0f4-9d7e-47db-9eb5-4af8e98dbb21",
+    ownerId: "6b2e91d3-1d2f-4dba-b8d4-0b99f7e6cc42",
     title: "Ender 3 3D Printer",
     category: "Equipment",
     department: "Mechanical",
@@ -177,8 +177,8 @@ export const DUMMY_ITEMS: MarketplaceItem[] = [
   },
   {
     id: "8",
-    transactionId: "47ec42a0-bca6-4e7d-9df7-5716e818af39",
-    ownerId: "757df7d2-e11c-4bda-9f5c-a3721e880f6a",
+    transactionId: "3e94b2f7-5f6b-4ab9-bfc5-935f3d77de32",
+    ownerId: "8d9e3ab1-2b89-4f41-9ae4-7e5fd9a1ef53",
     title: "TI-84 Plus CE",
     category: "Calculator",
     department: "Civil Engineering",
