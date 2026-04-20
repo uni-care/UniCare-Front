@@ -21,27 +21,8 @@ export default function MarketplacePage() {
   const [activeStatus, setActiveStatus] = useState<"All" | "Available Now" | "Low Stock">("All");
   const [activePrice, setActivePrice] = useState<"All" | "Free" | "Paid">("All");
   const [selectedItem, setSelectedItem] = useState<MarketplaceItem | null>(null);
-  const [requestedTransactionIds, setRequestedTransactionIds] = useState<string[]>(() => {
-    if (typeof window === "undefined") {
-      return [];
-    }
-
-    try {
-      const raw = localStorage.getItem(REQUESTED_TRANSACTIONS_STORAGE_KEY);
-      if (!raw) {
-        return [];
-      }
-
-      const parsed = JSON.parse(raw) as unknown;
-      if (!Array.isArray(parsed)) {
-        return [];
-      }
-
-      return parsed.filter((value): value is string => typeof value === "string" && value.length > 0);
-    } catch {
-      return [];
-    }
-  });
+  const [requestedTransactionIds, setRequestedTransactionIds] = useState<string[]>([]);
+  const [isRequestedStateHydrated, setIsRequestedStateHydrated] = useState(false);
   const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
@@ -80,12 +61,38 @@ export default function MarketplacePage() {
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    try {
+      const raw = localStorage.getItem(REQUESTED_TRANSACTIONS_STORAGE_KEY);
+      if (!raw) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setRequestedTransactionIds([]);
+        setIsRequestedStateHydrated(true);
+        return;
+      }
+
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed)) {
+        setRequestedTransactionIds([]);
+        setIsRequestedStateHydrated(true);
+        return;
+      }
+
+      const values = parsed.filter((value): value is string => typeof value === "string" && value.length > 0);
+      setRequestedTransactionIds(values);
+    } catch {
+      setRequestedTransactionIds([]);
+    } finally {
+      setIsRequestedStateHydrated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isRequestedStateHydrated) {
       return;
     }
 
     localStorage.setItem(REQUESTED_TRANSACTIONS_STORAGE_KEY, JSON.stringify(requestedTransactionIds));
-  }, [requestedTransactionIds]);
+  }, [isRequestedStateHydrated, requestedTransactionIds]);
 
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();

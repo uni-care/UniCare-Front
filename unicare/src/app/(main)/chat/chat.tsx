@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -8,9 +8,12 @@ import { toast } from "sonner";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { chatApi } from "@/features/chat/api/chat-api";
 import type { ConversationMessage, ConversationResponse } from "@/features/chat/types";
+import { ensureSignalRStarted, getSignalRConnection } from "@/lib/signalr";
 
 export default function ChatPageClient() {
   const [message, setMessage] = useState("");
+  const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
+  const [signalRErrorShown, setSignalRErrorShown] = useState(false);
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const { user } = useAuth();
@@ -22,11 +25,114 @@ export default function ChatPageClient() {
     queryKey: ["chat", "conversation", chatId, user?.id],
     queryFn: () => chatApi.getConversation(chatId!, user!.id),
     enabled: Boolean(chatId && user?.id),
+    refetchInterval: isRealtimeConnected ? false : 2500,
+    refetchOnWindowFocus: !isRealtimeConnected,
   });
 
   const messages = useMemo(() => {
     return conversationQuery.data?.messages ?? [];
   }, [conversationQuery.data?.messages]);
+
+  useEffect(() => {
+    if (!chatId || !user?.id) {
+      return;
+    }
+
+    const apiBase = (process.env.NEXT_PUBLIC_API_URL ?? "").trim().replace(/\/$/, "");
+    const hubUrl = apiBase ? `${apiBase}/hubs/chat` : "/hubs/chat";
+    const connection = getSignalRConnection(hubUrl);
+    const queryKey = ["chat", "conversation", chatId, user?.id] as const;
+    let isDisposed = false;
+
+    const onReceiveMessage = (payload: unknown) => {
+      const data = payload as Partial<ConversationMessage> & { chatId?: string; ChatId?: string; MessageId?: string };
+      const payloadChatId = data.chatId ?? data.ChatId;
+      if (!payloadChatId || payloadChatId !== chatId) {
+        return;
+      }
+
+      const normalized: ConversationMessage = {
+        messageId: String(data.messageId ?? data.MessageId ?? crypto.randomUUID()),
+        senderId: String(data.senderId ?? ""),
+        body: String(data.body ?? ""),
+        type: String(data.type ?? "Text"),
+        sentAt: String(data.sentAt ?? new Date().toISOString()),
+        readAt: data.readAt ?? null,
+      };
+
+      queryClient.setQueryData(queryKey, (previous: ConversationResponse | undefined) => {
+        if (!previous) {
+          return previous;
+        }
+
+        const exists = previous.messages.some((entry) => entry.messageId === normalized.messageId);
+        if (exists) {
+          return previous;
+        }
+
+        return {
+          ...previous,
+          messages: [...previous.messages, normalized],
+        };
+      });
+    };
+
+    const onMessagesRead = (payload: unknown) => {
+      const data = payload as { chatId?: string; ChatId?: string; readerId?: string; ReaderId?: string };
+      const payloadChatId = data.chatId ?? data.ChatId;
+      const readerId = data.readerId ?? data.ReaderId;
+
+      if (!payloadChatId || payloadChatId !== chatId || !readerId || readerId === user?.id) {
+        return;
+      }
+
+      queryClient.setQueryData(queryKey, (previous: ConversationResponse | undefined) => {
+        if (!previous) {
+          return previous;
+        }
+
+        return {
+          ...previous,
+          messages: previous.messages.map((entry) =>
+            entry.senderId === user?.id
+              ? { ...entry, readAt: entry.readAt ?? new Date().toISOString() }
+              : entry
+          ),
+        };
+      });
+    };
+
+    connection.on("ReceiveMessage", onReceiveMessage);
+    connection.on("MessagesRead", onMessagesRead);
+
+    void (async () => {
+      try {
+        await ensureSignalRStarted(connection);
+        await connection.invoke("JoinChat", chatId);
+        if (!isDisposed) {
+          setIsRealtimeConnected(true);
+          setSignalRErrorShown(false);
+        }
+      } catch (error) {
+        if (!isDisposed) {
+          setIsRealtimeConnected(false);
+          if (!signalRErrorShown) {
+            toast.message("Realtime unavailable. Chat is syncing automatically.");
+            setSignalRErrorShown(true);
+          }
+        }
+        console.error("SignalR setup failed:", error);
+      }
+    })();
+
+    return () => {
+      isDisposed = true;
+      setIsRealtimeConnected(false);
+      connection.off("ReceiveMessage", onReceiveMessage);
+      connection.off("MessagesRead", onMessagesRead);
+      void connection.invoke("LeaveChat", chatId).catch(() => undefined);
+    };
+  }, [chatId, queryClient, signalRErrorShown, user?.id]);
 
   const sendMessageMutation = useMutation({
     mutationFn: async (body: string) => {
