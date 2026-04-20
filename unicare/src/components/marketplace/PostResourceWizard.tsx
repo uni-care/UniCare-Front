@@ -39,8 +39,8 @@ export default function PostResourceWizard() {
                 {
                     title: form.name,
                     description: form.description,
-                    price: form.exchangeType === "sell" ? parseFloat(form.price) || 0 : 0,
-                    currency: form.discipline,
+                    price: form.exchangeType === "sell" ? parseFloat(form.price) || 1 : 0.01,
+                    currency: "EGP",
                     location: form.discipline,
                     imageUrls: form.previews.filter((p) => !p.startsWith("blob:")),
                     availableFrom: new Date().toISOString(),
