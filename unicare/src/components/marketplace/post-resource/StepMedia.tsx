@@ -21,7 +21,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
     const progress = (2 / 3) * 100;
 
     return (
-        <div className="bg-background-light min-h-screen pt-28 pb-20">
+        <div className="bg-background-light min-h-screen pt-32 pb-20">
             <div className="max-w-5xl mx-auto px-4 md:px-8 flex flex-col gap-8">
                 {/* Stepper */}
                 <div className="flex flex-col gap-2">
@@ -47,7 +47,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                         {/* Upload Zone */}
                         <div
                             onClick={() => fileRef.current?.click()}
-                            className="group relative flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-neutral-300 bg-white hover:border-primary/50 hover:bg-neutral-50 transition-all duration-200 py-16 px-6 cursor-pointer"
+                            className="group relative flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-neutral-300 bg-white hover:border-primary/50 hover:bg-neutral-50 transition-all duration-200 py-16 px-6 cursor-pointer"
                         >
                             <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                                 <span className="material-symbols-outlined text-4xl text-primary">cloud_upload</span>
@@ -75,7 +75,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                         {form.previews.length > 0 && (
                             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                                 {form.previews.map((src, i) => (
-                                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-neutral-200 group">
+                                    <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-neutral-200 group">
                                         <Image src={src} alt={`Upload ${i + 1}`} fill className="object-cover" />
                                         <button
                                             onClick={() => removeFile(i)}
@@ -95,7 +95,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                             </button>
                             <button
                                 onClick={onNext}
-                                className="px-8 py-3 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2 cursor-pointer"
+                                className="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2 cursor-pointer"
                             >
                                 Continue <span className="material-symbols-outlined text-sm">arrow_forward</span>
                             </button>
@@ -104,7 +104,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
 
                     {/* Sidebar Tips */}
                     <div className="lg:col-span-1 flex flex-col gap-6">
-                        <div className="rounded-xl overflow-hidden shadow-sm bg-white border border-neutral-100">
+                        <div className="rounded-lg overflow-hidden shadow-sm bg-white border border-neutral-100">
                             <div
                                 className="h-48 bg-neutral-200 w-full relative overflow-hidden"
                                 style={{
@@ -129,7 +129,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                             </div>
                         </div>
 
-                        <div className="rounded-xl p-5 bg-primary/10 border border-primary/20 flex flex-col gap-3">
+                        <div className="rounded-lg p-5 bg-primary/10 border border-primary/20 flex flex-col gap-3">
                             <div className="flex items-center gap-3 text-primary">
                                 <span className="material-symbols-outlined">visibility</span>
                                 <h3 className="font-bold">Be Transparent</h3>

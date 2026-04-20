@@ -7,7 +7,7 @@ interface StepSuccessProps {
 
 export default function StepSuccess({ form }: StepSuccessProps) {
     return (
-        <div className="bg-background-light min-h-screen pt-28 pb-20 relative overflow-hidden">
+        <div className="bg-background-light min-h-screen pt-36 pb-20 relative overflow-hidden">
             {/* Decorative Background */}
             <div className="absolute top-20 left-[10%] text-primary/10 select-none pointer-events-none">
                 <span className="material-symbols-outlined text-[120px]">school</span>
@@ -40,7 +40,7 @@ export default function StepSuccess({ form }: StepSuccessProps) {
                         <span className="material-symbols-outlined text-[16px]">visibility</span>
                         Live Preview
                     </div>
-                    <div className="flex flex-col md:flex-row gap-5 bg-neutral-50 rounded-xl p-4 border border-neutral-100">
+                    <div className="flex flex-col md:flex-row gap-5 bg-neutral-50 rounded-lg p-4 border border-neutral-100">
                         {/* Image */}
                         <div
                             className="w-full md:w-[240px] shrink-0 h-48 md:h-auto rounded-lg bg-neutral-200 bg-cover bg-center relative overflow-hidden"
@@ -83,14 +83,14 @@ export default function StepSuccess({ form }: StepSuccessProps) {
                 <div className="flex flex-col sm:flex-row items-center gap-4 mt-10 w-full max-w-md">
                     <Link
                         href="/marketplace"
-                        className="w-full flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-base transition-all shadow-md hover:shadow-lg cursor-pointer"
+                        className="w-full flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-base transition-all shadow-md hover:shadow-lg cursor-pointer"
                     >
                         View Live Post
                         <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                     </Link>
                     <Link
                         href="/marketplace"
-                        className="w-full flex items-center justify-center h-12 px-6 bg-transparent hover:bg-neutral-100 text-neutral-600 rounded-xl font-medium text-base transition-colors cursor-pointer"
+                        className="w-full flex items-center justify-center h-12 px-6 bg-transparent hover:bg-neutral-100 text-neutral-600 rounded-lg font-medium text-base transition-colors cursor-pointer"
                     >
                         <span className="material-symbols-outlined text-[20px] mr-2 text-neutral-400">arrow_back</span>
                         Back to Marketplace

@@ -82,7 +82,7 @@ export default function RequestItemModal({
         </button>
 
         <div className="mx-auto mb-4 h-14 w-14 overflow-hidden rounded-2xl border border-primary/10 bg-white p-1">
-          <div className="relative h-full w-full overflow-hidden rounded-xl">
+          <div className="relative h-full w-full overflow-hidden rounded-lg">
             <Image src={item.image} alt={item.title} fill className="object-cover" />
           </div>
         </div>

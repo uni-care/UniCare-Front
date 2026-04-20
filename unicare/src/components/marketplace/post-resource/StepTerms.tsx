@@ -25,7 +25,7 @@ export default function StepTerms({ form, update, onNext, onBack }: StepProps) {
                         </div>
 
                         {/* Lend / Sell Toggle */}
-                        <div className="flex h-12 w-full max-w-sm items-center rounded-xl bg-neutral-100 p-1">
+                        <div className="flex h-12 w-full max-w-sm items-center rounded-lg bg-neutral-100 p-1">
                             <button
                                 onClick={() => update("exchangeType", "lend")}
                                 className={`flex-1 h-full rounded-lg flex items-center justify-center gap-2 text-sm font-bold transition-all cursor-pointer ${form.exchangeType === "lend" ? "bg-white shadow-sm text-primary" : "text-neutral-500"}`}
@@ -51,7 +51,7 @@ export default function StepTerms({ form, update, onNext, onBack }: StepProps) {
                                         <div className="relative flex items-center">
                                             <span className="absolute left-4 text-neutral-400 material-symbols-outlined text-[20px]">calendar_clock</span>
                                             <input
-                                                className="w-full h-12 pl-11 pr-4 rounded-xl border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                                className="w-full h-12 pl-11 pr-4 rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                                 placeholder="e.g., 7"
                                                 type="number"
                                                 value={form.maxDuration}
@@ -65,7 +65,7 @@ export default function StepTerms({ form, update, onNext, onBack }: StepProps) {
                                         <div className="relative flex items-center">
                                             <span className="absolute left-4 text-neutral-400 material-symbols-outlined text-[20px]">verified_user</span>
                                             <input
-                                                className="w-full h-12 pl-11 pr-4 rounded-xl border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                                className="w-full h-12 pl-11 pr-4 rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                                 placeholder="e.g., 50.00"
                                                 type="number"
                                                 value={form.deposit}
@@ -81,7 +81,7 @@ export default function StepTerms({ form, update, onNext, onBack }: StepProps) {
                                     <div className="relative flex items-center">
                                         <span className="absolute left-4 text-neutral-400 material-symbols-outlined text-[20px]">attach_money</span>
                                         <input
-                                            className="w-full h-12 pl-11 pr-4 rounded-xl border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                            className="w-full h-12 pl-11 pr-4 rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                             placeholder="e.g., 120.00"
                                             type="number"
                                             value={form.price}
@@ -115,13 +115,13 @@ export default function StepTerms({ form, update, onNext, onBack }: StepProps) {
 
                     {/* Actions */}
                     <div className="flex items-center justify-between mt-10 gap-4">
-                        <button onClick={onBack} className="px-6 py-3 rounded-xl text-neutral-600 font-medium hover:bg-neutral-100 transition-colors cursor-pointer">
+                        <button onClick={onBack} className="px-6 py-3 rounded-lg text-neutral-600 font-medium hover:bg-neutral-100 transition-colors cursor-pointer">
                             Back
                         </button>
                         <button
                             onClick={onNext}
                             disabled={!form.promise}
-                            className="md:w-48 bg-primary hover:bg-primary/90 text-white h-12 rounded-xl font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            className="md:w-48 bg-primary hover:bg-primary/90 text-white h-12 rounded-lg font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         >
                             Post Now
                             <span className="material-symbols-outlined text-[20px]">arrow_forward</span>

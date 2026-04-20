@@ -31,7 +31,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors">label</span>
                             <input
                                 id="res-name"
-                                className="w-full h-14 pl-12 pr-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                                className="w-full h-14 pl-12 pr-4 rounded-lg border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
                                 placeholder="e.g., Fluke Multimeter 87V"
                                 value={form.name}
                                 onChange={(e) => update("name", e.target.value)}
@@ -46,7 +46,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors">category</span>
                             <select
                                 id="discipline"
-                                className="w-full h-14 pl-12 pr-10 rounded-xl border border-neutral-200 bg-white text-neutral-900 focus:border-primary focus:ring-1 focus:ring-primary appearance-none transition-all cursor-pointer outline-none"
+                                className="w-full h-14 pl-12 pr-10 rounded-lg border border-neutral-200 bg-white text-neutral-900 focus:border-primary focus:ring-1 focus:ring-primary appearance-none transition-all cursor-pointer outline-none"
                                 value={form.discipline}
                                 onChange={(e) => update("discipline", e.target.value)}
                             >
@@ -71,7 +71,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                         <div className="relative group">
                             <textarea
                                 id="description"
-                                className="w-full p-4 rounded-xl border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none leading-relaxed outline-none"
+                                className="w-full p-4 rounded-lg border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none leading-relaxed outline-none"
                                 maxLength={300}
                                 rows={4}
                                 placeholder="Describe the condition, history, or unique quirks of this item..."
@@ -85,13 +85,13 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
 
                     {/* Actions */}
                     <div className="col-span-1 md:col-span-2 flex items-center justify-between pt-6 border-t border-neutral-100 mt-4">
-                        <Link href="/marketplace" className="px-6 py-3 rounded-xl text-neutral-600 font-bold hover:bg-neutral-100 transition-colors">
+                        <Link href="/marketplace" className="px-6 py-3 rounded-lg text-neutral-600 font-bold hover:bg-neutral-100 transition-colors">
                             Cancel
                         </Link>
                         <button
                             onClick={onNext}
                             disabled={!form.name || !form.discipline}
-                            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-bold shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         >
                             Continue
                             <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -102,7 +102,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                 {/* Tips */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
                     {TIPS.map((tip) => (
-                        <div key={tip.title} className="p-4 rounded-xl bg-primary/5 border border-primary/10 flex flex-col gap-2">
+                        <div key={tip.title} className="p-4 rounded-lg bg-primary/5 border border-primary/10 flex flex-col gap-2">
                             <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-1">
                                 <span className="material-symbols-outlined text-lg">{tip.icon}</span>
                             </div>
