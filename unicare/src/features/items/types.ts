@@ -24,7 +24,6 @@ export interface CreateItemPayload {
   description: string;
   price: number;
   currency: string;
-  categoryId?: string;
   availableFrom?: string;
   availableTo?: string;
   location?: string;

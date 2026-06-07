@@ -36,7 +36,7 @@ export default function MarketplacePage() {
   const { user } = useAuth();
 
   /* ─── Fetch items from API ─── */
-  const [items, setItems] = useState<MarketplaceItem[]>(DUMMY_ITEMS);
+  const [items, setItems] = useState<MarketplaceItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -46,16 +46,12 @@ export default function MarketplacePage() {
       try {
         const apiItems = await itemsApi.getAll();
         if (!cancelled) {
-          if (apiItems.length > 0) {
-            setItems(apiItems.map(toMarketplaceItem));
-          } else {
-            setItems(DUMMY_ITEMS);
-          }
+          setItems(apiItems.map(toMarketplaceItem));
         }
-      } catch {
-        // Fallback to dummy data if API is unreachable
+      } catch (error) {
+        console.error("Failed to fetch marketplace items:", error);
         if (!cancelled) {
-          setItems(DUMMY_ITEMS);
+          setItems([]);
         }
       } finally {
         if (!cancelled) {
