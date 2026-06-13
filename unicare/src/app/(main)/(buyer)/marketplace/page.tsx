@@ -6,7 +6,9 @@ import Link from "next/link";
 import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
-import { CATEGORIES, DUMMY_ITEMS, toMarketplaceItem, type MarketplaceItem } from "./data";
+import { DUMMY_ITEMS, toMarketplaceItem, type MarketplaceItem } from "./data";
+import { categoriesApi } from "@/api/categories-api";
+import type { CategoryResponse } from "@/types/categories";
 import { chatApi } from "@/api/chat-api";
 import { useAuth } from "@/hooks/useAuth";
 import { itemsApi } from "@/api/items-api";
@@ -23,7 +25,8 @@ interface RequestedItemRecord {
 
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeDepartment, setActiveDepartment] = useState(CATEGORIES[0]);
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
+  const [activeCategoryId, setActiveCategoryId] = useState<string>("All");
   const [showFilters, setShowFilters] = useState(false);
   const [activeType, setActiveType] = useState<"All" | "LEND" | "SALE">("All");
   const [activeStatus, setActiveStatus] = useState<"All" | "Available Now" | "Low Stock">("All");
@@ -38,6 +41,27 @@ export default function MarketplacePage() {
   /* ─── Fetch items from API ─── */
   const [items, setItems] = useState<MarketplaceItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(12);
+
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [searchQuery, activeCategoryId, activeType, activeStatus, activePrice]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchCategories() {
+      try {
+        const list = await categoriesApi.getAll();
+        if (!cancelled) {
+          setCategories(list);
+        }
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      }
+    }
+    fetchCategories();
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -102,12 +126,12 @@ export default function MarketplacePage() {
     const query = searchQuery.trim().toLowerCase();
 
     return items.filter((item) => {
-      const matchesDepartment =
-        activeDepartment === "All Departments" || item.department === activeDepartment;
+      const matchesCategory =
+        activeCategoryId === "All" || item.categoryId === activeCategoryId;
 
       const matchesQuery = query.length === 0
         ? true
-        : [item.title, item.category, item.department].some((field) =>
+        : [item.title, item.category].some((field) =>
           field.toLowerCase().includes(query)
         );
 
@@ -125,14 +149,18 @@ export default function MarketplacePage() {
             : !isFree;
 
       return (
-        matchesDepartment &&
+        matchesCategory &&
         matchesQuery &&
         matchesType &&
         matchesStatus &&
         matchesPrice
       );
     });
-  }, [activeDepartment, activePrice, activeStatus, activeType, searchQuery, items]);
+  }, [activeCategoryId, activePrice, activeStatus, activeType, searchQuery, items]);
+
+  const slicedItems = useMemo(() => {
+    return filteredItems.slice(0, visibleCount);
+  }, [filteredItems, visibleCount]);
 
   return (
     <div className="bg-neutral-50 min-h-screen pt-28 pb-20 px-4 md:px-8">
@@ -222,17 +250,27 @@ export default function MarketplacePage() {
 
         {/* Categories Bar */}
         <div className="flex items-center gap-3 overflow-x-auto pb-4 mb-10 no-scrollbar">
-          {CATEGORIES.map((cat) => (
+          <button
+            type="button"
+            onClick={() => setActiveCategoryId("All")}
+            className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeCategoryId === "All"
+              ? "bg-primary text-white shadow-lg shadow-primary/20"
+              : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
+              }`}
+          >
+            All Categories
+          </button>
+          {categories.map((cat) => (
             <button
-              key={cat}
+              key={cat.id}
               type="button"
-              onClick={() => setActiveDepartment(cat)}
-              className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeDepartment === cat
+              onClick={() => setActiveCategoryId(cat.id)}
+              className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeCategoryId === cat.id
                 ? "bg-primary text-white shadow-lg shadow-primary/20"
                 : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
                 }`}
             >
-              {cat}
+              {cat.name}
             </button>
           ))}
         </div>
@@ -251,7 +289,7 @@ export default function MarketplacePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
-            {filteredItems.map((item) => (
+            {slicedItems.map((item) => (
               <ItemCard
                 key={item.id}
                 {...item}
@@ -263,9 +301,12 @@ export default function MarketplacePage() {
         )}
 
         {/* Pagination/Load More */}
-        {!isLoading && filteredItems.length > 0 && (
+        {!isLoading && filteredItems.length > visibleCount && (
           <div className="flex justify-center">
-            <button className="group flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-10 py-4 font-bold text-neutral-800 hover:border-primary/60 transition-all shadow-sm cursor-pointer">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 12)}
+              className="group flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-10 py-4 font-bold text-neutral-800 hover:border-primary/60 transition-all shadow-sm cursor-pointer"
+            >
               View More Resources
               <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </button>
