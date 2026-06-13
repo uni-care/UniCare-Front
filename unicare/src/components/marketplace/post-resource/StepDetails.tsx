@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProgressStepper from "./ProgressStepper";
 import type { StepProps } from "./types";
+import { categoriesApi } from "@/api/categories-api";
+import type { CategoryResponse } from "@/types/categories";
 
 const TIPS = [
     { icon: "verified", title: "Be Accurate", desc: "Ensure the model number and condition are correct." },
@@ -9,6 +12,24 @@ const TIPS = [
 ];
 
 export default function StepDetails({ form, update, onNext }: StepProps) {
+    const [categories, setCategories] = useState<CategoryResponse[]>([]);
+
+    useEffect(() => {
+        let cancelled = false;
+        async function fetchCategories() {
+            try {
+                const list = await categoriesApi.getAll();
+                if (!cancelled) {
+                    setCategories(list);
+                }
+            } catch (err) {
+                console.error("Failed to load categories:", err);
+            }
+        }
+        fetchCategories();
+        return () => { cancelled = true; };
+    }, []);
+
     return (
         <div className="bg-background-light min-h-screen pt-28 pb-20">
             <div className="max-w-4xl mx-auto px-4 md:px-8 flex flex-col gap-8">
@@ -51,12 +72,11 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                                 onChange={(e) => update("discipline", e.target.value)}
                             >
                                 <option disabled value="">Select a discipline</option>
-                                <option value="Electrical Engineering">Electrical Engineering</option>
-                                <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                <option value="Civil Engineering">Civil Engineering</option>
-                                <option value="Software Engineering">Software Engineering</option>
-                                <option value="Architecture">Architecture</option>
-                                <option value="Chemical Engineering">Chemical Engineering</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>
+                                        {cat.name}
+                                    </option>
+                                ))}
                             </select>
                             <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none">expand_more</span>
                         </div>

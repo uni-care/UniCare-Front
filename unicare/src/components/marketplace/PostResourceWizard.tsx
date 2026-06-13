@@ -24,18 +24,28 @@ export default function PostResourceWizard() {
     const next = () => setStep((s) => s + 1);
     const back = () => setStep((s) => s - 1);
 
-    const mapDisciplineToCategoryId = (discipline: string): string => {
-        switch (discipline) {
-            case "Electrical Engineering":
-            case "Mechanical Engineering":
-            case "Civil Engineering":
-            case "Software Engineering":
-            case "Chemical Engineering":
-                return "55555555-5555-5555-5555-555555555555"; // Engineering & Tech Tools
-            case "Architecture":
-                return "44444444-4444-4444-4444-444444444444"; // Art & Design Supplies
+    const getCategoryNameById = (id: string): string => {
+        switch (id) {
+            case "22222222-2222-2222-2222-222222222222":
+                return "Textbooks & Course Materials";
+            case "33333333-3333-3333-3333-333333333333":
+                return "Lab & Science Supplies";
+            case "44444444-4444-4444-4444-444444444444":
+                return "Art & Design Supplies";
+            case "55555555-5555-5555-5555-555555555555":
+                return "Engineering & Tech Tools";
+            case "66666666-6666-6666-6666-666666666666":
+                return "Medical & Health Sciences";
+            case "77777777-7777-7777-7777-777777777777":
+                return "Electronics & Devices";
+            case "88888888-8888-8888-8888-888888888888":
+                return "Music & Performing Arts";
+            case "99999999-9999-9999-9999-999999999999":
+                return "Sports & Recreation";
+            case "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa":
+                return "Dorm & Living Essentials";
             default:
-                return "11111111-1111-1111-1111-111111111111"; // Other
+                return "Other";
         }
     };
 
@@ -50,7 +60,8 @@ export default function PostResourceWizard() {
 
         setIsSubmitting(true);
         try {
-            const categoryId = mapDisciplineToCategoryId(form.discipline);
+            const categoryId = form.discipline;
+            const categoryName = getCategoryNameById(categoryId);
 
             // 1. Create the item (created as Draft by default in backend)
             const item = await itemsApi.create(
@@ -60,7 +71,7 @@ export default function PostResourceWizard() {
                     price: form.exchangeType === "sell" ? parseFloat(form.price) || 1 : 0.01,
                     currency: "EGP",
                     categoryId,
-                    location: form.discipline,
+                    location: categoryName,
                     imageUrls: [], // Images uploaded dynamically next
                     availableFrom: new Date().toISOString(),
                     availableTo: form.maxDuration
@@ -81,8 +92,8 @@ export default function PostResourceWizard() {
                     }
                     toast.success("Images uploaded successfully!", { id: toastId });
                 } catch (uploadErr) {
-                    toast.error("Some images failed to upload.", { id: toastId });
-                    throw uploadErr;
+                    toast.error("Image upload failed. Publishing resource without images.", { id: toastId });
+                    // console.error("Image upload error, continuing creation:", uploadErr);
                 }
             }
 

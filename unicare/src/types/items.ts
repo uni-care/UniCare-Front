@@ -14,6 +14,8 @@ export interface ItemResponse {
   imageUrls: string[];
   isFavorited: boolean;
   favoriteCount: number;
+  categoryId: string;
+  categoryName: string;
   createdAt: string;
   updatedAt: string;
 }

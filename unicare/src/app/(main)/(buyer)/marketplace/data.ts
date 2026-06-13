@@ -7,6 +7,7 @@ export interface MarketplaceItem {
   ownerId: string;
   title: string;
   category: string;
+  categoryId: string;
   department: string;
   image: string;
   price: string | number;
@@ -59,7 +60,8 @@ export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
     transactionId: item.id, // using item id as transaction ref
     ownerId: item.ownerId,
     title: item.title,
-    category: item.location || "General",
+    category: item.categoryName || "Other",
+    categoryId: item.categoryId || "",
     department: mapDisciplineToDepartment(item.location),
     image: item.imageUrls?.[0] || "",
     price: isFree ? "Free" : item.price,
