@@ -24,6 +24,21 @@ export default function PostResourceWizard() {
     const next = () => setStep((s) => s + 1);
     const back = () => setStep((s) => s - 1);
 
+    const mapDisciplineToCategoryId = (discipline: string): string => {
+        switch (discipline) {
+            case "Electrical Engineering":
+            case "Mechanical Engineering":
+            case "Civil Engineering":
+            case "Software Engineering":
+            case "Chemical Engineering":
+                return "55555555-5555-5555-5555-555555555555"; // Engineering & Tech Tools
+            case "Architecture":
+                return "44444444-4444-4444-4444-444444444444"; // Art & Design Supplies
+            default:
+                return "11111111-1111-1111-1111-111111111111"; // Other
+        }
+    };
+
     /** Submit the item to the backend */
     const handleSubmit = async () => {
         const authToken = getAuthToken();
@@ -35,20 +50,52 @@ export default function PostResourceWizard() {
 
         setIsSubmitting(true);
         try {
-            await itemsApi.create(
+            const categoryId = mapDisciplineToCategoryId(form.discipline);
+
+            // 1. Create the item (created as Draft by default in backend)
+            const item = await itemsApi.create(
                 {
                     title: form.name,
                     description: form.description,
                     price: form.exchangeType === "sell" ? parseFloat(form.price) || 1 : 0.01,
                     currency: "EGP",
+                    categoryId,
                     location: form.discipline,
-                    imageUrls: form.previews.length > 0
-                        ? form.previews.filter((p) => !p.startsWith("blob:"))
-                        : [],
+                    imageUrls: [], // Images uploaded dynamically next
                     availableFrom: new Date().toISOString(),
                     availableTo: form.maxDuration
                         ? new Date(Date.now() + parseInt(form.maxDuration) * 86400000).toISOString()
                         : new Date(Date.now() + 30 * 86400000).toISOString(),
+                },
+                authToken
+            );
+
+            // 2. Upload images sequentially if files exist
+            if (form.files && form.files.length > 0) {
+                const toastId = toast.loading(`Uploading images (0/${form.files.length})...`);
+                try {
+                    for (let i = 0; i < form.files.length; i++) {
+                        const file = form.files[i];
+                        toast.loading(`Uploading images (${i + 1}/${form.files.length})...`, { id: toastId });
+                        await itemsApi.uploadImage(item.id, file, authToken);
+                    }
+                    toast.success("Images uploaded successfully!", { id: toastId });
+                } catch (uploadErr) {
+                    toast.error("Some images failed to upload.", { id: toastId });
+                    throw uploadErr;
+                }
+            }
+
+            // 3. Publish the item by changing status to Available
+            await itemsApi.update(
+                item.id,
+                {
+                    title: form.name,
+                    description: form.description,
+                    price: form.exchangeType === "sell" ? parseFloat(form.price) || 1 : 0.01,
+                    currency: "EGP",
+                    categoryId,
+                    status: "Available",
                 },
                 authToken
             );

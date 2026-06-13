@@ -12,7 +12,10 @@ export function proxy(request: NextRequest) {
 
   // Rewrite /api/v1/... requests to the backend API URL
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5111";
-  const url = new URL(request.nextUrl.pathname + request.nextUrl.search, backendUrl);
+  const url = new URL(
+    request.nextUrl.pathname + request.nextUrl.search,
+    backendUrl,
+  );
 
   return NextResponse.rewrite(url, {
     request: {

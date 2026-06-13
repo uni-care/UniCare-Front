@@ -58,4 +58,27 @@ export const itemsApi = {
     );
     return data;
   },
+
+  /** POST /api/v1/Items/:itemId/images — upload item image */
+  uploadImage: async (
+    itemId: string,
+    file: File,
+    token: string,
+  ): Promise<{ url: string; publicId: string }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const { data } = await axiosInstance.post<{ url: string; publicId: string }>(
+      `${BASE}/${itemId}/images`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  },
 };
+
