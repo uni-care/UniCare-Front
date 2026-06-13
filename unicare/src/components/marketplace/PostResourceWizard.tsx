@@ -92,8 +92,8 @@ export default function PostResourceWizard() {
                     }
                     toast.success("Images uploaded successfully!", { id: toastId });
                 } catch (uploadErr) {
-                    toast.error("Some images failed to upload.", { id: toastId });
-                    throw uploadErr;
+                    toast.error("Image upload failed. Publishing resource without images.", { id: toastId });
+                    // console.error("Image upload error, continuing creation:", uploadErr);
                 }
             }
 

@@ -53,6 +53,7 @@ export default function MarketplacePage() {
       try {
         const list = await categoriesApi.getAll();
         if (!cancelled) {
+          // console.log("Marketplace - Fetched categories:", list.map(x => ({ id: x.id, name: x.name })));
           setCategories(list);
         }
       } catch (err) {
@@ -70,7 +71,9 @@ export default function MarketplacePage() {
       try {
         const apiItems = await itemsApi.getAll();
         if (!cancelled) {
-          setItems(apiItems.map(toMarketplaceItem));
+          const mapped = apiItems.map(toMarketplaceItem);
+          // console.log("Marketplace - Fetched and mapped items:", mapped.map(x => ({ title: x.title, categoryId: x.categoryId, category: x.category })));
+          setItems(mapped);
         }
       } catch (error) {
         console.error("Failed to fetch marketplace items:", error);
@@ -124,6 +127,7 @@ export default function MarketplacePage() {
 
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
+    // console.log("Marketplace - Filtering items with activeCategoryId:", activeCategoryId);
 
     return items.filter((item) => {
       const matchesCategory =
