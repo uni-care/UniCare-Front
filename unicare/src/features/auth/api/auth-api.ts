@@ -3,9 +3,9 @@ import { axiosInstance } from "@/lib/api/axios-instance";
 import type { AuthResponse, LoginPayload, RegisterPayload, UserProfile } from "@/features/auth/types";
 
 export const AUTH_ENDPOINTS = {
-  register: "/api/v1/auth/register",
-  login: "/api/v1/auth/login",
-  logout: "/api/v1/auth/logout",
+  register: "/api/auth/register",
+  login: "/api/auth/login",
+  logout: "/api/auth/logout",
   profile: "/api/v1/profile/me",
 } as const;
 
@@ -18,25 +18,12 @@ export const authApi = {
     const { data } = await axiosInstance.post<AuthResponse>(AUTH_ENDPOINTS.login, payload);
     return data;
   },
-  logout: async (token: string): Promise<void> => {
-    await axiosInstance.post(
-      AUTH_ENDPOINTS.logout,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  logout: async (): Promise<void> => {
+    await axiosInstance.post(AUTH_ENDPOINTS.logout, {});
   },
-  getCurrentProfile: async (token: string): Promise<UserProfile> => {
+  getCurrentProfile: async (): Promise<UserProfile> => {
     const { data } = await axiosInstance.get<{ data?: UserProfile; success: boolean; message?: string }>(
-      AUTH_ENDPOINTS.profile,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      AUTH_ENDPOINTS.profile
     );
 
     if (!data.data) {
@@ -46,3 +33,4 @@ export const authApi = {
     return data.data;
   },
 };
+
