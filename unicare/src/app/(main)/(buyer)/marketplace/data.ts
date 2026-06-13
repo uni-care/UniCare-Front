@@ -61,7 +61,7 @@ export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
     title: item.title,
     category: item.location || "General",
     department: mapDisciplineToDepartment(item.location),
-    image: item.imageUrls?.[0] || "/placeholder-item.png",
+    image: item.imageUrls?.[0] || "",
     price: isFree ? "Free" : item.price,
     status:
       item.status?.toLowerCase() === "low stock"

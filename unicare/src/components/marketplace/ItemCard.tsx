@@ -33,18 +33,26 @@ export default function ItemCard({
     onRequestClick,
     isRequested = false,
 }: ItemCardProps) {
+    const isValidImage = typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"));
     const isFree = price === 0 || price === "Free";
 
     return (
         <div className="group bg-white rounded-[2rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer">
             {/* Image Container */}
-            <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-neutral-50 mb-4">
-                <Image
-                    src={image}
-                    alt={title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+            <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-neutral-50 mb-4 flex items-center justify-center border border-neutral-100">
+                {isValidImage ? (
+                    <Image
+                        src={image}
+                        alt={title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                ) : (
+                    <div className="flex flex-col items-center justify-center gap-1.5 text-neutral-400">
+                        <span className="material-symbols-outlined text-4xl">image</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">No Image</span>
+                    </div>
+                )}
 
                 {/* Badges */}
                 <div className="absolute top-3 left-3 flex flex-col gap-2">

@@ -67,7 +67,7 @@ export default function ProfilePage() {
       const related = DUMMY_ITEMS.find((item) => item.transactionId === entry.transactionId);
       return {
         ...entry,
-        image: related?.image ?? "/placeholder-item.png",
+        image: related?.image ?? "",
       };
     });
   }, [requestedItems]);
@@ -153,8 +153,12 @@ export default function ProfilePage() {
                   <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
                     {requestedItemsWithImage.map((item) => (
                       <div key={item.transactionId} className="flex items-center gap-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-                        <div className="relative h-20 w-20 overflow-hidden rounded-xl bg-white">
-                          <Image src={item.image} alt={item.itemTitle} fill className="object-cover" />
+                        <div className="relative h-20 w-20 overflow-hidden rounded-xl bg-neutral-50 border border-neutral-200 flex items-center justify-center shrink-0">
+                          {item.image ? (
+                            <Image src={item.image} alt={item.itemTitle} fill className="object-cover" />
+                          ) : (
+                            <span className="material-symbols-outlined text-neutral-400 text-2xl">image</span>
+                          )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-bold text-neutral-800">{item.itemTitle}</p>
