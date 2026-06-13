@@ -13,7 +13,6 @@ export interface MarketplaceItem {
   price: string | number;
   status: "Available Now" | "Low Stock";
   type: "LEND" | "SALE";
-  rating: number;
   isFavorited: boolean;
   user: {
     name: string;
@@ -70,7 +69,6 @@ export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
         ? "Low Stock"
         : "Available Now",
     type: isFree ? "LEND" : "SALE",
-    rating: 4.5 + Math.random() * 0.5, // placeholder until backend adds ratings
     isFavorited: item.isFavorited,
     user: {
       name: item.ownerName || "UniCare User",

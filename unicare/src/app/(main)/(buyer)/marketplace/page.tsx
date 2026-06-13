@@ -10,7 +10,7 @@ import { DUMMY_ITEMS, toMarketplaceItem, type MarketplaceItem } from "./data";
 import { categoriesApi } from "@/api/categories-api";
 import type { CategoryResponse } from "@/types/categories";
 import { chatApi } from "@/api/chat-api";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import { itemsApi } from "@/api/items-api";
 
 const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
@@ -35,8 +35,31 @@ export default function MarketplacePage() {
   const [requestedTransactionIds, setRequestedTransactionIds] = useState<string[]>([]);
   const [isRequestedStateHydrated, setIsRequestedStateHydrated] = useState(false);
   const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
-  const router = useRouter();
   const { user } = useAuth();
+  const router = useRouter();
+
+  const handleFavoriteToggle = async (itemId: string) => {
+    const token = getAuthToken();
+    if (!token) {
+      toast.error("Please sign in to favorite items.");
+      router.push("/login");
+      return;
+    }
+
+    try {
+      const res = await itemsApi.toggleFavorite(itemId, token);
+      setItems((prevItems) =>
+        prevItems.map((item) =>
+          item.id === itemId
+            ? { ...item, isFavorited: res.isFavorited }
+            : item
+        )
+      );
+      toast.success(res.message);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update favorite status.");
+    }
+  };
 
   /* ─── Fetch items from API ─── */
   const [items, setItems] = useState<MarketplaceItem[]>([]);
@@ -299,6 +322,7 @@ export default function MarketplacePage() {
                 {...item}
                 isRequested={requestedTransactionIds.includes(item.transactionId)}
                 onRequestClick={() => setSelectedItem(item)}
+                onFavoriteClick={handleFavoriteToggle}
               />
             ))}
           </div>

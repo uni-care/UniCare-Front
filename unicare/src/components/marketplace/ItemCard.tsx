@@ -9,13 +9,14 @@ interface ItemCardProps {
     price: string | number;
     status: "Available Now" | "Low Stock";
     type: "LEND" | "SALE";
-    rating: number;
+    isFavorited: boolean;
     user: {
         name: string;
         initials: string;
         time: string;
     };
     onRequestClick?: (itemId: string) => void;
+    onFavoriteClick?: (itemId: string) => void;
     isRequested?: boolean;
 }
 
@@ -28,9 +29,10 @@ export default function ItemCard({
     price,
     status,
     type,
-    rating,
+    isFavorited,
     user,
     onRequestClick,
+    onFavoriteClick,
     isRequested = false,
 }: ItemCardProps) {
     const isValidImage = typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"));
@@ -73,8 +75,21 @@ export default function ItemCard({
                 </div>
 
                 {/* Favorite Button */}
-                <button className="absolute top-3 right-3 size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center text-neutral-500 hover:text-rose-500 hover:bg-white transition-all shadow-sm">
-                    <span className="material-symbols-outlined text-xl">favorite</span>
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onFavoriteClick?.(id);
+                    }}
+                    className={`absolute top-3 right-3 size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center transition-all shadow-sm cursor-pointer ${isFavorited ? "text-rose-500" : "text-neutral-500 hover:text-rose-500"
+                        }`}
+                >
+                    <span
+                        className={`material-symbols-outlined text-xl ${isFavorited ? "fill-1 text-rose-500" : ""}`}
+                        style={{ fontVariationSettings: isFavorited ? "'FILL' 1" : "'FILL' 0" }}
+                    >
+                        favorite
+                    </span>
                 </button>
             </div>
 
@@ -84,10 +99,6 @@ export default function ItemCard({
                     <h3 className="text-lg font-bold text-neutral-800 line-clamp-1 group-hover:text-primary transition-colors">
                         {title}
                     </h3>
-                    <div className="flex items-center gap-1 text-amber-500 shrink-0">
-                        <span className="material-symbols-outlined text-base fill-1">star</span>
-                        <span className="text-sm font-bold">{rating.toFixed(1)}</span>
-                    </div>
                 </div>
                 <p className="text-xs font-semibold text-neutral-400 mb-4 uppercase tracking-wide">
                     {department} • {category}
