@@ -6,23 +6,21 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/features/auth/api/auth-api";
 import type { UserProfile } from "@/features/auth/types";
 
-export const AUTH_TOKEN_KEY = "auth_token";
 export const AUTH_ME_QUERY_KEY = ["auth", "me"] as const;
 
-export const getAuthToken = () => {
-  if (typeof window === "undefined") {
-    return null;
-  }
+// In-memory token storage (XSS-resistant, does not persist in localStorage)
+let inMemoryToken: string | null = null;
 
-  return localStorage.getItem(AUTH_TOKEN_KEY);
+export const getAuthToken = () => {
+  return inMemoryToken;
 };
 
-export const setAuthToken = (token: string) => {
-  localStorage.setItem(AUTH_TOKEN_KEY, token);
+export const setAuthToken = (token: string | null) => {
+  inMemoryToken = token;
 };
 
 export const clearAuthToken = () => {
-  localStorage.removeItem(AUTH_TOKEN_KEY);
+  inMemoryToken = null;
 };
 
 export const useAuth = () => {
@@ -35,14 +33,24 @@ export const useAuth = () => {
   } = useQuery<UserProfile | null>({
     queryKey: AUTH_ME_QUERY_KEY,
     queryFn: async () => {
-      const token = getAuthToken();
-
-      if (!token) {
-        return null;
-      }
-
       try {
-        return await authApi.getCurrentProfile(token);
+        // Fetch the user profile (cookie is automatically sent via the Next.js proxy)
+        const profile = await authApi.getCurrentProfile();
+
+        // Restore token in-memory for SignalR / client-side calls
+        try {
+          const res = await fetch("/api/auth/token");
+          if (res.ok) {
+            const tokenData = await res.json();
+            if (tokenData.token) {
+              setAuthToken(tokenData.token);
+            }
+          }
+        } catch (tokenErr) {
+          console.error("Failed to restore token in-memory:", tokenErr);
+        }
+
+        return profile;
       } catch {
         clearAuthToken();
         return null;
@@ -52,12 +60,8 @@ export const useAuth = () => {
   });
 
   const signOut = useCallback(async () => {
-    const token = getAuthToken();
-
     try {
-      if (token) {
-        await authApi.logout(token);
-      }
+      await authApi.logout();
     } finally {
       clearAuthToken();
       queryClient.setQueryData(AUTH_ME_QUERY_KEY, null);
@@ -75,3 +79,4 @@ export const useAuth = () => {
     [isFetching, isLoading, refetch, signOut, user]
   );
 };
+
