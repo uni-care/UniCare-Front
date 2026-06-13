@@ -1,4 +1,4 @@
-import { TransactionStatus } from "@/features/transactions/types";
+import { TransactionStatus } from "@/types/transactions";
 
 const STATUS_MAP: Record<number, { label: string; color: string }> = {
     [TransactionStatus.Pending]: { label: "Pending", color: "bg-amber-100 text-amber-700 border-amber-200" },

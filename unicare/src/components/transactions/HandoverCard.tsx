@@ -1,7 +1,7 @@
 "use client";
 
 import { QRCodeSVG } from "qrcode.react";
-import type { HandoverCode } from "@/features/transactions/types";
+import type { HandoverCode } from "@/types/transactions";
 
 interface Props {
     code: HandoverCode;

@@ -7,7 +7,7 @@ import {
   LogLevel,
 } from "@microsoft/signalr";
 
-import { getAuthToken } from "@/features/auth/hooks/useAuth";
+import { getAuthToken } from "@/hooks/useAuth";
 
 const connections = new Map<string, HubConnection>();
 

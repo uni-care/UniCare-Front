@@ -5,9 +5,9 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { authApi } from "@/features/auth/api/auth-api";
-import { registerSchema, type RegisterInput } from "@/features/auth/schemas/register-schema";
-import { RegistrationMethod } from "@/features/auth/types";
+import { authApi } from "@/api/auth-api";
+import { registerSchema, type RegisterInput } from "@/types/auth-schemas";
+import { RegistrationMethod } from "@/types/auth";
 import { useRouter } from "next/navigation";
 
 export function CreateAccountForm() {

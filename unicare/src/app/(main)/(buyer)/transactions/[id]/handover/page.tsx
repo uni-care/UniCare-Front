@@ -4,9 +4,9 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { useAuth, getAuthToken } from "@/features/auth/hooks/useAuth";
-import { transactionsApi } from "@/features/transactions/api/transactions-api";
-import { TransactionType, type HandoverCode } from "@/features/transactions/types";
+import { useAuth, getAuthToken } from "@/hooks/useAuth";
+import { transactionsApi } from "@/api/transactions-api";
+import { TransactionType, type HandoverCode } from "@/types/transactions";
 import HandoverCard from "@/components/transactions/HandoverCard";
 import PinVerifyForm from "@/components/transactions/PinVerifyForm";
 

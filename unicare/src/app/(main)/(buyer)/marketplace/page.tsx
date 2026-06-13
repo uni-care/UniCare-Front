@@ -7,9 +7,9 @@ import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
 import { CATEGORIES, DUMMY_ITEMS, toMarketplaceItem, type MarketplaceItem } from "./data";
-import { chatApi } from "@/features/chat/api/chat-api";
-import { useAuth } from "@/features/auth/hooks/useAuth";
-import { itemsApi } from "@/features/items/api/items-api";
+import { chatApi } from "@/api/chat-api";
+import { useAuth } from "@/hooks/useAuth";
+import { itemsApi } from "@/api/items-api";
 
 const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
 const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";

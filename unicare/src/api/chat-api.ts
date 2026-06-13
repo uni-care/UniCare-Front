@@ -1,11 +1,11 @@
-import { axiosInstance } from "@/lib/api/axios-instance";
+import { axiosInstance } from "./axios-instance";
 import type {
   ConversationMessage,
   ConversationResponse,
   CreateChatPayload,
   CreateChatResponse,
   SendMessagePayload,
-} from "@/features/chat/types";
+} from "@/types/chat";
 
 const CHAT_ENDPOINTS = {
   root: "/api/chats",

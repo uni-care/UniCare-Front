@@ -5,9 +5,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-import { useAuth } from "@/features/auth/hooks/useAuth";
-import { chatApi } from "@/features/chat/api/chat-api";
-import type { ConversationMessage, ConversationResponse } from "@/features/chat/types";
+import { useAuth } from "@/hooks/useAuth";
+import { chatApi } from "@/api/chat-api";
+import type { ConversationMessage, ConversationResponse } from "@/types/chat";
 import { ensureSignalRStarted, getSignalRConnection } from "@/lib/signalr";
 
 export default function ChatPageClient() {

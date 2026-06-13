@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/api/axios-instance";
+import { axiosInstance } from "./axios-instance";
 import type {
   CreateTransactionPayload,
   TransactionResponse,
@@ -7,7 +7,7 @@ import type {
   HandoverStatus,
   VerifyCodePayload,
   VerifyCodeResponse,
-} from "@/features/transactions/types";
+} from "@/types/transactions";
 
 const BASE = "/api/transactions";
 

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useAuth, getAuthToken } from "@/features/auth/hooks/useAuth";
-import { transactionsApi } from "@/features/transactions/api/transactions-api";
-import { TransactionType, type ActiveTransaction } from "@/features/transactions/types";
+import { useAuth, getAuthToken } from "@/hooks/useAuth";
+import { transactionsApi } from "@/api/transactions-api";
+import { TransactionType, type ActiveTransaction } from "@/types/transactions";
 import TransactionStatusBadge from "@/components/transactions/TransactionStatusBadge";
 
 export default function TransactionsPage() {

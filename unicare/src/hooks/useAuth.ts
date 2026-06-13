@@ -3,8 +3,8 @@
 import { useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { authApi } from "@/features/auth/api/auth-api";
-import type { UserProfile } from "@/features/auth/types";
+import { authApi } from "@/api/auth-api";
+import type { UserProfile } from "@/types/auth";
 
 export const AUTH_ME_QUERY_KEY = ["auth", "me"] as const;
 
@@ -79,4 +79,3 @@ export const useAuth = () => {
     [isFetching, isLoading, refetch, signOut, user]
   );
 };
-

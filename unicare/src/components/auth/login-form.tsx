@@ -8,9 +8,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { authApi } from "@/features/auth/api/auth-api";
-import { AUTH_ME_QUERY_KEY, setAuthToken } from "@/features/auth/hooks/useAuth";
-import { loginSchema, type LoginInput } from "@/features/auth/schemas/login-schema";
+import { authApi } from "@/api/auth-api";
+import { AUTH_ME_QUERY_KEY, setAuthToken } from "@/hooks/useAuth";
+import { loginSchema, type LoginInput } from "@/types/auth-schemas";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);

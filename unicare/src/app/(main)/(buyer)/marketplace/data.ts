@@ -1,4 +1,4 @@
-import type { ItemResponse } from "@/features/items/types";
+import type { ItemResponse } from "@/types/items";
 
 /* ─── Internal UI shape used by ItemCard & marketplace page ─── */
 export interface MarketplaceItem {

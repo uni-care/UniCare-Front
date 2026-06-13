@@ -8,8 +8,8 @@ import StepDetails from "./post-resource/StepDetails";
 import StepMedia from "./post-resource/StepMedia";
 import StepTerms from "./post-resource/StepTerms";
 import StepSuccess from "./post-resource/StepSuccess";
-import { itemsApi } from "@/features/items/api/items-api";
-import { useAuth, getAuthToken } from "@/features/auth/hooks/useAuth";
+import { itemsApi } from "@/api/items-api";
+import { useAuth, getAuthToken } from "@/hooks/useAuth";
 
 export default function PostResourceWizard() {
     const [step, setStep] = useState(0);

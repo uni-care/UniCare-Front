@@ -1,10 +1,10 @@
-import { axiosInstance } from "@/lib/api/axios-instance";
+import { axiosInstance } from "./axios-instance";
 import type {
   ItemResponse,
   CreateItemPayload,
   UpdateItemPayload,
   FavoriteResponse,
-} from "@/features/items/types";
+} from "@/types/items";
 
 const BASE = "/api/v1/Items";
 
@@ -81,4 +81,3 @@ export const itemsApi = {
     return data;
   },
 };
-

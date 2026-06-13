@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { DUMMY_ITEMS } from "@/app/(main)/(buyer)/marketplace/data";
 
 const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";

@@ -1,6 +1,5 @@
-import { axiosInstance } from "@/lib/api/axios-instance";
-
-import type { AuthResponse, LoginPayload, RegisterPayload, UserProfile } from "@/features/auth/types";
+import { axiosInstance } from "./axios-instance";
+import type { AuthResponse, LoginPayload, RegisterPayload, UserProfile } from "@/types/auth";
 
 export const AUTH_ENDPOINTS = {
   register: "/api/auth/register",
@@ -33,4 +32,3 @@ export const authApi = {
     return data.data;
   },
 };
-
