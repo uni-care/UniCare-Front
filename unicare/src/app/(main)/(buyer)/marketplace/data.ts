@@ -10,6 +10,7 @@ export interface MarketplaceItem {
   categoryId: string;
   department: string;
   image: string;
+  images: string[];
   price: string | number;
   currency?: string;
   status: string;
@@ -92,6 +93,7 @@ export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
     categoryId: item.categoryId || "",
     department: mapDisciplineToDepartment(item.location),
     image: item.imageUrls?.[0] || "",
+    images: item.imageUrls || [],
     price: isFree ? "Free" : item.price,
     currency: item.currency || "EGP",
     status: displayStatus,

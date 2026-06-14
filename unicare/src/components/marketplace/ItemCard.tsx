@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface ItemCardProps {
     id: string;
@@ -44,6 +45,7 @@ export default function ItemCard({
     availableTo,
     description,
 }: ItemCardProps) {
+    const router = useRouter();
     const [isExpanded, setIsExpanded] = useState(false);
     const isValidImage = typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"));
     const isFree = price === 0 || price === "Free" || price === 0.01 || price === "0.01";
@@ -66,7 +68,10 @@ export default function ItemCard({
     };
 
     return (
-        <div className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer">
+        <div
+            onClick={() => router.push(`/marketplace/${id}`)}
+            className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer"
+        >
             {/* Image Container */}
             <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-neutral-50 mb-4 flex items-center justify-center border border-neutral-100">
                 {isValidImage ? (
@@ -198,7 +203,10 @@ export default function ItemCard({
                 <button
                     type="button"
                     disabled={isRequested}
-                    onClick={() => onRequestClick?.(id)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onRequestClick?.(id);
+                    }}
                     className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 ${isRequested
                         ? "bg-amber-100 text-amber-700 cursor-not-allowed"
                         : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
