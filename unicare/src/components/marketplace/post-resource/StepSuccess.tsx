@@ -4,9 +4,10 @@ import type { PostFormData } from "./types";
 interface StepSuccessProps {
     form: PostFormData;
     categoryName: string;
+    itemId: string | null;
 }
 
-export default function StepSuccess({ form, categoryName }: StepSuccessProps) {
+export default function StepSuccess({ form, categoryName, itemId }: StepSuccessProps) {
     return (
         <div className="bg-background-light min-h-screen pt-36 pb-20 relative overflow-hidden">
             {/* Decorative Background — hidden on small screens */}
@@ -83,7 +84,7 @@ export default function StepSuccess({ form, categoryName }: StepSuccessProps) {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row items-center gap-4 mt-10 w-full max-w-lg">
                     <Link
-                        href="/marketplace"
+                        href={itemId ? `/marketplace/${itemId}` : "/marketplace"}
                         className="w-full sm:flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-sm sm:text-base whitespace-nowrap transition-all shadow-md hover:shadow-lg cursor-pointer"
                     >
                         View Live Post

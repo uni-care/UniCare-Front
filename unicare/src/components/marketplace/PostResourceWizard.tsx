@@ -14,6 +14,7 @@ import { useAuth, getAuthToken } from "@/hooks/useAuth";
 export default function PostResourceWizard() {
     const [step, setStep] = useState(0);
     const [form, setForm] = useState<PostFormData>(INITIAL_FORM_DATA);
+    const [createdItemId, setCreatedItemId] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { user } = useAuth();
     const router = useRouter();
@@ -86,6 +87,7 @@ export default function PostResourceWizard() {
                 },
                 authToken
             );
+            setCreatedItemId(item.id);
 
             // 2. Upload images sequentially if files exist
             const uploadedImageUrls: string[] = [];
@@ -148,6 +150,6 @@ export default function PostResourceWizard() {
                 />
             );
         default:
-            return <StepSuccess form={form} categoryName={getCategoryNameById(form.discipline)} />;
+            return <StepSuccess form={form} categoryName={getCategoryNameById(form.discipline)} itemId={createdItemId} />;
     }
 }
