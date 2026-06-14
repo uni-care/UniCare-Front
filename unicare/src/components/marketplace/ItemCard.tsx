@@ -7,7 +7,8 @@ interface ItemCardProps {
     department: string;
     image: string;
     price: string | number;
-    status: "Available Now" | "Low Stock";
+    currency?: string;
+    status: string;
     type: "LEND" | "SALE";
     isFavorited: boolean;
     user: {
@@ -18,6 +19,8 @@ interface ItemCardProps {
     onRequestClick?: (itemId: string) => void;
     onFavoriteClick?: (itemId: string) => void;
     isRequested?: boolean;
+    availableFrom?: string;
+    availableTo?: string;
 }
 
 export default function ItemCard({
@@ -27,6 +30,7 @@ export default function ItemCard({
     department,
     image,
     price,
+    currency,
     status,
     type,
     isFavorited,
@@ -34,12 +38,31 @@ export default function ItemCard({
     onRequestClick,
     onFavoriteClick,
     isRequested = false,
+    availableFrom,
+    availableTo,
 }: ItemCardProps) {
     const isValidImage = typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"));
-    const isFree = price === 0 || price === "Free";
+    const isFree = price === 0 || price === "Free" || price === 0.01 || price === "0.01";
+    const hasAvailableFrom = typeof availableFrom === "string" && availableFrom.trim().length > 0;
+    const hasAvailableTo = typeof availableTo === "string" && availableTo.trim().length > 0;
+
+    const formatDate = (dateStr?: string) => {
+        if (!dateStr) return "";
+        try {
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return "";
+            return date.toLocaleDateString(undefined, {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+            });
+        } catch {
+            return "";
+        }
+    };
 
     return (
-        <div className="group bg-white rounded-[2rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer">
+        <div className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer">
             {/* Image Container */}
             <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-neutral-50 mb-4 flex items-center justify-center border border-neutral-100">
                 {isValidImage ? (
@@ -58,13 +81,9 @@ export default function ItemCard({
 
                 {/* Badges */}
                 <div className="absolute top-3 left-3 flex flex-col gap-2">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full border border-white/40">
-                        <span className={`size-2 rounded-full ${status === "Available Now" ? "bg-primary" : "bg-amber-500"} animate-pulse`}></span>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full border border-white/40 shadow-sm">
+                        <span className={`size-2 rounded-full ${status?.toLowerCase() === "available" || status?.toLowerCase() === "available now" ? "bg-primary" : "bg-amber-500"} animate-pulse`}></span>
                         <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-700">{status}</span>
-                    </div>
-                    <div className={`inline-flex self-start px-3 py-1 rounded-full text-[10px] font-black tracking-widest ${type === "LEND" ? "bg-primary text-white" : "bg-rose-500 text-white"
-                        }`}>
-                        {type}
                     </div>
                     {isRequested ? (
                         <div className="inline-flex self-start items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black tracking-widest bg-amber-100 text-amber-700 border border-amber-300">
@@ -72,6 +91,13 @@ export default function ItemCard({
                             REQUESTED
                         </div>
                     ) : null}
+                </div>
+
+                {/* Type Badge (Bottom Left) */}
+                <div className={`absolute bottom-3 left-3 px-3 py-1 rounded-full text-[10px] font-black tracking-widest shadow-md backdrop-blur-sm select-none ${
+                    type === "LEND" ? "bg-primary text-white" : "bg-rose-500 text-white"
+                }`}>
+                    {type}
                 </div>
 
                 {/* Favorite Button */}
@@ -100,9 +126,25 @@ export default function ItemCard({
                         {title}
                     </h3>
                 </div>
-                <p className="text-xs font-semibold text-neutral-400 mb-4 uppercase tracking-wide">
-                    {department} • {category}
+                <p className="text-xs font-semibold text-neutral-400 mb-3 uppercase tracking-wide">
+                    {category}
                 </p>
+
+                {/* Available Date Range for LEND */}
+                {type === "LEND" && (hasAvailableFrom || hasAvailableTo) && (
+                    <div className="flex items-center gap-1.5 text-xs text-neutral-600 mb-3 bg-neutral-50 p-2.5 rounded-xl border border-neutral-100/80">
+                        <span className="material-symbols-outlined text-[16px] text-neutral-400 select-none">calendar_today</span>
+                        <span className="font-semibold text-[11px] tracking-wide text-neutral-500 uppercase">
+                            {hasAvailableFrom && hasAvailableTo ? (
+                                `${formatDate(availableFrom)} - ${formatDate(availableTo)}`
+                            ) : hasAvailableFrom ? (
+                                `From: ${formatDate(availableFrom)}`
+                            ) : (
+                                `Until: ${formatDate(availableTo)}`
+                            )}
+                        </span>
+                    </div>
+                )}
 
                 {/* User & Price */}
                 <div className="mt-auto flex items-center justify-between pt-4 border-t border-neutral-50">
@@ -116,7 +158,7 @@ export default function ItemCard({
                     </div>
                     <div className="text-right">
                         <span className={`text-lg font-black ${isFree ? "text-primary italic" : "text-neutral-900"}`}>
-                            {isFree ? "Free" : `$${price}`}
+                            {isFree ? "Free" : `${currency || "EGP"} ${price}`}
                         </span>
                     </div>
                 </div>

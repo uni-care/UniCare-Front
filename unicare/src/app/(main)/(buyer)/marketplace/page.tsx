@@ -29,7 +29,7 @@ export default function MarketplacePage() {
   const [activeCategoryId, setActiveCategoryId] = useState<string>("All");
   const [showFilters, setShowFilters] = useState(false);
   const [activeType, setActiveType] = useState<"All" | "LEND" | "SALE">("All");
-  const [activeStatus, setActiveStatus] = useState<"All" | "Available Now" | "Low Stock">("All");
+  const [activeStatus, setActiveStatus] = useState<string>("All");
   const [activePrice, setActivePrice] = useState<"All" | "Free" | "Paid">("All");
   const [selectedItem, setSelectedItem] = useState<MarketplaceItem | null>(null);
   const [requestedTransactionIds, setRequestedTransactionIds] = useState<string[]>([]);
@@ -165,9 +165,9 @@ export default function MarketplacePage() {
       const matchesType = activeType === "All" || item.type === activeType;
 
       const matchesStatus =
-        activeStatus === "All" || item.status === activeStatus;
+        activeStatus === "All" || item.status?.toLowerCase() === activeStatus.toLowerCase();
 
-      const isFree = item.price === "Free" || item.price === 0;
+      const isFree = item.price === "Free" || item.price === 0 || item.price === 0.01;
       const matchesPrice =
         activePrice === "All"
           ? true
@@ -251,12 +251,14 @@ export default function MarketplacePage() {
                 Availability
                 <select
                   value={activeStatus}
-                  onChange={(event) => setActiveStatus(event.target.value as typeof activeStatus)}
+                  onChange={(event) => setActiveStatus(event.target.value)}
                   className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700"
                 >
                   <option value="All">All</option>
-                  <option value="Available Now">Available Now</option>
-                  <option value="Low Stock">Low Stock</option>
+                  <option value="Available">Available</option>
+                  <option value="Draft">Draft</option>
+                  <option value="Rented">Rented</option>
+                  <option value="Unavailable">Unavailable</option>
                 </select>
               </label>
               <label className="flex flex-col gap-2 text-sm font-semibold text-neutral-600">
