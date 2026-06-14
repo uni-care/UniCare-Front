@@ -39,7 +39,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                 <div className="px-2">
                     <h1 className="text-4xl md:text-5xl font-black tracking-tight text-neutral-900 mb-3">Share Your Resource</h1>
                     <p className="text-neutral-500 text-lg max-w-2xl">
-                        Help your fellow engineers by sharing tools, books, or equipment. Precise details help others find what they need.
+                        Help your fellow students by sharing books, tools, or campus essentials. Precise details help others find what they need.
                     </p>
                 </div>
 
@@ -53,7 +53,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                             <input
                                 id="res-name"
                                 className="w-full h-14 pl-12 pr-4 rounded-lg border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
-                                placeholder="e.g., Fluke Multimeter 87V"
+                                placeholder="e.g., Lab Coat, Drawing Board, or Calculus Textbook"
                                 value={form.name}
                                 onChange={(e) => update("name", e.target.value)}
                             />

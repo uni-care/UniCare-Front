@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -6,26 +7,6 @@ export default function Page() {
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-10%] right-[-5%] w-125 h-125 rounded-full bg-primary/20 organic-glow"></div>
         <div className="absolute bottom-[10%] left-[-10%] w-150 h-150 rounded-full bg-muted-teal/20 organic-glow"></div>
-        {/* <svg
-          className="absolute inset-0 w-full h-full opacity-10"
-          viewBox="0 0 1000 1000"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0,500 Q250,450 400,600 T800,400 T1000,550"
-            fill="transparent"
-            stroke="#6a907f"
-            strokeWidth="1"
-          ></path>
-          <path
-            d="M200,0 Q300,300 100,600 T400,1000"
-            fill="transparent"
-            stroke="#6a907f"
-            strokeWidth="0.5"
-          ></path>
-          <circle cx="400" cy="600" fill="#6a907f" r="4"></circle>
-          <circle cx="800" cy="400" fill="#6a907f" r="4"></circle>
-        </svg> */}
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen pt-12">
@@ -40,40 +21,40 @@ export default function Page() {
                   The Universities <span className="text-primary italic">Ecosystem</span> of Care
                 </h2>
                 <p className="text-lg lg:text-xl text-neutral-600 font-light leading-relaxed max-w-md">
-                  An artistic marketplace to lend, sell, and share high-precision
-                  resources across the engineering community.
+                  A campus marketplace to lend, buy, and share textbooks, lab tools,
+                  and resources across the university community.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <button className="group flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/40 hover:translate-y-0.5 transition-all cursor-pointer">
+                <Link href="/marketplace" className="group flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/40 hover:translate-y-0.5 transition-all cursor-pointer">
                   Enter the Ecosystem
                   <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
                     arrow_forward
                   </span>
-                </button>
-                <button className="flex items-center gap-3 px-8 py-4 rounded-full text-lg font-bold border border-primary/20 hover:bg-white/50 transition-all cursor-pointer">
+                </Link>
+                <Link href="/marketplace" className="flex items-center gap-3 px-8 py-4 rounded-full text-lg font-bold border border-primary/20 hover:bg-white/50 transition-all cursor-pointer">
                   Explore Assets
-                </button>
+                </Link>
               </div>
 
               <div className="flex items-center gap-8 mt-4">
                 <div>
-                  <p className="text-2xl font-bold text-primary">15k+</p>
+                  <p className="text-2xl font-bold text-primary">5k+</p>
                   <p className="text-xs text-neutral-500 uppercase tracking-widest">
-                    Engineers
+                    Students
                   </p>
                 </div>
                 <div className="h-8 w-px bg-primary/20"></div>
                 <div>
-                  <p className="text-2xl font-bold text-primary">50k+</p>
+                  <p className="text-2xl font-bold text-primary">10k+</p>
                   <p className="text-xs text-neutral-500 uppercase tracking-widest">
                     Resources
                   </p>
                 </div>
                 <div className="h-8 w-px bg-primary/20"></div>
                 <div>
-                  <p className="text-2xl font-bold text-primary">2.4k</p>
+                  <p className="text-2xl font-bold text-primary">1.2k</p>
                   <p className="text-xs text-neutral-500 uppercase tracking-widest">
                     Active Roots
                   </p>
@@ -88,6 +69,7 @@ export default function Page() {
                   alt="Abstract 3D shapes"
                   className="w-full h-full object-cover grayscale-20 group-hover:scale-110 transition-transform duration-700"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpIkpKbh7d1et9JsXU_OHwKrOjuqrSLDUpsDpxk1HCsOHYvubsHTchUdd3KYHV7KTo6QDqU8kt2e67a9KvCQFzNi4xbzmOQLCeS0UTpdbkhmZ9gCXrCvmYVY0f40E9cudqsE5IAzkfYppK0L_RWXEFPbKly_Opy9F5h6cbgbFaTB-k7reTei3SSCf0H04y6ygoh0uKGhdKUBkp7PPywRE2pdDh7GYLbvUS9lBnp7pJc39fQhDxNbaU5WhtTmsrGMxLdUveVqd_chmM"
+                  sizes="(max-width: 768px) 100vw, 500px"
                 />
                 <div className="absolute inset-0 bg-linear-to-tr from-primary/40 to-transparent"></div>
               </div>
@@ -98,7 +80,6 @@ export default function Page() {
                   Community Driven
                 </p>
                 <p className="text-lg italic font-serif-art text-primary">&quot;The roots of Uni Students grow through the soil of art.&quot;</p>
-                {/* or we can use "Where every shared resource nurtures the roots of student success." مش عارف*/}
               </div>
             </div>
           </div>
@@ -130,7 +111,7 @@ export default function Page() {
                 The Cycle of <span className="text-primary italic">Support</span>
               </h3>
               <p className="text-neutral-500 max-w-sm">
-                A seamless flow of technical expertise and material generosity.
+                A seamless flow of academic resources and student support.
               </p>
             </div>
 
@@ -156,8 +137,8 @@ export default function Page() {
                 <div className="max-w-60">
                   <h4 className="text-2xl font-bold mb-3 tracking-tight">Post</h4>
                   <p className="text-neutral-600 font-light leading-relaxed italic">
-                    Release your idle instruments into the garden; let the tools of
-                    your craft breathe new life in other hands.
+                    Release your unused textbooks, drawing boards, or tools; let them
+                    support another student&apos;s campus journey.
                   </p>
                 </div>
               </div>
@@ -183,8 +164,8 @@ export default function Page() {
                 <div className="max-w-60">
                   <h4 className="text-2xl font-bold mb-3 tracking-tight">Share</h4>
                   <p className="text-neutral-600 font-light leading-relaxed italic">
-                    Bridge the gap with a simple gesture. Connect through precision
-                    and purpose in a marketplace built on trust.
+                    Find or share resources within your campus. Connect with peers in a trusted,
+                    secure student marketplace built on mutual trust.
                   </p>
                 </div>
               </div>
@@ -212,8 +193,8 @@ export default function Page() {
                     Impact
                   </h4>
                   <p className="text-neutral-600 font-light leading-relaxed italic">
-                    Watch the ecosystem bloom as shared knowledge takes root,
-                    nurturing the future of engineering together.
+                    Watch the student community thrive as we share resources, helping every
+                    student succeed without financial burden.
                   </p>
                 </div>
               </div>
@@ -229,64 +210,67 @@ export default function Page() {
                   Cultivate Your Toolkit
                 </h3>
                 <p className="text-neutral-500">
-                  Discover specialized resources shared by peer engineers.
+                  Discover textbooks, tools, and dorm items shared by peer students.
                 </p>
               </div>
-              <button className="flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer">
+              <Link href="/marketplace" className="flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer">
                 View all <span className="material-symbols-outlined">trending_flat</span>
-              </button>
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="group relative aspect-4/5 overflow-hidden rounded-xl cursor-pointer">
+              <Link href="/marketplace" className="group relative aspect-4/5 overflow-hidden rounded-xl cursor-pointer">
                 <Image
                   fill
                   alt="Instruments"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrpsacMm6siyKn3E_mlMtinA1SVP5fmtrcDvMA3mr7hzUryrf_hs-sICQQUr5O7epG7FvZVDz0F0lQmupxBOaIICoQfCdgIsi2sQLj5_U8Li_vrAHWstKaMWfuEgDSdaTxfkiUuF2znWapVAHUalGzVkMis4dwEVvUPWRuISaby2IrKJ5_tccZT80MvaGGuJy64ATjsqgmGSUvH-Qqq9v5938MYKHAXSnEGXEJoAl3KYc2L0LU7Shi3CHQ9l4sKCXPYohIl5toSCog"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-6 left-6 text-white">
                   <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    Tools
+                    Supplies
                   </p>
-                  <h4 className="text-xl font-bold">Precision Instruments</h4>
+                  <h4 className="text-xl font-bold">Lab & Science Supplies</h4>
                 </div>
-              </div>
+              </Link>
 
-              <div className="group relative aspect-4/5 overflow-hidden rounded-xl cursor-pointer">
+              <Link href="/marketplace" className="group relative aspect-4/5 overflow-hidden rounded-xl cursor-pointer">
                 <Image
                   fill
                   alt="Reference"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   src="/library-vision.png"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-6 left-6 text-white">
                   <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    Library
+                    Textbooks
                   </p>
-                  <h4 className="text-xl font-bold">Reference Manuals</h4>
+                  <h4 className="text-xl font-bold">Course Materials</h4>
                 </div>
-              </div>
+              </Link>
 
-              <div className="group relative aspect-4/5 overflow-hidden rounded-xl cursor-pointer">
+              <Link href="/marketplace" className="group relative aspect-4/5 overflow-hidden rounded-xl cursor-pointer">
                 <Image
                   fill
                   alt="Hardware"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   src="/electronics-vision.png"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-6 left-6 text-white">
                   <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    Electronics
+                    Devices
                   </p>
-                  <h4 className="text-xl font-bold">Hardware Modules</h4>
+                  <h4 className="text-xl font-bold">Calculators & Electronics</h4>
                 </div>
-              </div>
+              </Link>
 
-              <div className="border-2 border-dashed border-primary/30 rounded-xl flex flex-col items-center justify-center p-8 text-center group hover:bg-primary/5 transition-colors cursor-pointer">
+              <Link href="/post" className="border-2 border-dashed border-primary/30 rounded-xl flex flex-col items-center justify-center p-8 text-center group hover:bg-primary/5 transition-colors cursor-pointer">
                 <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <span className="material-symbols-outlined text-primary text-3xl">
                     add
@@ -294,9 +278,9 @@ export default function Page() {
                 </div>
                 <h4 className="text-lg font-bold">Lend Your Own</h4>
                 <p className="text-sm text-neutral-500 mt-2 italic font-light">
-                  Contribute to the root network of the ecosystem.
+                  Share your unused resources with fellow students.
                 </p>
-              </div>
+              </Link>
             </div>
           </div>
         </section>
