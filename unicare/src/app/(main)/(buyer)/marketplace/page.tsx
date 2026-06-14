@@ -239,46 +239,70 @@ export default function MarketplacePage() {
         </Link>
 
         {showFilters && (
-          <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <label className="flex flex-col gap-2 text-sm font-semibold text-neutral-600">
-                Listing Type
-                <select
-                  value={activeType}
-                  onChange={(event) => setActiveType(event.target.value as typeof activeType)}
-                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700"
-                >
-                  <option value="All">All</option>
-                  <option value="LEND">Lend</option>
-                  <option value="SALE">Sale</option>
-                </select>
-              </label>
-              <label className="flex flex-col gap-2 text-sm font-semibold text-neutral-600">
-                Availability
-                <select
-                  value={activeStatus}
-                  onChange={(event) => setActiveStatus(event.target.value)}
-                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700"
-                >
-                  <option value="All">All</option>
-                  <option value="Available">Available</option>
-                  <option value="Draft">Draft</option>
-                  <option value="Rented">Rented</option>
-                  <option value="Unavailable">Unavailable</option>
-                </select>
-              </label>
-              <label className="flex flex-col gap-2 text-sm font-semibold text-neutral-600">
-                Price
-                <select
-                  value={activePrice}
-                  onChange={(event) => setActivePrice(event.target.value as typeof activePrice)}
-                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700"
-                >
-                  <option value="All">All</option>
-                  <option value="Free">Free</option>
-                  <option value="Paid">Paid</option>
-                </select>
-              </label>
+          <div className="bg-white border border-neutral-200 rounded-3xl p-6 shadow-sm mb-8 animate-in fade-in slide-in-from-top-4 duration-200">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+              {/* Listing Type Filter */}
+              <div className="flex flex-col gap-2.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Listing Type</span>
+                <div className="flex h-11 p-1 bg-neutral-100/80 rounded-xl border border-neutral-200/50">
+                  {(["All", "LEND", "SALE"] as const).map((typeOption) => (
+                    <button
+                      key={typeOption}
+                      type="button"
+                      onClick={() => setActiveType(typeOption)}
+                      className={`flex-1 h-full rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+                        activeType === typeOption
+                          ? "bg-white text-primary shadow-xs"
+                          : "text-neutral-500 hover:text-neutral-800"
+                      }`}
+                    >
+                      {typeOption === "All" ? "All" : typeOption === "LEND" ? "Lend" : "Sale"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Filter */}
+              <div className="flex flex-col gap-2.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Price</span>
+                <div className="flex h-11 p-1 bg-neutral-100/80 rounded-xl border border-neutral-200/50">
+                  {(["All", "Free", "Paid"] as const).map((priceOption) => (
+                    <button
+                      key={priceOption}
+                      type="button"
+                      onClick={() => setActivePrice(priceOption)}
+                      className={`flex-1 h-full rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+                        activePrice === priceOption
+                          ? "bg-white text-primary shadow-xs"
+                          : "text-neutral-500 hover:text-neutral-800"
+                      }`}
+                    >
+                      {priceOption}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Availability Filter */}
+              <div className="flex flex-col gap-2.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Availability</span>
+                <div className="flex flex-wrap gap-1.5 min-h-11 items-center">
+                  {["All", "Available", "Draft", "Rented", "Unavailable"].map((statusOption) => (
+                    <button
+                      key={statusOption}
+                      type="button"
+                      onClick={() => setActiveStatus(statusOption)}
+                      className={`px-3 py-2 rounded-lg text-xs font-bold border transition-all duration-200 cursor-pointer ${
+                        activeStatus === statusOption
+                          ? "bg-primary border-primary text-white shadow-xs"
+                          : "bg-white border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-800"
+                      }`}
+                    >
+                      {statusOption}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
