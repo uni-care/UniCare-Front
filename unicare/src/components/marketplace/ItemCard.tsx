@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Image from "next/image";
 
 interface ItemCardProps {
@@ -21,6 +22,7 @@ interface ItemCardProps {
     isRequested?: boolean;
     availableFrom?: string;
     availableTo?: string;
+    description?: string;
 }
 
 export default function ItemCard({
@@ -40,7 +42,9 @@ export default function ItemCard({
     isRequested = false,
     availableFrom,
     availableTo,
+    description,
 }: ItemCardProps) {
+    const [isExpanded, setIsExpanded] = useState(false);
     const isValidImage = typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"));
     const isFree = price === 0 || price === "Free" || price === 0.01 || price === "0.01";
     const hasAvailableFrom = typeof availableFrom === "string" && availableFrom.trim().length > 0;
@@ -130,19 +134,45 @@ export default function ItemCard({
                     {category}
                 </p>
 
-                {/* Available Date Range for LEND */}
-                {type === "LEND" && (hasAvailableFrom || hasAvailableTo) && (
-                    <div className="flex items-center gap-1.5 text-xs text-neutral-600 mb-3 bg-neutral-50 p-2.5 rounded-xl border border-neutral-100/80">
-                        <span className="material-symbols-outlined text-[16px] text-neutral-400 select-none">calendar_today</span>
-                        <span className="font-semibold text-[11px] tracking-wide text-neutral-500 uppercase">
-                            {hasAvailableFrom && hasAvailableTo ? (
-                                `${formatDate(availableFrom)} - ${formatDate(availableTo)}`
-                            ) : hasAvailableFrom ? (
-                                `From: ${formatDate(availableFrom)}`
-                            ) : (
-                                `Until: ${formatDate(availableTo)}`
-                            )}
+                {/* Expand / Collapse Details Button */}
+                {(description || (type === "LEND" && (hasAvailableFrom || hasAvailableTo))) && (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsExpanded(!isExpanded);
+                        }}
+                        className="flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors mb-3 cursor-pointer outline-none select-none self-start"
+                    >
+                        <span className="material-symbols-outlined text-[16px] transition-transform duration-200" style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>
+                            expand_more
                         </span>
+                        {isExpanded ? "Hide Details" : "Show Details"}
+                    </button>
+                )}
+
+                {/* Collapsible Details (Dates & Description) */}
+                {isExpanded && (
+                    <div className="flex flex-col gap-2 mb-3 bg-neutral-50/80 p-3 rounded-xl border border-neutral-100/60 text-xs text-neutral-600 transition-all duration-200 w-full">
+                        {type === "LEND" && (hasAvailableFrom || hasAvailableTo) && (
+                            <div className="flex items-center gap-1.5 font-semibold text-[10px] tracking-wide text-neutral-500 uppercase">
+                                <span className="material-symbols-outlined text-[15px] text-neutral-400 select-none">calendar_today</span>
+                                <span>
+                                    {hasAvailableFrom && hasAvailableTo ? (
+                                        `${formatDate(availableFrom)} - ${formatDate(availableTo)}`
+                                    ) : hasAvailableFrom ? (
+                                        `From: ${formatDate(availableFrom)}`
+                                    ) : (
+                                        `Until: ${formatDate(availableTo)}`
+                                    )}
+                                </span>
+                            </div>
+                        )}
+                        {description && (
+                            <p className="text-[11px] leading-relaxed text-neutral-600 font-medium whitespace-pre-line">
+                                {description}
+                            </p>
+                        )}
                     </div>
                 )}
 
@@ -153,7 +183,8 @@ export default function ItemCard({
                             {user.initials}
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[10px] font-bold text-neutral-600">Posted {user.time}</span>
+                            <span className="text-[10px] font-extrabold text-neutral-700 leading-none mb-0.5">{user.name}</span>
+                            <span className="text-[9px] font-medium text-neutral-400">Posted {user.time}</span>
                         </div>
                     </div>
                     <div className="text-right">

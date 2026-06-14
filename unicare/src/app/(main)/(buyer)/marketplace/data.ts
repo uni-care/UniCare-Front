@@ -22,6 +22,7 @@ export interface MarketplaceItem {
   };
   availableFrom?: string;
   availableTo?: string;
+  description?: string;
 }
 
 /* ─── Adapter: transform API response → UI shape ─── */
@@ -103,6 +104,7 @@ export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
     },
     availableFrom: item.availableFrom,
     availableTo: item.availableTo,
+    description: item.description,
   };
 }
 
