@@ -62,6 +62,14 @@ export default function PostResourceWizard() {
         try {
             const categoryId = form.discipline;
             const categoryName = getCategoryNameById(categoryId);
+            const isLend = form.exchangeType === "lend";
+
+            const availableFrom = isLend ? new Date().toISOString() : undefined;
+            const availableTo = isLend
+                ? (form.maxDuration
+                    ? new Date(Date.now() + parseInt(form.maxDuration) * 86400000).toISOString()
+                    : new Date(Date.now() + 30 * 86400000).toISOString())
+                : undefined;
 
             // 1. Create the item (created as Draft by default in backend)
             const item = await itemsApi.create(
@@ -73,27 +81,26 @@ export default function PostResourceWizard() {
                     categoryId,
                     location: categoryName,
                     imageUrls: [], // Images uploaded dynamically next
-                    availableFrom: new Date().toISOString(),
-                    availableTo: form.maxDuration
-                        ? new Date(Date.now() + parseInt(form.maxDuration) * 86400000).toISOString()
-                        : new Date(Date.now() + 30 * 86400000).toISOString(),
+                    availableFrom,
+                    availableTo,
                 },
                 authToken
             );
 
             // 2. Upload images sequentially if files exist
+            const uploadedImageUrls: string[] = [];
             if (form.files && form.files.length > 0) {
                 const toastId = toast.loading(`Uploading images (0/${form.files.length})...`);
                 try {
                     for (let i = 0; i < form.files.length; i++) {
                         const file = form.files[i];
                         toast.loading(`Uploading images (${i + 1}/${form.files.length})...`, { id: toastId });
-                        await itemsApi.uploadImage(item.id, file, authToken);
+                        const uploadRes = await itemsApi.uploadImage(item.id, file, authToken);
+                        uploadedImageUrls.push(uploadRes.url);
                     }
                     toast.success("Images uploaded successfully!", { id: toastId });
                 } catch (uploadErr) {
                     toast.error("Image upload failed. Publishing resource without images.", { id: toastId });
-                    // console.error("Image upload error, continuing creation:", uploadErr);
                 }
             }
 
@@ -107,6 +114,10 @@ export default function PostResourceWizard() {
                     currency: "EGP",
                     categoryId,
                     status: "Available",
+                    location: categoryName,
+                    imageUrls: uploadedImageUrls.length > 0 ? uploadedImageUrls : undefined,
+                    availableFrom,
+                    availableTo,
                 },
                 authToken
             );
