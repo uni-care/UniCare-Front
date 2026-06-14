@@ -12,6 +12,13 @@ import type { CategoryResponse } from "@/types/categories";
 import { chatApi } from "@/api/chat-api";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import { itemsApi } from "@/api/items-api";
+import {
+  MdOutlineSearch,
+  MdOutlineTune,
+  MdOutlineFileUpload,
+  MdArrowForward,
+  MdOutlineInbox
+} from "react-icons/md";
 
 const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
 const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";
@@ -203,7 +210,7 @@ export default function MarketplacePage() {
         {/* Search & Filters Row */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <div className="relative grow">
-            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400">search</span>
+            <MdOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-xl" />
             <input
               type="text"
               placeholder="Search resources, textbooks, tools..."
@@ -217,7 +224,7 @@ export default function MarketplacePage() {
             onClick={() => setShowFilters((prev) => !prev)}
             className="flex items-center justify-center gap-2 bg-white border border-neutral-200 rounded-2xl px-8 py-4 font-bold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm cursor-pointer"
           >
-            <span className="material-symbols-outlined text-xl">tune</span>
+            <MdOutlineTune className="text-xl" />
             Filters
           </button>
         </div>
@@ -227,9 +234,8 @@ export default function MarketplacePage() {
           href="/post"
           className="flex items-center justify-center gap-2 w-full bg-primary/10 hover:bg-primary hover:text-white text-primary border border-primary/20 rounded-2xl py-4 px-6 font-bold transition-all mb-8 cursor-pointer group"
         >
-          <span className="material-symbols-outlined text-xl">upload_file</span>
+          <MdOutlineFileUpload className="text-xl" />
           Post a Resource
-          <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
         </Link>
 
         {showFilters && (
@@ -312,7 +318,7 @@ export default function MarketplacePage() {
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <span className="material-symbols-outlined text-6xl text-neutral-300">inventory_2</span>
+            <MdOutlineInbox className="text-6xl text-neutral-300" />
             <p className="text-neutral-500 font-medium text-lg">No resources found</p>
             <p className="text-neutral-400 text-sm">Try adjusting your filters or search query.</p>
           </div>
@@ -338,7 +344,7 @@ export default function MarketplacePage() {
               className="group flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-10 py-4 font-bold text-neutral-800 hover:border-primary/60 transition-all shadow-sm cursor-pointer"
             >
               View More Resources
-              <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+              <MdArrowForward className="transition-transform group-hover:translate-x-1" />
             </button>
           </div>
         )}

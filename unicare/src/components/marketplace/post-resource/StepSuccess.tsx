@@ -1,5 +1,16 @@
 import Link from "next/link";
 import type { PostFormData } from "./types";
+import {
+    MdOutlineSchool,
+    MdOutlineDesignServices,
+    MdOutlineAutoAwesome,
+    MdOutlineSpeed,
+    MdOutlineStar,
+    MdCheckCircle,
+    MdOutlineVisibility,
+    MdArrowForward,
+    MdArrowBack
+} from "react-icons/md";
 
 interface StepSuccessProps {
     form: PostFormData;
@@ -12,21 +23,21 @@ export default function StepSuccess({ form, categoryName, itemId }: StepSuccessP
         <div className="bg-background-light min-h-screen pt-36 pb-20 relative overflow-hidden">
             {/* Decorative Background — hidden on small screens */}
             <div className="hidden md:block absolute top-32 left-[5%] lg:left-[10%] text-primary/10 select-none pointer-events-none">
-                <span className="material-symbols-outlined text-[100px] lg:text-[120px]">school</span>
+                <MdOutlineSchool className="text-[100px] lg:text-[120px]" />
             </div>
             <div className="hidden md:block absolute bottom-24 right-[5%] lg:right-[10%] text-primary/10 select-none pointer-events-none">
-                <span className="material-symbols-outlined text-[120px] lg:text-[150px]">design_services</span>
+                <MdOutlineDesignServices className="text-[120px] lg:text-[150px]" />
             </div>
 
             <div className="relative max-w-[800px] mx-auto px-4 md:px-8 flex flex-col items-center">
                 {/* Success Header */}
                 <div className="flex flex-col items-center text-center mb-10 relative">
-                    <span className="material-symbols-outlined absolute -top-4 left-0 md:-left-8 text-primary/60 text-3xl animate-pulse">auto_awesome</span>
-                    <span className="material-symbols-outlined absolute top-10 right-0 md:-right-12 text-amber-500/80 text-4xl animate-pulse" style={{ animationDelay: "0.5s" }}>shutter_speed</span>
-                    <span className="material-symbols-outlined absolute -bottom-2 left-2 md:-left-16 text-amber-500/60 text-2xl animate-pulse" style={{ animationDelay: "0.3s" }}>star</span>
+                    <MdOutlineAutoAwesome className="absolute -top-4 left-0 md:-left-8 text-primary/60 text-3xl animate-pulse" />
+                    <MdOutlineSpeed className="absolute top-10 right-0 md:-right-12 text-amber-500/80 text-4xl animate-pulse" style={{ animationDelay: "0.5s" }} />
+                    <MdOutlineStar className="absolute -bottom-2 left-2 md:-left-16 text-amber-500/60 text-2xl animate-pulse" style={{ animationDelay: "0.3s" }} />
 
                     <div className="size-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 ring-4 ring-primary/20">
-                        <span className="material-symbols-outlined text-primary text-5xl">check_circle</span>
+                        <MdCheckCircle className="text-primary text-5xl" />
                     </div>
                     <h1 className="text-3xl md:text-[40px] font-bold tracking-tight text-neutral-900 mb-3">
                         Resource Posted Successfully!
@@ -39,7 +50,7 @@ export default function StepSuccess({ form, categoryName, itemId }: StepSuccessP
                 {/* Preview Card */}
                 <div className="w-full bg-white rounded-2xl p-6 shadow-md border border-neutral-100">
                     <div className="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wider text-neutral-400">
-                        <span className="material-symbols-outlined text-[16px]">visibility</span>
+                        <MdOutlineVisibility className="text-[16px]" />
                         Live Preview
                     </div>
                     <div className="flex flex-col md:flex-row gap-5 bg-neutral-50 rounded-lg p-4 border border-neutral-100">
@@ -88,13 +99,13 @@ export default function StepSuccess({ form, categoryName, itemId }: StepSuccessP
                         className="w-full sm:flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-sm sm:text-base whitespace-nowrap transition-all shadow-md hover:shadow-lg cursor-pointer"
                     >
                         View Live Post
-                        <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                        <MdArrowForward className="text-[20px]" />
                     </Link>
                     <Link
                         href="/marketplace"
                         className="w-full sm:flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-600 rounded-lg font-medium text-sm sm:text-base whitespace-nowrap transition-colors cursor-pointer"
                     >
-                        <span className="material-symbols-outlined text-[20px] text-neutral-400">arrow_back</span>
+                        <MdArrowBack className="text-[20px] text-neutral-400" />
                         Back to Marketplace
                     </Link>
                 </div>

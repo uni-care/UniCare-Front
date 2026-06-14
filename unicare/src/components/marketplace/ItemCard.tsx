@@ -1,6 +1,15 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+    MdOutlineImage,
+    MdOutlineSchedule,
+    MdFavorite,
+    MdFavoriteBorder,
+    MdExpandMore,
+    MdOutlineCalendarToday,
+    MdSend
+} from "react-icons/md";
 
 interface ItemCardProps {
     id: string;
@@ -79,11 +88,12 @@ export default function ItemCard({
                         src={image}
                         alt={title}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                 ) : (
                     <div className="flex flex-col items-center justify-center gap-1.5 text-neutral-400">
-                        <span className="material-symbols-outlined text-4xl">image</span>
+                        <MdOutlineImage className="text-4xl" />
                         <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">No Image</span>
                     </div>
                 )}
@@ -96,7 +106,7 @@ export default function ItemCard({
                     </div>
                     {isRequested ? (
                         <div className="inline-flex self-start items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black tracking-widest bg-amber-100 text-amber-700 border border-amber-300">
-                            <span className="material-symbols-outlined text-[12px]">schedule</span>
+                            <MdOutlineSchedule className="text-[12px]" />
                             REQUESTED
                         </div>
                     ) : null}
@@ -119,12 +129,11 @@ export default function ItemCard({
                     className={`absolute top-3 right-3 size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center transition-all shadow-sm cursor-pointer ${isFavorited ? "text-rose-500" : "text-neutral-500 hover:text-rose-500"
                         }`}
                 >
-                    <span
-                        className={`material-symbols-outlined text-xl ${isFavorited ? "fill-1 text-rose-500" : ""}`}
-                        style={{ fontVariationSettings: isFavorited ? "'FILL' 1" : "'FILL' 0" }}
-                    >
-                        favorite
-                    </span>
+                    {isFavorited ? (
+                        <MdFavorite className="text-xl text-rose-500" />
+                    ) : (
+                        <MdFavoriteBorder className="text-xl" />
+                    )}
                 </button>
             </div>
 
@@ -149,9 +158,7 @@ export default function ItemCard({
                         }}
                         className="flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors mb-3 cursor-pointer outline-none select-none self-start"
                     >
-                        <span className="material-symbols-outlined text-[16px] transition-transform duration-200" style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>
-                            expand_more
-                        </span>
+                        <MdExpandMore className="text-[16px] transition-transform duration-200" style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }} />
                         {isExpanded ? "Hide Details" : "Show Details"}
                     </button>
                 )}
@@ -161,7 +168,7 @@ export default function ItemCard({
                     <div className="flex flex-col gap-2 mb-3 bg-neutral-50/80 p-3 rounded-xl border border-neutral-100/60 text-xs text-neutral-600 transition-all duration-200 w-full">
                         {type === "LEND" && (hasAvailableFrom || hasAvailableTo) && (
                             <div className="flex items-center gap-1.5 font-semibold text-[10px] tracking-wide text-neutral-500 uppercase">
-                                <span className="material-symbols-outlined text-[15px] text-neutral-400 select-none">calendar_today</span>
+                                <MdOutlineCalendarToday className="text-[15px] text-neutral-400 select-none" />
                                 <span>
                                     {hasAvailableFrom && hasAvailableTo ? (
                                         `${formatDate(availableFrom)} - ${formatDate(availableTo)}`
@@ -212,7 +219,7 @@ export default function ItemCard({
                         : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
                         }`}
                 >
-                    <span className="material-symbols-outlined text-lg">send</span>
+                    <MdSend className="text-lg" />
                     {isRequested ? "Requested" : "Request Item"}
                 </button>
             </div>

@@ -1,5 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  MdArrowForward,
+  MdOutlineInventory,
+  MdHandshake,
+  MdLocalFlorist,
+  MdTrendingFlat,
+  MdAdd
+} from "react-icons/md";
 
 export default function Page() {
   return (
@@ -29,9 +37,7 @@ export default function Page() {
               <div className="flex flex-wrap gap-4">
                 <Link href="/marketplace" className="group flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/40 hover:translate-y-0.5 transition-all cursor-pointer">
                   Enter the Ecosystem
-                  <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
-                    arrow_forward
-                  </span>
+                  <MdArrowForward className="group-hover:translate-x-1 transition-transform text-xl" />
                 </Link>
                 <Link href="/marketplace" className="flex items-center gap-3 px-8 py-4 rounded-full text-lg font-bold border border-primary/20 hover:bg-white/50 transition-all cursor-pointer">
                   Explore Assets
@@ -128,9 +134,7 @@ export default function Page() {
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtLSV7tjpbJmepscALpNOWWJna-mOj7X7xwZNffwh24rvWKcefCr7es48eDOp-opwE28UQaItJbEIb-LnXDPGKfhmYB99ZexRknxazvYe2-_ax7EIpoE1c27_m-xSWk6B1KAFvk5ZaB3hIbXS3wiUrpXQnsunFfWZTY6tW1mUPA_wxYhOWiwte-rf-vloKqaXtKNUO2nNGPUEaguX2d8A62X9P6_88IZ_AEDdrGbFNsQjuwNZElKW0eoFryf_guWsFnNF3FgtafRIH"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-5xl text-primary/40 font-thin">
-                        package_2
-                      </span>
+                      <MdOutlineInventory className="text-5xl text-primary/40" />
                     </div>
                   </div>
                 </div>
@@ -155,9 +159,7 @@ export default function Page() {
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuB007sAwvnJz9vk8xtdV5MgqWS-M3mkoybrbVibkrx1RM9tgIPmQfJqM18m6OvUalIwLpz_Locp0lu0fBSKTVpmnNs5695oDxzTC_fXrHF-inMqHRCb-SpA6-V9eaLT-MkNCHEqcwYvDSe38vSvXx0OFZjLxXC7OVYsW1YAct8YKneA04_RtmbfgWF_P7oUvhXO5toWX5Syq55Auj5eyntyhpeJCMKJrxmSg-myxdDkKl7ZTsjOnl-8IBlWmMSYgeEW5Jj4dJV6iQtz"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-5xl text-primary/40 font-thin">
-                        handshake
-                      </span>
+                      <MdHandshake className="text-5xl text-primary/40" />
                     </div>
                   </div>
                 </div>
@@ -182,9 +184,7 @@ export default function Page() {
                       src="/impact-vision.png"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-5xl text-primary/70 font-thin">
-                        potted_plant
-                      </span>
+                      <MdLocalFlorist className="text-5xl text-primary/70" />
                     </div>
                   </div>
                 </div>
@@ -214,7 +214,7 @@ export default function Page() {
                 </p>
               </div>
               <Link href="/marketplace" className="flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer">
-                View all <span className="material-symbols-outlined">trending_flat</span>
+                View all <MdTrendingFlat className="text-xl" />
               </Link>
             </div>
 
@@ -272,9 +272,7 @@ export default function Page() {
 
               <Link href="/post" className="border-2 border-dashed border-primary/30 rounded-xl flex flex-col items-center justify-center p-8 text-center group hover:bg-primary/5 transition-colors cursor-pointer">
                 <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <span className="material-symbols-outlined text-primary text-3xl">
-                    add
-                  </span>
+                  <MdAdd className="text-primary text-3xl" />
                 </div>
                 <h4 className="text-lg font-bold">Lend Your Own</h4>
                 <p className="text-sm text-neutral-500 mt-2 italic font-light">

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { MdOutlineImage } from "react-icons/md";
 
 interface DetailGalleryProps {
   title: string;
@@ -36,12 +37,13 @@ export default function DetailGallery({
             src={activeImage}
             alt={title}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover"
             priority
           />
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-neutral-400 bg-neutral-50/50">
-            <span className="material-symbols-outlined text-5xl">image</span>
+            <MdOutlineImage className="text-5xl" />
             <span className="text-xs font-bold uppercase tracking-wider">No Image Available</span>
           </div>
         )}
@@ -72,7 +74,7 @@ export default function DetailGallery({
                 activeImageIndex === idx ? "border-primary scale-95 shadow-sm" : "border-transparent opacity-75 hover:opacity-100"
               }`}
             >
-              <Image src={url} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" />
+              <Image src={url} alt={`Thumbnail ${idx + 1}`} fill sizes="80px" className="object-cover" />
             </button>
           ))}
         </div>

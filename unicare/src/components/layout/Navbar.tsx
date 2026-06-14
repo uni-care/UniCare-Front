@@ -5,6 +5,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import {
+    MdOutlineAccountTree,
+    MdOutlinePeople,
+    MdOutlineMenuBook,
+    MdExpandMore,
+    MdOutlinePerson,
+    MdOutlineReceiptLong,
+    MdOutlineLogout
+} from "react-icons/md";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -36,21 +45,21 @@ export default function Navbar() {
                         href="/marketplace"
                         className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/marketplace") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
                     >
-                        <span className={`material-symbols-outlined text-[20px] ${isActive("/marketplace") ? "text-primary" : "text-neutral-600"}`}>account_tree</span>
+                        <MdOutlineAccountTree className={`text-[20px] ${isActive("/marketplace") ? "text-primary" : "text-neutral-600"}`} />
                         Marketplace
                     </Link>
                     <Link
                         href="/contribute"
                         className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/contribute") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
                     >
-                        <span className={`material-symbols-outlined text-[20px] ${isActive("/contribute") ? "text-primary" : "text-neutral-600"}`}>group</span>
+                        <MdOutlinePeople className={`text-[20px] ${isActive("/contribute") ? "text-primary" : "text-neutral-600"}`} />
                         Contribute
                     </Link>
                     <Link
                         href="/about"
                         className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/about") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
                     >
-                        <span className={`material-symbols-outlined text-[20px] ${isActive("/about") ? "text-primary" : "text-neutral-600"}`}>menu_book</span>
+                        <MdOutlineMenuBook className={`text-[20px] ${isActive("/about") ? "text-primary" : "text-neutral-600"}`} />
                         About
                     </Link>
                 </nav>
@@ -78,9 +87,7 @@ export default function Navbar() {
                                         {userInitial}
                                     </span>
                                 )}
-                                <span className={`material-symbols-outlined text-[18px] text-neutral-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}>
-                                    expand_more
-                                </span>
+                                <MdExpandMore className={`text-[18px] text-neutral-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`} />
                             </button>
 
                             <div
@@ -92,7 +99,7 @@ export default function Navbar() {
                                     onClick={() => setIsUserMenuOpen(false)}
                                     className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-primary/10"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">person</span>
+                                    <MdOutlinePerson className="text-[18px]" />
                                     Profile
                                 </Link>
                                 <Link
@@ -100,7 +107,7 @@ export default function Navbar() {
                                     onClick={() => setIsUserMenuOpen(false)}
                                     className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-primary/10"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                                    <MdOutlineReceiptLong className="text-[18px]" />
                                     Transactions
                                 </Link>
                                 <button
@@ -112,7 +119,7 @@ export default function Navbar() {
                                     }}
                                     className="flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                                    <MdOutlineLogout className="text-[18px]" />
                                     Logout
                                 </button>
                             </div>
@@ -156,7 +163,7 @@ export default function Navbar() {
                             onClick={() => setIsOpen(false)}
                             className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/marketplace") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
                         >
-                            <span className={`material-symbols-outlined text-xl ${isActive("/marketplace") ? "text-primary" : "text-primary/60"}`}>account_tree</span>
+                            <MdOutlineAccountTree className={`text-xl ${isActive("/marketplace") ? "text-primary" : "text-primary/60"}`} />
                             Marketplace
                         </Link>
                         <Link
@@ -164,7 +171,7 @@ export default function Navbar() {
                             onClick={() => setIsOpen(false)}
                             className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/contribute") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
                         >
-                            <span className={`material-symbols-outlined text-xl ${isActive("/contribute") ? "text-primary" : "text-primary/60"}`}>group</span>
+                            <MdOutlinePeople className={`text-xl ${isActive("/contribute") ? "text-primary" : "text-primary/60"}`} />
                             Contribute
                         </Link>
                         <Link
@@ -172,7 +179,7 @@ export default function Navbar() {
                             onClick={() => setIsOpen(false)}
                             className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/about") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
                         >
-                            <span className={`material-symbols-outlined text-xl ${isActive("/about") ? "text-primary" : "text-primary/60"}`}>menu_book</span>
+                            <MdOutlineMenuBook className={`text-xl ${isActive("/about") ? "text-primary" : "text-primary/60"}`} />
                             About
                         </Link>
                     </nav>
@@ -207,7 +214,7 @@ export default function Navbar() {
                                     onClick={() => setIsOpen(false)}
                                     className="flex items-center gap-3 rounded-2xl border border-primary/20 bg-white/70 px-4 py-3 text-neutral-700 font-bold"
                                 >
-                                    <span className="material-symbols-outlined text-primary">receipt_long</span>
+                                    <MdOutlineReceiptLong className="text-primary text-xl" />
                                     My Transactions
                                 </Link>
                                 <button
@@ -219,7 +226,7 @@ export default function Navbar() {
                                     }}
                                     className="flex w-full items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 py-3 text-sm font-bold text-red-600 transition-colors hover:bg-red-100"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                                    <MdOutlineLogout className="text-[18px]" />
                                     Logout
                                 </button>
                             </>

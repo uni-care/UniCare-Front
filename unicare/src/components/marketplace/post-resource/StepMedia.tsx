@@ -1,6 +1,13 @@
 import { useRef } from "react";
 import Image from "next/image";
 import type { StepProps } from "./types";
+import {
+    MdOutlineCloudUpload,
+    MdArrowBack,
+    MdArrowForward,
+    MdOutlineLightMode,
+    MdOutlineVisibility
+} from "react-icons/md";
 
 export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
     const fileRef = useRef<HTMLInputElement>(null);
@@ -50,7 +57,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                             className="group relative flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-neutral-300 bg-white hover:border-primary/50 hover:bg-neutral-50 transition-all duration-200 py-16 px-6 cursor-pointer"
                         >
                             <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                <span className="material-symbols-outlined text-4xl text-primary">cloud_upload</span>
+                                <MdOutlineCloudUpload className="text-4xl text-primary" />
                             </div>
                             <p className="text-lg font-bold text-neutral-900">Tap to upload</p>
                             <p className="text-sm text-neutral-500">Support JPG, PNG, MP4 up to 50MB</p>
@@ -91,13 +98,13 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                         {/* Actions */}
                         <div className="flex justify-between items-center pt-4">
                             <button onClick={onBack} className="text-neutral-500 font-bold hover:text-neutral-900 transition-colors flex items-center gap-2 cursor-pointer">
-                                <span className="material-symbols-outlined text-sm">arrow_back</span> Back
+                                <MdArrowBack className="text-sm" /> Back
                             </button>
                             <button
                                 onClick={onNext}
                                 className="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2 cursor-pointer"
                             >
-                                Continue <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                Continue <MdArrowForward className="text-sm" />
                             </button>
                         </div>
                     </div>
@@ -116,7 +123,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                                 <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                                 <div className="absolute bottom-4 left-4 right-4 text-white">
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="material-symbols-outlined text-lg">light_mode</span>
+                                        <MdOutlineLightMode className="text-lg" />
                                         <span className="text-xs font-bold uppercase tracking-wider opacity-90">Pro Tip</span>
                                     </div>
                                     <h3 className="font-bold text-lg leading-tight">Lighting Matters</h3>
@@ -131,7 +138,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
 
                         <div className="rounded-lg p-5 bg-primary/10 border border-primary/20 flex flex-col gap-3">
                             <div className="flex items-center gap-3 text-primary">
-                                <span className="material-symbols-outlined">visibility</span>
+                                <MdOutlineVisibility className="text-xl" />
                                 <h3 className="font-bold">Be Transparent</h3>
                             </div>
                             <p className="text-sm text-neutral-600 leading-relaxed">

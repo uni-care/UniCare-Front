@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
+import { MdClose, MdOutlineCalendarMonth, MdSend } from "react-icons/md";
 import type { MarketplaceItem } from "@/app/(main)/(buyer)/marketplace/data";
 
 interface RequestItemModalProps {
@@ -78,12 +78,12 @@ export default function RequestItemModal({
           className="absolute cursor-pointer right-4 top-4 text-neutral-400 transition-colors hover:text-neutral-600"
           aria-label="Close request modal"
         >
-          <span className="material-symbols-outlined">close</span>
+          <MdClose className="text-xl" />
         </button>
 
         <div className="mx-auto mb-4 h-14 w-14 overflow-hidden rounded-2xl border border-primary/10 bg-white p-1">
           <div className="relative h-full w-full overflow-hidden rounded-lg">
-            <Image src={item.image} alt={item.title} fill className="object-cover" />
+            <Image src={item.image} alt={item.title} fill sizes="56px" className="object-cover" />
           </div>
         </div>
 
@@ -94,7 +94,7 @@ export default function RequestItemModal({
           <div>
             <label className="mb-2 block text-lg font-semibold text-neutral-700">Hey! How long do you need this for?</label>
             <div className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-3">
-              <span className="material-symbols-outlined text-base text-primary/70">calendar_month</span>
+              <MdOutlineCalendarMonth className="text-base text-primary/70" />
               <input
                 value={duration}
                 onChange={(event) => setDuration(event.target.value)}
@@ -122,7 +122,7 @@ export default function RequestItemModal({
           className="mt-5 flex cursor-pointer w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-lg font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isSubmitting ? "Sending..." : "Send Request"}
-          <span className="material-symbols-outlined text-base">send</span>
+          <MdSend className="text-base" />
         </button>
 
         <p className="mt-3 text-center text-xs text-neutral-500">

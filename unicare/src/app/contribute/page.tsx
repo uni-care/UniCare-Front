@@ -1,5 +1,11 @@
 import Image from "next/image";
 import JoinTeamForm from "@/components/forms/JoinTeamForm";
+import {
+    MdOutlineLock,
+    MdOutlineCode,
+    MdOutlineDns,
+    MdOutlineEngineering
+} from "react-icons/md";
 
 const TEAM_ROLES = [
     {
@@ -18,6 +24,19 @@ const TEAM_ROLES = [
         subtitle: "Architecture & Performance",
     },
 ];
+
+const getRoleIcon = (iconName: string) => {
+    switch (iconName) {
+        case "code":
+            return <MdOutlineCode className="text-xl" />;
+        case "dns":
+            return <MdOutlineDns className="text-xl" />;
+        case "engineering":
+            return <MdOutlineEngineering className="text-xl" />;
+        default:
+            return null;
+    }
+};
 
 export default function ContributePage() {
     return (
@@ -54,6 +73,7 @@ export default function ContributePage() {
                                 src="/contribute-hero.png"
                                 alt="Group of diverse engineers collaborating around a laptop"
                                 fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 priority
                             />
@@ -66,7 +86,7 @@ export default function ContributePage() {
                 <section className="w-full bg-primary/10 border border-primary/20 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
                     <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-center md:justify-start gap-2 text-primary font-bold mb-1">
-                            <span className="material-symbols-outlined text-xl">lock</span>
+                            <MdOutlineLock className="text-xl" />
                             <span className="text-sm uppercase tracking-wider">Limited Access</span>
                         </div>
                         <h3 className="text-2xl md:text-3xl font-bold text-neutral-900">
@@ -99,7 +119,7 @@ export default function ContributePage() {
                                     className="flex items-center gap-4 p-4 rounded-xl bg-white border border-neutral-100 shadow-sm"
                                 >
                                     <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-                                        <span className="material-symbols-outlined">{role.icon}</span>
+                                        {getRoleIcon(role.icon)}
                                     </div>
                                     <div>
                                         <h4 className="font-bold text-neutral-900">{role.title}</h4>

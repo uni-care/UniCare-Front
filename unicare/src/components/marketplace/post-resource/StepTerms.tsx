@@ -1,4 +1,14 @@
 import type { StepProps } from "./types";
+import {
+    MdHandshake,
+    MdAttachMoney,
+    MdOutlineCalendarMonth,
+    MdOutlineVerifiedUser,
+    MdOutlinePeople,
+    MdArrowForward,
+    MdOutlineHelpOutline,
+    MdOutlineLock
+} from "react-icons/md";
 
 interface StepTermsProps extends StepProps {
     isSubmitting?: boolean;
@@ -25,7 +35,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                     <div className="flex flex-col gap-6">
                         <div>
                             <h2 className="text-2xl font-bold text-neutral-900">Terms of Exchange</h2>
-                            <p className="text-neutral-500 text-base mt-1">Decide how you want to share your resource with the engineering community.</p>
+                            <p className="text-neutral-500 text-base mt-1">Decide how you want to share your resource with the student community.</p>
                         </div>
 
                         {/* Lend / Sell Toggle */}
@@ -34,14 +44,14 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                 onClick={() => update("exchangeType", "lend")}
                                 className={`flex-1 h-full rounded-lg flex items-center justify-center gap-2 text-sm font-bold transition-all cursor-pointer ${form.exchangeType === "lend" ? "bg-white shadow-sm text-primary" : "text-neutral-500"}`}
                             >
-                                <span className="material-symbols-outlined text-[18px]">handshake</span>
+                                <MdHandshake className="text-[18px]" />
                                 Lend (Free)
                             </button>
                             <button
                                 onClick={() => update("exchangeType", "sell")}
                                 className={`flex-1 h-full rounded-lg flex items-center justify-center gap-2 text-sm font-bold transition-all cursor-pointer ${form.exchangeType === "sell" ? "bg-white shadow-sm text-primary" : "text-neutral-500"}`}
                             >
-                                <span className="material-symbols-outlined text-[18px]">attach_money</span>
+                                <MdAttachMoney className="text-[18px]" />
                                 Sell
                             </button>
                         </div>
@@ -53,7 +63,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                     <label className="flex flex-col gap-2">
                                         <p className="text-neutral-900 text-sm font-semibold">Max Duration (Days)</p>
                                         <div className="relative flex items-center">
-                                            <span className="absolute left-4 text-neutral-400 material-symbols-outlined text-[20px]">calendar_clock</span>
+                                            <MdOutlineCalendarMonth className="absolute left-4 text-neutral-400 text-[20px]" />
                                             <input
                                                 className="w-full h-12 pl-11 pr-4 rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                                 placeholder="e.g., 7"
@@ -67,7 +77,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                     <label className="flex flex-col gap-2">
                                         <p className="text-neutral-900 text-sm font-semibold">Security Deposit ($)</p>
                                         <div className="relative flex items-center">
-                                            <span className="absolute left-4 text-neutral-400 material-symbols-outlined text-[20px]">verified_user</span>
+                                            <MdOutlineVerifiedUser className="absolute left-4 text-neutral-400 text-[20px]" />
                                             <input
                                                 className="w-full h-12 pl-11 pr-4 rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                                 placeholder="e.g., 50.00"
@@ -83,7 +93,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                 <label className="flex flex-col gap-2">
                                     <p className="text-neutral-900 text-sm font-semibold">Selling Price ($)</p>
                                     <div className="relative flex items-center">
-                                        <span className="absolute left-4 text-neutral-400 material-symbols-outlined text-[20px]">attach_money</span>
+                                        <MdAttachMoney className="absolute left-4 text-neutral-400 text-[20px]" />
                                         <input
                                             className="w-full h-12 pl-11 pr-4 rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                                             placeholder="e.g., 120.00"
@@ -107,11 +117,11 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                             />
                             <label htmlFor="promise" className="flex flex-col cursor-pointer">
                                 <span className="text-neutral-900 font-bold text-base flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-primary text-[20px]">diversity_3</span>
+                                    <MdOutlinePeople className="text-primary text-[20px]" />
                                     The UniCare Promise
                                 </span>
                                 <p className="text-neutral-600 text-sm mt-1 leading-relaxed">
-                                    I pledge to maintain the integrity of the UniCare community by providing accurate descriptions and treating all fellow engineers with respect and fairness.
+                                    I pledge to maintain the integrity of the UniCare community by providing accurate descriptions and treating all fellow students with respect and fairness.
                                 </p>
                             </label>
                         </div>
@@ -135,7 +145,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                             ) : (
                                 <>
                                     Post Now
-                                    <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                                    <MdArrowForward className="text-[20px]" />
                                 </>
                             )}
                         </button>
@@ -144,8 +154,8 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
 
                 {/* Footer */}
                 <div className="flex justify-center gap-6 text-neutral-400 text-sm">
-                    <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[16px]">help</span> Help Center</span>
-                    <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[16px]">lock</span> Safe &amp; Secure</span>
+                    <span className="flex items-center gap-1"><MdOutlineHelpOutline className="text-[16px]" /> Help Center</span>
+                    <span className="flex items-center gap-1"><MdOutlineLock className="text-[16px]" /> Safe &amp; Secure</span>
                 </div>
             </div>
         </div>

@@ -4,12 +4,35 @@ import ProgressStepper from "./ProgressStepper";
 import type { StepProps } from "./types";
 import { categoriesApi } from "@/api/categories-api";
 import type { CategoryResponse } from "@/types/categories";
+import {
+    MdOutlineLabel,
+    MdOutlineCategory,
+    MdExpandMore,
+    MdOutlineEditNote,
+    MdArrowForward,
+    MdOutlineVerified,
+    MdOutlinePhotoCamera,
+    MdOutlineSecurity
+} from "react-icons/md";
 
 const TIPS = [
     { icon: "verified", title: "Be Accurate", desc: "Ensure the model number and condition are correct." },
     { icon: "photo_camera", title: "Photos Next", desc: "You'll be able to upload up to 5 photos in the next step." },
     { icon: "security", title: "Safe Sharing", desc: "Your contact info is only shared after you approve a request." },
 ];
+
+const getTipIcon = (iconName: string) => {
+    switch (iconName) {
+        case "verified":
+            return <MdOutlineVerified className="text-lg" />;
+        case "photo_camera":
+            return <MdOutlinePhotoCamera className="text-lg" />;
+        case "security":
+            return <MdOutlineSecurity className="text-lg" />;
+        default:
+            return null;
+    }
+};
 
 export default function StepDetails({ form, update, onNext }: StepProps) {
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
@@ -49,7 +72,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-bold text-neutral-700" htmlFor="res-name">Resource Name</label>
                         <div className="relative group">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors">label</span>
+                            <MdOutlineLabel className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors text-[20px]" />
                             <input
                                 id="res-name"
                                 className="w-full h-14 pl-12 pr-4 rounded-lg border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
@@ -64,7 +87,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                     <div className="flex flex-col gap-2">
                         <label className="text-sm font-bold text-neutral-700" htmlFor="discipline">Discipline Category</label>
                         <div className="relative group">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors">category</span>
+                            <MdOutlineCategory className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors text-[20px]" />
                             <select
                                 id="discipline"
                                 className="w-full h-14 pl-12 pr-10 rounded-lg border border-neutral-200 bg-white text-neutral-900 focus:border-primary focus:ring-1 focus:ring-primary appearance-none transition-all cursor-pointer outline-none"
@@ -78,7 +101,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                                     </option>
                                 ))}
                             </select>
-                            <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none">expand_more</span>
+                            <MdExpandMore className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none text-xl" />
                         </div>
                     </div>
 
@@ -98,7 +121,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                                 value={form.description}
                                 onChange={(e) => update("description", e.target.value)}
                             />
-                            <span className="material-symbols-outlined absolute bottom-4 right-4 text-neutral-300 text-xl pointer-events-none">edit_note</span>
+                            <MdOutlineEditNote className="absolute bottom-4 right-4 text-neutral-300 text-2xl pointer-events-none" />
                         </div>
                         <p className="text-xs text-neutral-500">Be creative! A good story makes sharing more fun.</p>
                     </div>
@@ -114,7 +137,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                             className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-bold shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         >
                             Continue
-                            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                            <MdArrowForward className="text-sm" />
                         </button>
                     </div>
                 </div>
@@ -124,7 +147,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                     {TIPS.map((tip) => (
                         <div key={tip.title} className="p-4 rounded-lg bg-primary/5 border border-primary/10 flex flex-col gap-2">
                             <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-1">
-                                <span className="material-symbols-outlined text-lg">{tip.icon}</span>
+                                {getTipIcon(tip.icon)}
                             </div>
                             <h4 className="font-bold text-sm text-neutral-800">{tip.title}</h4>
                             <p className="text-xs text-neutral-600">{tip.desc}</p>
