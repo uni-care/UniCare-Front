@@ -148,6 +148,6 @@ export default function PostResourceWizard() {
                 />
             );
         default:
-            return <StepSuccess form={form} />;
+            return <StepSuccess form={form} categoryName={getCategoryNameById(form.discipline)} />;
     }
 }

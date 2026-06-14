@@ -3,9 +3,10 @@ import type { PostFormData } from "./types";
 
 interface StepSuccessProps {
     form: PostFormData;
+    categoryName: string;
 }
 
-export default function StepSuccess({ form }: StepSuccessProps) {
+export default function StepSuccess({ form, categoryName }: StepSuccessProps) {
     return (
         <div className="bg-background-light min-h-screen pt-36 pb-20 relative overflow-hidden">
             {/* Decorative Background — hidden on small screens */}
@@ -60,7 +61,7 @@ export default function StepSuccess({ form }: StepSuccessProps) {
                                     <div className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">New</div>
                                 </div>
                                 <p className="text-neutral-500 text-sm mb-3 font-medium">
-                                    {form.discipline || "Engineering"} • {form.exchangeType === "lend" ? "Lend" : "Sale"}
+                                    {categoryName || "Engineering"} • {form.exchangeType === "lend" ? "Lend" : "Sale"}
                                 </p>
                                 <p className="text-neutral-600 text-sm leading-relaxed line-clamp-2 mb-4">
                                     {form.description || "No description provided."}
@@ -72,7 +73,7 @@ export default function StepSuccess({ form }: StepSuccessProps) {
                                     <span className="text-xs font-medium text-neutral-500">By You</span>
                                 </div>
                                 <span className="text-xs font-bold text-primary">
-                                    {form.exchangeType === "lend" ? "Free" : form.price ? `$${form.price}` : "Free"}
+                                    {form.exchangeType === "lend" ? "Free" : form.price ? `${form.price} EGP` : "Free"}
                                 </span>
                             </div>
                         </div>
@@ -80,17 +81,17 @@ export default function StepSuccess({ form }: StepSuccessProps) {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-row items-center gap-4 mt-10 w-full max-w-lg">
+                <div className="flex flex-col sm:flex-row items-center gap-4 mt-10 w-full max-w-lg">
                     <Link
                         href="/marketplace"
-                        className="flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-sm sm:text-base whitespace-nowrap transition-all shadow-md hover:shadow-lg cursor-pointer"
+                        className="w-full sm:flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-sm sm:text-base whitespace-nowrap transition-all shadow-md hover:shadow-lg cursor-pointer"
                     >
                         View Live Post
                         <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                     </Link>
                     <Link
                         href="/marketplace"
-                        className="flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-600 rounded-lg font-medium text-sm sm:text-base whitespace-nowrap transition-colors cursor-pointer"
+                        className="w-full sm:flex-1 flex items-center justify-center gap-2 h-12 px-6 bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-600 rounded-lg font-medium text-sm sm:text-base whitespace-nowrap transition-colors cursor-pointer"
                     >
                         <span className="material-symbols-outlined text-[20px] text-neutral-400">arrow_back</span>
                         Back to Marketplace
