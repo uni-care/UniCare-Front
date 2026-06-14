@@ -31,7 +31,7 @@ export default function StepSuccess({ form, categoryName }: StepSuccessProps) {
                         Resource Posted Successfully!
                     </h1>
                     <p className="text-neutral-500 text-lg max-w-[500px] leading-relaxed">
-                        Your contribution is now live on the marketplace. Engineers around the world can now learn from your work!
+                        Your resource is now live on the campus marketplace. Other students can now find, request, or buy it directly from you!
                     </p>
                 </div>
 
