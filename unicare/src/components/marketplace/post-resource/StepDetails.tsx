@@ -36,6 +36,7 @@ const getTipIcon = (iconName: string) => {
 
 export default function StepDetails({ form, update, onNext }: StepProps) {
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
+    const [showCategories, setShowCategories] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -76,7 +77,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                             <input
                                 id="res-name"
                                 className="w-full h-14 pl-12 pr-4 rounded-lg border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
-                                placeholder="e.g., Lab Coat, Drawing Board, or Calculus Textbook"
+                                placeholder="e.g., Calculus Textbook"
                                 value={form.name}
                                 onChange={(e) => update("name", e.target.value)}
                             />
@@ -84,25 +85,46 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                     </div>
 
                     {/* Discipline */}
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-bold text-neutral-700" htmlFor="discipline">Discipline Category</label>
-                        <div className="relative group">
-                            <MdOutlineCategory className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors text-[20px]" />
-                            <select
-                                id="discipline"
-                                className="w-full h-14 pl-12 pr-10 rounded-lg border border-neutral-200 bg-white text-neutral-900 focus:border-primary focus:ring-1 focus:ring-primary appearance-none transition-all cursor-pointer outline-none"
-                                value={form.discipline}
-                                onChange={(e) => update("discipline", e.target.value)}
+                    <div className="col-span-1 md:col-span-2 flex flex-col gap-2">
+                        <label className="text-sm font-bold text-neutral-700">Discipline Category</label>
+                        <div className="relative">
+                            <button
+                                type="button"
+                                onClick={() => setShowCategories(!showCategories)}
+                                className="w-full h-14 pl-12 pr-10 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-left font-semibold focus:border-primary transition-all outline-none flex items-center justify-between cursor-pointer"
                             >
-                                <option disabled value="">Select a discipline</option>
-                                {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>
-                                        {cat.name}
-                                    </option>
-                                ))}
-                            </select>
-                            <MdExpandMore className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none text-xl" />
+                                <div className="flex items-center gap-2">
+                                    <MdOutlineCategory className="text-neutral-400 text-[20px]" />
+                                    <span>{categories.find(c => c.id === form.discipline)?.name || "Select a discipline"}</span>
+                                </div>
+                                <MdExpandMore className="text-neutral-400 text-xl transition-transform duration-200" style={{ transform: showCategories ? "rotate(180deg)" : "rotate(0deg)" }} />
+                            </button>
                         </div>
+
+                        {showCategories && (
+                            <div className="mt-2 p-4 bg-white border border-neutral-200 rounded-2xl shadow-sm flex flex-wrap gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                                {categories.map((cat) => {
+                                    const isSelected = form.discipline === cat.id;
+                                    return (
+                                        <button
+                                            key={cat.id}
+                                            type="button"
+                                            onClick={() => {
+                                                update("discipline", cat.id);
+                                                setShowCategories(false);
+                                            }}
+                                            className={`px-4 py-2.5 rounded-xl text-xs font-bold border transition-all duration-200 cursor-pointer ${
+                                                isSelected
+                                                    ? "bg-primary border-primary text-white shadow-sm"
+                                                    : "bg-white border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-800"
+                                            }`}
+                                        >
+                                            {cat.name}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Description */}
