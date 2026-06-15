@@ -9,6 +9,8 @@ import { authApi } from "@/api/auth-api";
 import { registerSchema, type RegisterInput } from "@/types/auth-schemas";
 import { RegistrationMethod } from "@/types/auth";
 import { useRouter } from "next/navigation";
+import { IoEyeOffOutline } from "react-icons/io5";
+import { IoEyeOutline } from "react-icons/io5";
 
 export function CreateAccountForm() {
   const router = useRouter();
@@ -48,22 +50,30 @@ export function CreateAccountForm() {
             ? RegistrationMethod.Email
             : RegistrationMethod.Phone,
         email: values.contactMethod === "email" ? values.email : undefined,
-        phoneNumber: values.contactMethod === "phone" ? values.phoneNumber : undefined,
+        phoneNumber:
+          values.contactMethod === "phone" ? values.phoneNumber : undefined,
       });
-      toast.success("Account created successfully. You can now sign in.", { duration: 2000 });
+      toast.success("Account created successfully. You can now sign in.", {
+        duration: 2000,
+      });
       reset();
       setTimeout(() => {
         router.push("/login");
       }, 2000);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to create account. Please try again.";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to create account. Please try again.";
       toast.error(message);
     }
   };
 
   return (
     <div className="mx-auto w-full max-w-md rounded-xl border border-primary/10 bg-white px-8 py-10 shadow-md shadow-primary/5">
-      <h1 className="mb-1 text-center text-4xl font-bold leading-none text-[#131615] sm:text-3xl">Create Account</h1>
+      <h1 className="mb-1 text-center text-4xl font-bold leading-none text-[#131615] sm:text-3xl">
+        Create Account
+      </h1>
       <p className="mb-7 text-center text-sm text-neutral-500">
         Unlock your academic and professional potential.
       </p>
@@ -73,7 +83,9 @@ export function CreateAccountForm() {
           <button
             className={`rounded-md cursor-pointer px-4 py-2 text-sm font-semibold transition ${role === "student" ? "bg-primary/10 text-[#131615]" : "text-neutral-600"}`}
             type="button"
-            onClick={() => setValue("role", "student", { shouldValidate: true })}
+            onClick={() =>
+              setValue("role", "student", { shouldValidate: true })
+            }
           >
             Student
           </button>
@@ -90,14 +102,18 @@ export function CreateAccountForm() {
           <button
             className={`pb-2 text-sm cursor-pointer font-semibold transition ${contactMethod === "email" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
             type="button"
-            onClick={() => setValue("contactMethod", "email", { shouldValidate: true })}
+            onClick={() =>
+              setValue("contactMethod", "email", { shouldValidate: true })
+            }
           >
             Via Email
           </button>
           <button
             className={`pb-2 text-sm cursor-pointer font-semibold transition ${contactMethod === "phone" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
             type="button"
-            onClick={() => setValue("contactMethod", "phone", { shouldValidate: true })}
+            onClick={() =>
+              setValue("contactMethod", "phone", { shouldValidate: true })
+            }
           >
             Via Phone
           </button>
@@ -105,7 +121,10 @@ export function CreateAccountForm() {
 
         {contactMethod === "phone" ? (
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="phoneNumber">
+            <label
+              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              htmlFor="phoneNumber"
+            >
               Phone Number
             </label>
             <div className="flex rounded-md border border-primary/15 focus-within:border-primary">
@@ -121,15 +140,23 @@ export function CreateAccountForm() {
                 placeholder="1012345678"
                 type="tel"
                 {...register("phoneNumber", {
-                  setValueAs: (value: string) => value.replace(/\D/g, "").slice(0, 10),
+                  setValueAs: (value: string) =>
+                    value.replace(/\D/g, "").slice(0, 10),
                 })}
               />
             </div>
-            {errors.phoneNumber ? <p className="mt-1 text-xs text-red-600">{errors.phoneNumber.message}</p> : null}
+            {errors.phoneNumber ? (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.phoneNumber.message}
+              </p>
+            ) : null}
           </div>
         ) : (
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="email">
+            <label
+              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -139,13 +166,20 @@ export function CreateAccountForm() {
               type="email"
               {...register("email")}
             />
-            {errors.email ? <p className="mt-1 text-xs text-red-600">{errors.email.message}</p> : null}
+            {errors.email ? (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.email.message}
+              </p>
+            ) : null}
           </div>
         )}
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="firstName">
+            <label
+              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              htmlFor="firstName"
+            >
               First Name
             </label>
             <input
@@ -156,12 +190,17 @@ export function CreateAccountForm() {
               {...register("firstName")}
             />
             {errors.firstName ? (
-              <p className="mt-1 text-xs text-red-600">{errors.firstName.message}</p>
+              <p className="mt-1 text-xs text-red-600">
+                {errors.firstName.message}
+              </p>
             ) : null}
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="lastName">
+            <label
+              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              htmlFor="lastName"
+            >
               Last Name
             </label>
             <input
@@ -172,13 +211,18 @@ export function CreateAccountForm() {
               {...register("lastName")}
             />
             {errors.lastName ? (
-              <p className="mt-1 text-xs text-red-600">{errors.lastName.message}</p>
+              <p className="mt-1 text-xs text-red-600">
+                {errors.lastName.message}
+              </p>
             ) : null}
           </div>
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="password">
+          <label
+            className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+            htmlFor="password"
+          >
             Password
           </label>
           <div className="flex items-center rounded-md border border-primary/15 pr-2 focus-within:border-primary">
@@ -195,10 +239,14 @@ export function CreateAccountForm() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
             >
-              {showPassword ? "visibility_off" : "visibility"}
+              {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
             </button>
           </div>
-          {errors.password ? <p className="mt-1 text-xs text-red-600">{errors.password.message}</p> : null}
+          {errors.password ? (
+            <p className="mt-1 text-xs text-red-600">
+              {errors.password.message}
+            </p>
+          ) : null}
         </div>
 
         <div>
@@ -218,19 +266,29 @@ export function CreateAccountForm() {
             />
           </div>
           {errors.confirmPassword ? (
-            <p className="mt-1 text-xs text-red-600">{errors.confirmPassword.message}</p>
+            <p className="mt-1 text-xs text-red-600">
+              {errors.confirmPassword.message}
+            </p>
           ) : null}
         </div>
 
         <label className="flex items-start gap-2 text-sm text-neutral-600">
-          <input className="mt-0.5" type="checkbox" {...register("acceptedPolicy")} />
+          <input
+            className="mt-0.5"
+            type="checkbox"
+            {...register("acceptedPolicy")}
+          />
           <span>
             I agree to the{" "}
-            <span className="font-medium text-primary">Terms & Conditions</span> and{" "}
-            <span className="font-medium text-primary">Privacy Policy</span>
+            <span className="font-medium text-primary">Terms & Conditions</span>{" "}
+            and <span className="font-medium text-primary">Privacy Policy</span>
           </span>
         </label>
-        {errors.acceptedPolicy ? <p className="text-xs text-red-600">{errors.acceptedPolicy.message}</p> : null}
+        {errors.acceptedPolicy ? (
+          <p className="text-xs text-red-600">
+            {errors.acceptedPolicy.message}
+          </p>
+        ) : null}
 
         <button
           className="w-full rounded-full cursor-pointer bg-primary py-3 text-base font-semibold text-white shadow-md shadow-primary/25 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
@@ -242,7 +300,10 @@ export function CreateAccountForm() {
 
         <p className="text-center text-sm text-neutral-500">
           Already have an account?{" "}
-          <Link className="font-semibold text-primary hover:underline" href="/login">
+          <Link
+            className="font-semibold text-primary hover:underline"
+            href="/login"
+          >
             Log In
           </Link>
         </p>

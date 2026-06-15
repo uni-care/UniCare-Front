@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { authApi } from "@/api/auth-api";
 import { AUTH_ME_QUERY_KEY, setAuthToken } from "@/hooks/useAuth";
 import { loginSchema, type LoginInput } from "@/types/auth-schemas";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +45,8 @@ export function LoginForm() {
 
     try {
       const response = await authApi.login({
-        email: values.contactMethod === "email" ? values.email : values.phoneNumber,
+        email:
+          values.contactMethod === "email" ? values.email : values.phoneNumber,
         password: values.password,
       });
 
@@ -62,7 +64,9 @@ export function LoginForm() {
       router.push("/");
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Login failed. Please try again.";
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please try again.";
       toast.error(message);
     }
   };
@@ -76,18 +80,28 @@ export function LoginForm() {
       <form className="space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 rounded-lg border border-primary/15 bg-primary/5 p-1">
           <button
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition cursor-pointer ${contactMethod === "email" ? "bg-white text-primary shadow-sm" : "text-neutral-600"
-              }`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold transition cursor-pointer ${
+              contactMethod === "email"
+                ? "bg-white text-primary shadow-sm"
+                : "text-neutral-600"
+            }`}
             type="button"
-            onClick={() => setValue("contactMethod", "email", { shouldValidate: true })}
+            onClick={() =>
+              setValue("contactMethod", "email", { shouldValidate: true })
+            }
           >
             Via Email
           </button>
           <button
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition cursor-pointer ${contactMethod === "phone" ? "bg-white text-primary shadow-sm" : "text-neutral-600"
-              }`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold transition cursor-pointer ${
+              contactMethod === "phone"
+                ? "bg-white text-primary shadow-sm"
+                : "text-neutral-600"
+            }`}
             type="button"
-            onClick={() => setValue("contactMethod", "phone", { shouldValidate: true })}
+            onClick={() =>
+              setValue("contactMethod", "phone", { shouldValidate: true })
+            }
           >
             Via Phone
           </button>
@@ -95,11 +109,13 @@ export function LoginForm() {
 
         {contactMethod === "email" ? (
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="email">
+            <label
+              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              htmlFor="email"
+            >
               Email Address
             </label>
             <div className="flex items-center rounded-md border border-primary/15 px-3 focus-within:border-primary">
-              <span className="material-symbols-outlined text-[20px] text-neutral-500">mail</span>
               <input
                 className="w-full px-3 py-2 text-sm outline-none"
                 id="email"
@@ -108,11 +124,18 @@ export function LoginForm() {
                 {...register("email")}
               />
             </div>
-            {errors.email ? <p className="mt-1 text-xs text-red-600">{errors.email.message}</p> : null}
+            {errors.email ? (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.email.message}
+              </p>
+            ) : null}
           </div>
         ) : (
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="phoneNumber">
+            <label
+              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              htmlFor="phoneNumber"
+            >
               Phone Number
             </label>
             <div className="flex rounded-md border border-primary/15 focus-within:border-primary">
@@ -128,20 +151,27 @@ export function LoginForm() {
                 placeholder="1012345678"
                 type="tel"
                 {...register("phoneNumber", {
-                  setValueAs: (value: string) => value.replace(/\D/g, "").slice(0, 10),
+                  setValueAs: (value: string) =>
+                    value.replace(/\D/g, "").slice(0, 10),
                 })}
               />
             </div>
-            {errors.phoneNumber ? <p className="mt-1 text-xs text-red-600">{errors.phoneNumber.message}</p> : null}
+            {errors.phoneNumber ? (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.phoneNumber.message}
+              </p>
+            ) : null}
           </div>
         )}
 
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]" htmlFor="password">
+          <label
+            className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+            htmlFor="password"
+          >
             Password
           </label>
           <div className="flex items-center rounded-md border border-primary/15 px-3 focus-within:border-primary">
-            <span className="material-symbols-outlined text-[20px] text-neutral-500">lock</span>
             <input
               className="w-full px-3 py-2 text-sm outline-none"
               id="password"
@@ -155,14 +185,21 @@ export function LoginForm() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
             >
-              {showPassword ? "visibility_off" : "visibility"}
+              {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
             </button>
           </div>
-          {errors.password ? <p className="mt-1 text-xs text-red-600">{errors.password.message}</p> : null}
+          {errors.password ? (
+            <p className="mt-1 text-xs text-red-600">
+              {errors.password.message}
+            </p>
+          ) : null}
         </div>
 
         <div className="text-right">
-          <Link className="text-sm font-semibold text-primary hover:underline" href="/forgot-password">
+          <Link
+            className="text-sm font-semibold text-primary hover:underline"
+            href="/forgot-password"
+          >
             Forgot Password?
           </Link>
         </div>
@@ -188,7 +225,10 @@ export function LoginForm() {
 
         <p className="text-center text-sm text-neutral-600">
           Don&apos;t have an account?{" "}
-          <Link className="font-semibold text-primary hover:underline" href="/register">
+          <Link
+            className="font-semibold text-primary hover:underline"
+            href="/register"
+          >
             Sign Up
           </Link>
         </p>
