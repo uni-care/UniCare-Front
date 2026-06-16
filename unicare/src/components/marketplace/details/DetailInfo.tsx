@@ -1,3 +1,5 @@
+import { MdOutlineCalendarToday } from "react-icons/md";
+
 interface DetailInfoProps {
   title: string;
   category: string;
@@ -51,7 +53,7 @@ export default function DetailInfo({
       {type === "LEND" && (hasAvailableFrom || hasAvailableTo) && (
         <div className="flex flex-col gap-1.5 p-4 bg-primary/5 border border-primary/10 rounded-2xl">
           <div className="flex items-center gap-1.5 text-xs text-primary font-bold uppercase tracking-wider">
-            <span className="material-symbols-outlined text-[16px]">calendar_today</span>
+            <MdOutlineCalendarToday className="text-[16px]" />
             Lending Availability
           </div>
           <span className="text-sm font-semibold text-neutral-700">

@@ -1,5 +1,7 @@
 "use client";
 
+import { MdSend } from "react-icons/md";
+
 interface DetailSidebarProps {
   user: {
     name: string;
@@ -50,7 +52,7 @@ export default function DetailSidebar({
                 : "bg-primary text-white hover:bg-primary/95 shadow-primary/10 cursor-pointer"
             }`}
           >
-            <span className="material-symbols-outlined text-lg">send</span>
+            <MdSend className="text-lg" />
             {isRequested
               ? "Requested Already"
               : itemType === "LEND"

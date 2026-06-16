@@ -13,6 +13,12 @@ import { toMarketplaceItem, type MarketplaceItem } from "@/app/(main)/(buyer)/ma
 import DetailGallery from "./DetailGallery";
 import DetailInfo from "./DetailInfo";
 import DetailSidebar from "./DetailSidebar";
+import {
+  MdArrowBack,
+  MdFavorite,
+  MdFavoriteBorder,
+  MdOutlineErrorOutline
+} from "react-icons/md";
 
 const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";
 
@@ -199,7 +205,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
   if (!item) {
     return (
       <div className="bg-background-light min-h-screen pt-32 pb-20 flex flex-col items-center justify-center gap-6 text-center px-4">
-        <span className="material-symbols-outlined text-6xl text-neutral-300">report</span>
+        <MdOutlineErrorOutline className="text-6xl text-neutral-300" />
         <div>
           <h1 className="text-2xl font-bold text-neutral-800 mb-2">Resource Not Found</h1>
           <p className="text-neutral-500 max-w-md font-medium">
@@ -210,7 +216,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
           href="/marketplace"
           className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-3.5 rounded-full font-bold shadow-md transition-all cursor-pointer text-sm"
         >
-          <span className="material-symbols-outlined">arrow_back</span>
+          <MdArrowBack className="text-lg" />
           Back to Marketplace
         </Link>
       </div>
@@ -228,7 +234,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
             href="/marketplace"
             className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 font-bold transition-colors cursor-pointer select-none text-sm"
           >
-            <span className="material-symbols-outlined text-lg">arrow_back</span>
+            <MdArrowBack className="text-lg" />
             Back to Marketplace
           </Link>
 
@@ -238,12 +244,11 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
               isFavorited ? "border-rose-200 text-rose-500 bg-rose-50/20" : "border-neutral-200 text-neutral-500"
             }`}
           >
-            <span
-              className={`material-symbols-outlined text-lg ${isFavorited ? "fill-1 text-rose-500" : ""}`}
-              style={{ fontVariationSettings: isFavorited ? "'FILL' 1" : "'FILL' 0" }}
-            >
-              favorite
-            </span>
+            {isFavorited ? (
+              <MdFavorite className="text-lg text-rose-500" />
+            ) : (
+              <MdFavoriteBorder className="text-lg" />
+            )}
             <span className="text-xs font-bold">{isFavorited ? "Favorited" : "Favorite"}</span>
           </button>
         </div>
