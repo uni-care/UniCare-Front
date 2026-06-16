@@ -26,6 +26,22 @@ const nextConfig: NextConfig = {
         destination: `${API_URL}/api/v1/:path*`,
       },
       {
+        source: "/api/Categories",
+        destination: `${API_URL}/api/Categories`,
+      },
+      {
+        source: "/api/Categories/:path*",
+        destination: `${API_URL}/api/Categories/:path*`,
+      },
+      {
+        source: "/api/transactions",
+        destination: `${API_URL}/api/transactions`,
+      },
+      {
+        source: "/api/transactions/:path*",
+        destination: `${API_URL}/api/transactions/:path*`,
+      },
+      {
         source: "/api/chats",
         destination: `${API_URL}/api/chats`,
       },
