@@ -12,6 +12,7 @@ import type { CategoryResponse } from "@/types/categories";
 import { chatApi } from "@/api/chat-api";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import { itemsApi } from "@/api/items-api";
+import AuthRequiredModal from "@/components/auth/auth-required-modal";
 import {
   MdOutlineSearch,
   MdOutlineTune,
@@ -42,14 +43,14 @@ export default function MarketplacePage() {
   const [requestedTransactionIds, setRequestedTransactionIds] = useState<string[]>([]);
   const [isRequestedStateHydrated, setIsRequestedStateHydrated] = useState(false);
   const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
-  const { user } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { user, isAuthenticated } = useAuth();
   const router = useRouter();
 
   const handleFavoriteToggle = async (itemId: string) => {
     const token = getAuthToken();
     if (!token) {
-      toast.error("Please sign in to favorite items.");
-      router.push("/login");
+      setShowAuthModal(true);
       return;
     }
 
@@ -353,7 +354,13 @@ export default function MarketplacePage() {
                 key={item.id}
                 {...item}
                 isRequested={requestedTransactionIds.includes(item.transactionId)}
-                onRequestClick={() => setSelectedItem(item)}
+                onRequestClick={() => {
+                  if (!isAuthenticated) {
+                    setShowAuthModal(true);
+                  } else {
+                    setSelectedItem(item);
+                  }
+                }}
                 onFavoriteClick={handleFavoriteToggle}
               />
             ))}
@@ -461,6 +468,16 @@ export default function MarketplacePage() {
           }
         }}
       />
+
+      {showAuthModal && (
+        <AuthRequiredModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          title="Join the Conversation!"
+          description="Please sign in to request items, message owners, and save resources to your favorites."
+          redirectTo="/marketplace"
+        />
+      )}
     </div>
   );
 }

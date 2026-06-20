@@ -10,14 +10,40 @@ import StepTerms from "./post-resource/StepTerms";
 import StepSuccess from "./post-resource/StepSuccess";
 import { itemsApi } from "@/api/items-api";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
+import AuthRequiredModal from "@/components/auth/auth-required-modal";
 
 export default function PostResourceWizard() {
     const [step, setStep] = useState(0);
     const [form, setForm] = useState<PostFormData>(INITIAL_FORM_DATA);
     const [createdItemId, setCreatedItemId] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { user } = useAuth();
+    const { user, isLoading, isAuthenticated } = useAuth();
     const router = useRouter();
+
+    if (isLoading) {
+        return (
+            <div className="bg-background-light min-h-screen pt-32 pb-20 flex flex-col items-center justify-center gap-4">
+                <div className="size-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                <p className="text-neutral-500 font-bold text-lg">Verifying session...</p>
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return (
+            <div className="bg-background-light min-h-screen pt-32 pb-20 flex flex-col items-center justify-center gap-4">
+                <AuthRequiredModal
+                    isOpen={true}
+                    onClose={() => router.push("/marketplace")}
+                    title="Welcome to UniCare!"
+                    description="Please sign in to list your resources, borrow or sell items, and connect with other students."
+                    redirectTo="/post"
+                />
+                <div className="size-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                <p className="text-neutral-500 font-medium">Please sign in to continue...</p>
+            </div>
+        );
+    }
 
     const update = <K extends keyof PostFormData>(key: K, value: PostFormData[K]) =>
         setForm((prev) => ({ ...prev, [key]: value }));

@@ -8,6 +8,7 @@ import { itemsApi } from "@/api/items-api";
 import { chatApi } from "@/api/chat-api";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
+import AuthRequiredModal from "@/components/auth/auth-required-modal";
 import { toMarketplaceItem, type MarketplaceItem } from "@/app/(main)/(buyer)/marketplace/data";
 
 import DetailGallery from "./DetailGallery";
@@ -36,7 +37,7 @@ interface ItemDetailClientProps {
 
 export default function ItemDetailClient({ initialItem, id }: ItemDetailClientProps) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   const [item, setItem] = useState<MarketplaceItem | null>(initialItem);
   const [isLoading, setIsLoading] = useState(!initialItem);
@@ -45,6 +46,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
   const [isRequested, setIsRequested] = useState(false);
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Client-side fetch fallback if SSR was unauthenticated or failed
   useEffect(() => {
@@ -84,8 +86,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
     if (!item) return;
     const token = getAuthToken();
     if (!token) {
-      toast.error("Please sign in to favorite this item.");
-      router.push("/login");
+      setShowAuthModal(true);
       return;
     }
 
@@ -290,8 +291,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
               onRequestClick={() => {
                 const token = getAuthToken();
                 if (!token) {
-                  toast.error("Please sign in to request this item.");
-                  router.push("/login");
+                  setShowAuthModal(true);
                   return;
                 }
                 setShowRequestModal(true);
@@ -309,6 +309,16 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
           onClose={() => setShowRequestModal(false)}
           isSubmitting={isSubmittingRequest}
           onSubmit={handleRequestSubmit}
+        />
+      )}
+
+      {showAuthModal && (
+        <AuthRequiredModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          title="Let's Get Connected!"
+          description="Please sign in to request this resource, message the owner, or add it to your favorites."
+          redirectTo={`/marketplace/${id}`}
         />
       )}
     </div>

@@ -13,7 +13,7 @@ import { AUTH_ME_QUERY_KEY, setAuthToken } from "@/hooks/useAuth";
 import { loginSchema, type LoginInput } from "@/types/auth-schemas";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
-export function LoginForm() {
+export function LoginForm({ redirectTo = "/" }: { redirectTo?: string }) {
   const [showPassword, setShowPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [submitError, setSubmitError] = useState("");
@@ -61,7 +61,7 @@ export function LoginForm() {
         duration: 2000,
       });
 
-      router.push("/");
+      router.push(redirectTo);
     } catch (error) {
       const message =
         error instanceof Error
