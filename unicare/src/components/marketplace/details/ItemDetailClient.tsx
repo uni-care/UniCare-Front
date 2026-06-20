@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import { itemsApi } from "@/api/items-api";
 import { chatApi } from "@/api/chat-api";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
 import AuthRequiredModal from "@/components/auth/auth-required-modal";
-import { toMarketplaceItem, type MarketplaceItem } from "@/app/(main)/(buyer)/marketplace/data";
+import { useTranslations, useLocale } from "next-intl";
+import { toMarketplaceItem, type MarketplaceItem } from "@/app/[locale]/(main)/(buyer)/marketplace/data";
 
 import DetailGallery from "./DetailGallery";
 import DetailInfo from "./DetailInfo";
@@ -38,6 +38,8 @@ interface ItemDetailClientProps {
 export default function ItemDetailClient({ initialItem, id }: ItemDetailClientProps) {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
+  const locale = useLocale();
+  const isAr = locale === "ar";
 
   const [item, setItem] = useState<MarketplaceItem | null>(initialItem);
   const [isLoading, setIsLoading] = useState(!initialItem);
@@ -47,6 +49,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const tAuth = useTranslations("AuthRequired");
 
   // Client-side fetch fallback if SSR was unauthenticated or failed
   useEffect(() => {
@@ -96,10 +99,10 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
 
       const res = await itemsApi.toggleFavorite(item.id, token);
       setIsFavorited(res.isFavorited);
-      toast.success(res.isFavorited ? "Added to favorites!" : "Removed from favorites!");
+      toast.success(res.isFavorited ? (isAr ? "تمت الإضافة للمفضلة!" : "Added to favorites!") : (isAr ? "تم الحذف من المفضلة!" : "Removed from favorites!"));
     } catch (err) {
       setIsFavorited(isFavorited); // rollback
-      toast.error("Failed to update favorite status.");
+      toast.error(isAr ? "فشل تعديل حالة المفضلة." : "Failed to update favorite status.");
       console.error("Favorite toggle error:", err);
     }
   };
@@ -109,18 +112,18 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
     if (!item) return false;
     const token = getAuthToken();
     if (!token || !user?.id) {
-      toast.error("Please sign in to send a request.");
+      toast.error(isAr ? "يرجى تسجيل الدخول لإرسال طلب." : "Please sign in to send a request.");
       router.push("/login");
       return false;
     }
 
     if (!duration.trim()) {
-      toast.error("Please enter how long you need this item.");
+      toast.error(isAr ? "يرجى تحديد المدة التي تحتاج فيها الأدوات." : "Please enter how long you need this item.");
       return false;
     }
 
     if (item.ownerId === user.id) {
-      toast.error("You cannot request your own item.");
+      toast.error(isAr ? "لا يمكنك طلب المورد الخاص بك." : "You cannot request your own item.");
       return false;
     }
 
@@ -167,11 +170,11 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
         );
       }
 
-      toast.success("Request sent. Opening chat...");
+      toast.success(isAr ? "تم إرسال الطلب. جاري فتح المحادثة..." : "Request sent. Opening chat...");
       router.push(`/chat?chatId=${chat.chatId}&itemTitle=${encodeURIComponent(item.title)}`);
       return true;
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to send request.";
+      const message = error instanceof Error ? error.message : (isAr ? "فشل إرسال الطلب." : "Failed to send request.");
       toast.error(message);
       return false;
     } finally {
@@ -184,7 +187,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
     try {
       const date = new Date(dateStr);
       if (isNaN(date.getTime())) return "";
-      return date.toLocaleDateString(undefined, {
+      return date.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",
@@ -196,9 +199,11 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
 
   if (isLoading) {
     return (
-      <div className="bg-background-light min-h-screen pt-32 pb-20 flex flex-col items-center justify-center gap-4">
+      <div className="bg-background-light min-h-screen pt-32 pb-20 flex flex-col items-center justify-center gap-4 text-center">
         <div className="size-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-        <p className="text-neutral-500 font-bold text-lg">Loading item details...</p>
+        <p className="text-neutral-500 font-bold text-lg">
+          {isAr ? "جاري تحميل تفاصيل المورد..." : "Loading item details..."}
+        </p>
       </div>
     );
   }
@@ -208,17 +213,19 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
       <div className="bg-background-light min-h-screen pt-32 pb-20 flex flex-col items-center justify-center gap-6 text-center px-4">
         <MdOutlineErrorOutline className="text-6xl text-neutral-300" />
         <div>
-          <h1 className="text-2xl font-bold text-neutral-800 mb-2">Resource Not Found</h1>
+          <h1 className="text-2xl font-bold text-neutral-800 mb-2">
+            {isAr ? "المورد غير موجود" : "Resource Not Found"}
+          </h1>
           <p className="text-neutral-500 max-w-md font-medium">
-            The resource you are looking for might have been archived, deleted, or you followed an invalid link.
+            {isAr ? "قد يكون المورد الذي تبحث عنه قد تم أرشفته، أو حذفه، أو أنك اتبعت رابطاً غير صالح." : "The resource you are looking for might have been archived, deleted, or you followed an invalid link."}
           </p>
         </div>
         <Link
           href="/marketplace"
-          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-3.5 rounded-full font-bold shadow-md transition-all cursor-pointer text-sm"
+          className={`flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-3.5 rounded-full font-bold shadow-md transition-all cursor-pointer text-sm ${isAr ? "flex-row-reverse" : ""}`}
         >
-          <MdArrowBack className="text-lg" />
-          Back to Marketplace
+          <MdArrowBack className={`text-lg ${isAr ? "rotate-180" : ""}`} />
+          {isAr ? "العودة إلى المتجر" : "Back to Marketplace"}
         </Link>
       </div>
     );
@@ -230,32 +237,33 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
     <div className="bg-background-light min-h-screen pt-28 pb-20 animate-fade-in">
       <div className="max-w-6xl mx-auto px-4 md:px-8 flex flex-col gap-6">
         {/* Navigation & Favorite controls */}
-        <div className="flex justify-between items-center">
+        <div className={`flex justify-between items-center ${isAr ? "flex-row-reverse" : ""}`}>
           <Link
             href="/marketplace"
-            className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 font-bold transition-colors cursor-pointer select-none text-sm"
+            className={`inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 font-bold transition-colors cursor-pointer select-none text-sm ${isAr ? "flex-row-reverse" : ""}`}
           >
-            <MdArrowBack className="text-lg" />
-            Back to Marketplace
+            <MdArrowBack className={`text-lg ${isAr ? "rotate-180" : ""}`} />
+            {isAr ? "العودة إلى المتجر" : "Back to Marketplace"}
           </Link>
 
           <button
             onClick={handleFavoriteToggle}
-            className={`flex items-center gap-2 h-10 px-4 rounded-full border bg-white shadow-xs hover:shadow-md transition-all cursor-pointer ${
-              isFavorited ? "border-rose-200 text-rose-500 bg-rose-50/20" : "border-neutral-200 text-neutral-500"
-            }`}
+            className={`flex items-center gap-2 h-10 px-4 rounded-full border bg-white shadow-xs hover:shadow-md transition-all cursor-pointer ${isFavorited ? "border-rose-200 text-rose-500 bg-rose-50/20" : "border-neutral-200 text-neutral-500"
+              } ${isAr ? "flex-row-reverse" : ""}`}
           >
             {isFavorited ? (
               <MdFavorite className="text-lg text-rose-500" />
             ) : (
               <MdFavoriteBorder className="text-lg" />
             )}
-            <span className="text-xs font-bold">{isFavorited ? "Favorited" : "Favorite"}</span>
+            <span className="text-xs font-bold">
+              {isFavorited ? (isAr ? "مضاف للمفضلة" : "Favorited") : (isAr ? "أضف للمفضلة" : "Favorite")}
+            </span>
           </button>
         </div>
 
         {/* Dynamic Detail grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start`}>
           {/* Main image & thumbnails strip component */}
           <div className="lg:col-span-7">
             <DetailGallery
@@ -316,8 +324,8 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
         <AuthRequiredModal
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
-          title="Let's Get Connected!"
-          description="Please sign in to request this resource, message the owner, or add it to your favorites."
+          title={tAuth("detailTitle")}
+          description={tAuth("detailDesc")}
           redirectTo={`/marketplace/${id}`}
         />
       )}

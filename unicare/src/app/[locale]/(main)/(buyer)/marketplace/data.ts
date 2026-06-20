@@ -36,15 +36,16 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-function timeAgo(dateString: string): string {
+function timeAgo(dateString: string, locale?: string): string {
   const diff = Date.now() - new Date(dateString).getTime();
   const minutes = Math.floor(diff / 60_000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  const isAr = locale === "ar";
+  if (minutes < 1) return isAr ? "الآن" : "just now";
+  if (minutes < 60) return isAr ? `منذ ${minutes} دقيقة` : `${minutes}m ago`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return isAr ? `منذ ${hours} ساعة` : `${hours}h ago`;
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return isAr ? `منذ ${days} يوم` : `${days}d ago`;
 }
 
 function mapDisciplineToDepartment(location: string | null): string {
@@ -58,7 +59,7 @@ function mapDisciplineToDepartment(location: string | null): string {
   return "All Departments";
 }
 
-export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
+export function toMarketplaceItem(item: ItemResponse, locale?: string): MarketplaceItem {
   const isFree = item.price <= 0.01;
   const hasAvailableFrom = typeof item.availableFrom === "string" && item.availableFrom.trim().length > 0;
   const hasAvailableTo = typeof item.availableTo === "string" && item.availableTo.trim().length > 0;
@@ -102,7 +103,7 @@ export function toMarketplaceItem(item: ItemResponse): MarketplaceItem {
     user: {
       name: item.ownerName || "UniCare User",
       initials: getInitials(item.ownerName || "UC"),
-      time: timeAgo(item.createdAt),
+      time: timeAgo(item.createdAt, locale),
     },
     availableFrom: item.availableFrom,
     availableTo: item.availableTo,

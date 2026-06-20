@@ -1,18 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 import {
-    MdOutlineAccountTree,
-    MdOutlinePeople,
-    MdOutlineMenuBook,
+    MdOutlineStorefront,
+    MdOutlineEngineering,
+    MdOutlineDiversity3,
     MdExpandMore,
     MdOutlinePerson,
     MdOutlineReceiptLong,
-    MdOutlineLogout
+    MdOutlineLogout,
+    MdOutlineLanguage
 } from "react-icons/md";
 
 export default function Navbar() {
@@ -21,9 +23,17 @@ export default function Navbar() {
     const pathname = usePathname();
     const router = useRouter();
     const { isAuthenticated, isLoading, user, signOut } = useAuth();
+    const t = useTranslations("Navbar");
+    const locale = useLocale();
+    const isAr = locale === "ar";
 
     const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
     const userInitial = user?.fullName?.trim().charAt(0).toUpperCase() ?? "U";
+
+    const toggleLanguage = () => {
+        const nextLocale = locale === "en" ? "ar" : "en";
+        router.push(pathname, { locale: nextLocale });
+    };
 
     return (
         <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
@@ -43,29 +53,39 @@ export default function Navbar() {
                 <nav className="hidden md:flex items-center gap-8">
                     <Link
                         href="/marketplace"
-                        className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/marketplace") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
+                        className={cn("group font-bold flex items-center gap-2 cursor-pointer transition-colors", isAr ? "text-[16px]" : "text-[13px] tracking-wide", isActive("/marketplace") ? "text-primary" : "text-neutral-700 hover:text-primary")}
                     >
-                        <MdOutlineAccountTree className={`text-[20px] ${isActive("/marketplace") ? "text-primary" : "text-neutral-600"}`} />
-                        Marketplace
+                        <MdOutlineStorefront className={cn("text-[24px] transition-colors", isActive("/marketplace") ? "text-primary" : "text-neutral-600 group-hover:text-primary")} />
+                        {t("marketplace")}
                     </Link>
                     <Link
                         href="/contribute"
-                        className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/contribute") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
+                        className={cn("group font-bold flex items-center gap-2 cursor-pointer transition-colors", isAr ? "text-[16px]" : "text-[13px] tracking-wide", isActive("/contribute") ? "text-primary" : "text-neutral-700 hover:text-primary")}
                     >
-                        <MdOutlinePeople className={`text-[20px] ${isActive("/contribute") ? "text-primary" : "text-neutral-600"}`} />
-                        Contribute
+                        <MdOutlineEngineering className={cn("text-[24px] transition-colors", isActive("/contribute") ? "text-primary" : "text-neutral-600 group-hover:text-primary")} />
+                        {t("contribute")}
                     </Link>
                     <Link
                         href="/about"
-                        className={`text-[13px] font-bold tracking-wide flex items-center gap-2 cursor-pointer transition-colors ${isActive("/about") ? "text-primary" : "text-neutral-700 hover:text-primary"}`}
+                        className={cn("group font-bold flex items-center gap-2 cursor-pointer transition-colors", isAr ? "text-[16px]" : "text-[13px] tracking-wide", isActive("/about") ? "text-primary" : "text-neutral-700 hover:text-primary")}
                     >
-                        <MdOutlineMenuBook className={`text-[20px] ${isActive("/about") ? "text-primary" : "text-neutral-600"}`} />
-                        About
+                        <MdOutlineDiversity3 className={cn("text-[24px] transition-colors", isActive("/about") ? "text-primary" : "text-neutral-600 group-hover:text-primary")} />
+                        {t("about")}
                     </Link>
                 </nav>
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex items-center gap-4">
+                    {/* Language Switcher */}
+                    <button
+                        onClick={toggleLanguage}
+                        className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold text-neutral-600 border border-neutral-200 bg-white/70 hover:bg-neutral-100 transition-all cursor-pointer", isAr ? "text-[14px]" : "text-xs")}
+                        title={isAr ? "Change to English" : "تغيير للغة العربية"}
+                    >
+                        <MdOutlineLanguage className="text-[20px] text-neutral-500" />
+                        {isAr ? "English" : "العربية"}
+                    </button>
+
                     {isLoading ? null : isAuthenticated && user ? (
                         <div className="relative">
                             <button
@@ -73,7 +93,7 @@ export default function Navbar() {
                                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
                                 className="flex cursor-pointer items-center gap-3 rounded-full border border-primary/20 bg-white/70 px-3 py-1.5 transition-colors hover:bg-white"
                             >
-                                <span className="text-sm font-bold text-neutral-700">{user.fullName}</span>
+                                <span className={cn("font-bold text-neutral-700", isAr ? "text-[16px]" : "text-sm")}>{user.fullName}</span>
                                 {user.profilePictureUrl ? (
                                     <Image
                                         src={user.profilePictureUrl}
@@ -91,24 +111,23 @@ export default function Navbar() {
                             </button>
 
                             <div
-                                className={`absolute right-0 top-14 w-48 rounded-2xl border border-primary/15 bg-white p-2 shadow-xl transition-all ${isUserMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
-                                    }`}
+                                className={`absolute ${isAr ? "left-0" : "right-0"} top-14 w-48 rounded-2xl border border-primary/15 bg-white p-2 shadow-xl transition-all ${isUserMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"}`}
                             >
                                 <Link
                                     href="/profile"
                                     onClick={() => setIsUserMenuOpen(false)}
-                                    className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-primary/10"
+                                    className={cn("flex items-center gap-2 rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10", isAr ? "text-[16px] flex-row-reverse" : "text-sm")}
                                 >
-                                    <MdOutlinePerson className="text-[18px]" />
-                                    Profile
+                                    <MdOutlinePerson className="text-[22px]" />
+                                    {t("profile")}
                                 </Link>
                                 <Link
                                     href="/transactions"
                                     onClick={() => setIsUserMenuOpen(false)}
-                                    className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-primary/10"
+                                    className={cn("flex items-center gap-2 rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10", isAr ? "text-[16px] flex-row-reverse" : "text-sm")}
                                 >
-                                    <MdOutlineReceiptLong className="text-[18px]" />
-                                    Transactions
+                                    <MdOutlineReceiptLong className="text-[22px]" />
+                                    {t("transactions")}
                                 </Link>
                                 <button
                                     type="button"
@@ -117,26 +136,26 @@ export default function Navbar() {
                                         setIsUserMenuOpen(false);
                                         router.push("/login");
                                     }}
-                                    className="flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+                                    className={cn("flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-2 font-semibold text-red-600 transition-colors hover:bg-red-50", isAr ? "text-[16px] text-right flex-row-reverse" : "text-left text-sm")}
                                 >
-                                    <MdOutlineLogout className="text-[18px]" />
-                                    Logout
+                                    <MdOutlineLogout className="text-[22px]" />
+                                    {t("logout")}
                                 </button>
                             </div>
                         </div>
                     ) : (
                         <>
-                            <Link
+                            {/* <Link
                                 href="/login"
-                                className="px-6 py-2.5 rounded-full text-[13px] font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
+                                className={cn("px-6 py-2.5 rounded-full font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer", isAr ? "text-[15px]" : "text-[13px]")}
                             >
-                                Sign In
-                            </Link>
+                                {t("login")}
+                            </Link> */}
                             <Link
                                 href="/register"
-                                className="bg-primary text-white text-[13px] font-bold px-6 py-2.5 rounded-full shadow-lg shadow-primary/60 hover:scale-105 transition-transform active:scale-95 cursor-pointer"
+                                className={cn("bg-primary text-white font-bold px-6 py-2.5 rounded-full shadow-lg shadow-primary/60 hover:scale-105 transition-transform active:scale-95 cursor-pointer", isAr ? "text-[15px]" : "text-[13px]")}
                             >
-                                Join Ecosystem
+                                {t("join")}
                             </Link>
                         </>
                     )}
@@ -154,33 +173,49 @@ export default function Navbar() {
 
                 {/* Mobile Nav Dropdown */}
                 <div
-                    className={`absolute top-20 left-0 right-0 bg-background-light/95 backdrop-blur-xl border border-primary/10 rounded-3xl p-6 flex flex-col gap-6 shadow-2xl md:hidden transition-all duration-300 origin-top ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'
-                        }`}
+                    className={`absolute top-20 left-0 right-0 bg-background-light/95 backdrop-blur-xl border border-primary/10 rounded-3xl p-6 flex flex-col gap-6 shadow-2xl md:hidden transition-all duration-300 origin-top ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}
                 >
                     <nav className="flex flex-col gap-2">
+                        {/* Mobile Language Switcher */}
+                        <button
+                            onClick={() => {
+                                toggleLanguage();
+                                setIsOpen(false);
+                            }}
+                            className={cn("flex items-center justify-between p-3 rounded-xl font-bold text-neutral-700 hover:bg-primary/5 cursor-pointer", isAr ? "text-[18px] flex-row-reverse" : "text-base")}
+                        >
+                            <span className={cn("flex items-center gap-3", isAr ? "flex-row-reverse" : "")}>
+                                <MdOutlineLanguage className="text-2xl text-primary" />
+                                {isAr ? "English" : "العربية"}
+                            </span>
+                            <span className={cn("text-neutral-400 font-normal", isAr ? "text-[14px]" : "text-xs")}>
+                                {isAr ? "تغيير للإنجليزية" : "تغيير للعربية"}
+                            </span>
+                        </button>
+
                         <Link
                             href="/marketplace"
                             onClick={() => setIsOpen(false)}
-                            className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/marketplace") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
+                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] flex-row-reverse" : "text-base", isActive("/marketplace") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
                         >
-                            <MdOutlineAccountTree className={`text-xl ${isActive("/marketplace") ? "text-primary" : "text-primary/60"}`} />
-                            Marketplace
+                            <MdOutlineStorefront className={cn("text-2xl transition-colors", isActive("/marketplace") ? "text-primary" : "text-primary/60 group-hover:text-primary")} />
+                            {t("marketplace")}
                         </Link>
                         <Link
                             href="/contribute"
                             onClick={() => setIsOpen(false)}
-                            className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/contribute") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
+                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] flex-row-reverse" : "text-base", isActive("/contribute") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
                         >
-                            <MdOutlinePeople className={`text-xl ${isActive("/contribute") ? "text-primary" : "text-primary/60"}`} />
-                            Contribute
+                            <MdOutlineEngineering className={cn("text-2xl transition-colors", isActive("/contribute") ? "text-primary" : "text-primary/60 group-hover:text-primary")} />
+                            {t("contribute")}
                         </Link>
                         <Link
                             href="/about"
                             onClick={() => setIsOpen(false)}
-                            className={`text-base font-bold transition-colors flex items-center gap-3 p-3 rounded-xl ${isActive("/about") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5"}`}
+                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] flex-row-reverse" : "text-base", isActive("/about") ? "text-primary bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
                         >
-                            <MdOutlineMenuBook className={`text-xl ${isActive("/about") ? "text-primary" : "text-primary/60"}`} />
-                            About
+                            <MdOutlineDiversity3 className={cn("text-2xl transition-colors", isActive("/about") ? "text-primary" : "text-primary/60 group-hover:text-primary")} />
+                            {t("about")}
                         </Link>
                     </nav>
 
@@ -192,9 +227,9 @@ export default function Navbar() {
                                 <Link
                                     href="/profile"
                                     onClick={() => setIsOpen(false)}
-                                    className="flex items-center justify-between rounded-2xl border border-primary/20 bg-white/70 px-4 py-3"
+                                    className={cn("flex items-center justify-between rounded-2xl border border-primary/20 bg-white/70 px-4 py-3", isAr ? "flex-row-reverse" : "")}
                                 >
-                                    <span className="font-bold text-neutral-700">{user.fullName}</span>
+                                    <span className={cn("font-bold text-neutral-700", isAr ? "text-[18px]" : "text-sm")}>{user.fullName}</span>
                                     {user.profilePictureUrl ? (
                                         <Image
                                             src={user.profilePictureUrl}
@@ -212,10 +247,10 @@ export default function Navbar() {
                                 <Link
                                     href="/transactions"
                                     onClick={() => setIsOpen(false)}
-                                    className="flex items-center gap-3 rounded-2xl border border-primary/20 bg-white/70 px-4 py-3 text-neutral-700 font-bold"
+                                    className={cn("flex items-center gap-3 rounded-2xl border border-primary/20 bg-white/70 px-4 py-3 text-neutral-700 font-bold", isAr ? "text-[18px] flex-row-reverse" : "")}
                                 >
-                                    <MdOutlineReceiptLong className="text-primary text-xl" />
-                                    My Transactions
+                                    <MdOutlineReceiptLong className="text-primary text-2xl" />
+                                    {t("transactions")}
                                 </Link>
                                 <button
                                     type="button"
@@ -224,10 +259,10 @@ export default function Navbar() {
                                         setIsOpen(false);
                                         router.push("/login");
                                     }}
-                                    className="flex w-full items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 py-3 text-sm font-bold text-red-600 transition-colors hover:bg-red-100"
+                                    className={cn("flex w-full items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 py-3 font-bold text-red-600 transition-colors hover:bg-red-100", isAr ? "text-[18px] flex-row-reverse" : "text-sm")}
                                 >
-                                    <MdOutlineLogout className="text-[18px]" />
-                                    Logout
+                                    <MdOutlineLogout className="text-[22px]" />
+                                    {t("logout")}
                                 </button>
                             </>
                         ) : (
@@ -235,16 +270,16 @@ export default function Navbar() {
                                 <Link
                                     href="/login"
                                     onClick={() => setIsOpen(false)}
-                                    className="w-full py-3.5 text-center rounded-full text-sm font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer"
+                                    className={cn("w-full py-3.5 text-center rounded-full font-bold text-neutral-700 border border-primary/20 hover:bg-white/60 transition-all cursor-pointer", isAr ? "text-[17px]" : "text-sm")}
                                 >
-                                    Sign In
+                                    {t("login")}
                                 </Link>
                                 <Link
                                     href="/register"
                                     onClick={() => setIsOpen(false)}
-                                    className="w-full text-center bg-primary text-white text-sm font-bold py-3.5 rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 cursor-pointer"
+                                    className={cn("w-full text-center bg-primary text-white font-bold py-3.5 rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 cursor-pointer", isAr ? "text-[17px]" : "text-sm")}
                                 >
-                                    Join Ecosystem
+                                    {t("join")}
                                 </Link>
                             </>
                         )}

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { MdClose, MdWavingHand } from "react-icons/md";
+import { useTranslations } from "next-intl";
 
 interface AuthRequiredModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export default function AuthRequiredModal({
 }: AuthRequiredModalProps) {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
+  const t = useTranslations("AuthRequired");
 
   useEffect(() => {
     if (!isOpen) {
@@ -93,7 +95,7 @@ export default function AuthRequiredModal({
             onClick={handleLoginRedirect}
             className="flex cursor-pointer w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-base font-bold text-white transition-all hover:bg-primary/90 hover:shadow-md hover:scale-[1.01] active:scale-[0.99]"
           >
-            Sign In Now
+            {t("signIn")}
           </button>
           
           <button
@@ -101,7 +103,7 @@ export default function AuthRequiredModal({
             onClick={handleClose}
             className="flex cursor-pointer w-full items-center justify-center gap-2 rounded-full border border-neutral-300 bg-white py-3 text-sm font-semibold text-neutral-600 transition-all hover:bg-neutral-50"
           >
-            Cancel
+            {t("cancel")}
           </button>
         </div>
       </div>

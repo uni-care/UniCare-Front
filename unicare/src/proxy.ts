@@ -1,30 +1,45 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+
+const intlMiddleware = createMiddleware(routing);
 
 export function proxy(request: NextRequest) {
-  const token = request.cookies.get("auth_token")?.value;
+  const { pathname } = request.nextUrl;
 
-  // Clone request headers and add Authorization header if token is present
-  const requestHeaders = new Headers(request.headers);
-  if (token) {
-    requestHeaders.set("Authorization", `Bearer ${token}`);
+  // 1. Backend API Proxy (Authorization injection)
+  if (
+    pathname.startsWith("/api/v1") ||
+    pathname.startsWith("/api/Categories") ||
+    pathname.startsWith("/api/transactions") ||
+    pathname.startsWith("/api/chats") ||
+    pathname.startsWith("/hubs/chat")
+  ) {
+    const token = request.cookies.get("auth_token")?.value;
+    const requestHeaders = new Headers(request.headers);
+    if (token) {
+      requestHeaders.set("Authorization", `Bearer ${token}`);
+    }
+
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5111";
+    const url = new URL(
+      request.nextUrl.pathname + request.nextUrl.search,
+      backendUrl,
+    );
+
+    return NextResponse.rewrite(url, {
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
-  // Rewrite /api/v1/... requests to the backend API URL
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5111";
-  const url = new URL(
-    request.nextUrl.pathname + request.nextUrl.search,
-    backendUrl,
-  );
-
-  return NextResponse.rewrite(url, {
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  // 2. Locale Routing
+  return intlMiddleware(request);
 }
 
-// Intercept only /api/v1/ routes (excluding our Next.js API routes under /api/auth)
 export const config = {
-  matcher: ["/api/v1/:path*"],
+  // Match all pathnames except _next, _vercel, and static assets
+  matcher: ["/((?!_next|_vercel|.*\\..*).*)"],
 };

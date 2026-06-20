@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { MdClose, MdOutlineCalendarMonth, MdSend } from "react-icons/md";
-import type { MarketplaceItem } from "@/app/(main)/(buyer)/marketplace/data";
+import type { MarketplaceItem } from "@/app/[locale]/(main)/(buyer)/marketplace/data";
+import { useLocale } from "next-intl";
 
 interface RequestItemModalProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ export default function RequestItemModal({
   const [duration, setDuration] = useState("");
   const [note, setNote] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const locale = useLocale();
+  const isAr = locale === "ar";
 
   useEffect(() => {
     if (!isOpen) {
@@ -69,13 +72,13 @@ export default function RequestItemModal({
       onClick={handleClose}
     >
       <div
-        className={`relative w-full max-w-md rounded-3xl bg-[#f0f3f4] px-6 pb-6 pt-5 shadow-2xl transition-all duration-200 ${isVisible ? "translate-y-0 scale-100 opacity-100" : "translate-y-4 scale-95 opacity-0"}`}
+        className={`relative w-full max-w-md rounded-3xl bg-[#f0f3f4] px-6 pb-6 pt-5 shadow-2xl transition-all duration-200 ${isVisible ? "translate-y-0 scale-100 opacity-100" : "translate-y-4 scale-95 opacity-0"} ${isAr ? "text-right" : "text-left"}`}
         onClick={(event) => event.stopPropagation()}
       >
         <button
           type="button"
           onClick={handleClose}
-          className="absolute cursor-pointer right-4 top-4 text-neutral-400 transition-colors hover:text-neutral-600"
+          className={`absolute cursor-pointer ${isAr ? "left-4" : "right-4"} top-4 text-neutral-400 transition-colors hover:text-neutral-600`}
           aria-label="Close request modal"
         >
           <MdClose className="text-xl" />
@@ -87,30 +90,36 @@ export default function RequestItemModal({
           </div>
         </div>
 
-        <h3 className="text-center text-4xl font-black text-neutral-800">Request Item</h3>
+        <h3 className="text-center text-4xl font-black text-neutral-800">
+          {isAr ? "طلب الأدوات" : "Request Item"}
+        </h3>
         <p className="mb-6 mt-2 text-center text-sm font-semibold text-primary">{item.title}</p>
 
         <div className="space-y-4">
           <div>
-            <label className="mb-2 block text-lg font-semibold text-neutral-700">Hey! How long do you need this for?</label>
-            <div className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-3">
+            <label className="mb-2 block text-lg font-semibold text-neutral-700">
+              {isAr ? "مرحباً! ما هي المدة التي تحتاج فيها هذا المورد؟" : "Hey! How long do you need this for?"}
+            </label>
+            <div className={`flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-3 ${isAr ? "flex-row-reverse" : ""}`}>
               <MdOutlineCalendarMonth className="text-base text-primary/70" />
               <input
                 value={duration}
                 onChange={(event) => setDuration(event.target.value)}
-                className="w-full bg-transparent text-sm text-neutral-700 outline-none placeholder:text-neutral-400"
-                placeholder="e.g., 2 days or 1 week"
+                className={`w-full bg-transparent text-sm text-neutral-700 outline-none placeholder:text-neutral-400 ${isAr ? "text-right" : "text-left"}`}
+                placeholder={isAr ? "مثال: يومين أو أسبوع واحد" : "e.g., 2 days or 1 week"}
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-2 block text-lg font-semibold text-neutral-700">Want to leave a note for the owner?</label>
+            <label className="mb-2 block text-lg font-semibold text-neutral-700">
+              {isAr ? "هل تود ترك رسالة لمالك المورد؟" : "Want to leave a note for the owner?"}
+            </label>
             <textarea
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              className="h-28 w-full resize-none rounded-3xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-700 outline-none placeholder:text-neutral-400"
-              placeholder="Hi! I'd love to borrow this for my capstone project. I can return it by Friday..."
+              className={`h-28 w-full resize-none rounded-3xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-700 outline-none placeholder:text-neutral-400 ${isAr ? "text-right" : "text-left"}`}
+              placeholder={isAr ? "مرحباً! أود استعارة هذا لمشروع التخرج الخاص بي. يمكنني إعادته بحلول يوم الجمعة..." : "Hi! I'd love to borrow this for my capstone project. I can return it by Friday..."}
             />
           </div>
         </div>
@@ -119,15 +128,24 @@ export default function RequestItemModal({
           type="button"
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="mt-5 flex cursor-pointer w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-lg font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+          className={`mt-5 flex cursor-pointer w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-lg font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70 ${isAr ? "flex-row-reverse" : ""}`}
         >
-          {isSubmitting ? "Sending..." : "Send Request"}
-          <MdSend className="text-base" />
+          {isSubmitting ? (isAr ? "جاري الإرسال..." : "Sending...") : (isAr ? "إرسال الطلب" : "Send Request")}
+          <MdSend className={`text-base ${isAr ? "rotate-180" : ""}`} />
         </button>
 
         <p className="mt-3 text-center text-xs text-neutral-500">
-          By requesting, you agree to UniCare&apos;s{" "}
-          <span className="underline decoration-neutral-400 underline-offset-2">Community Guidelines</span>.
+          {isAr ? (
+            <>
+              بإرسال الطلب، أنت توافق على{" "}
+              <span className="underline decoration-neutral-400 underline-offset-2">إرشادات مجتمع يوني كير</span>.
+            </>
+          ) : (
+            <>
+              By requesting, you agree to UniCare&apos;s{" "}
+              <span className="underline decoration-neutral-400 underline-offset-2">Community Guidelines</span>.
+            </>
+          )}
         </p>
       </div>
     </div>

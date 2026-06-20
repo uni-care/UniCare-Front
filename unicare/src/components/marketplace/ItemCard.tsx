@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 import {
     MdOutlineImage,
     MdOutlineSchedule,
@@ -55,6 +57,9 @@ export default function ItemCard({
     description,
 }: ItemCardProps) {
     const router = useRouter();
+    const locale = useLocale();
+    const isAr = locale === "ar";
+    const tCat = useTranslations("Categories");
     const [isExpanded, setIsExpanded] = useState(false);
     const isValidImage = typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"));
     const isFree = price === 0 || price === "Free" || price === 0.01 || price === "0.01";
@@ -66,7 +71,7 @@ export default function ItemCard({
         try {
             const date = new Date(dateStr);
             if (isNaN(date.getTime())) return "";
-            return date.toLocaleDateString(undefined, {
+            return date.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
@@ -76,10 +81,19 @@ export default function ItemCard({
         }
     };
 
+    const displayStatus = () => {
+        const lower = status?.toLowerCase();
+        if (lower === "available") return isAr ? "متاح" : "Available";
+        if (lower === "rented") return isAr ? "مستأجر" : "Rented";
+        if (lower === "unavailable") return isAr ? "غير متاح" : "Unavailable";
+        if (lower === "draft") return isAr ? "مسودة" : "Draft";
+        return status;
+    };
+
     return (
         <div
             onClick={() => router.push(`/marketplace/${id}`)}
-            className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer"
+            className="group bg-white rounded-lg p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-neutral-100 flex flex-col h-full cursor-pointer text-left"
         >
             {/* Image Container */}
             <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-neutral-50 mb-4 flex items-center justify-center border border-neutral-100">
@@ -94,29 +108,33 @@ export default function ItemCard({
                 ) : (
                     <div className="flex flex-col items-center justify-center gap-1.5 text-neutral-400">
                         <MdOutlineImage className="text-4xl" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">No Image</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+                            {isAr ? "لا توجد صورة" : "No Image"}
+                        </span>
                     </div>
                 )}
 
                 {/* Badges */}
-                <div className="absolute top-3 left-3 flex flex-col gap-2">
+                <div className={`absolute top-3 ${isAr ? "right-3" : "left-3"} flex flex-col gap-2`}>
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full border border-white/40 shadow-sm">
                         <span className={`size-2 rounded-full ${status?.toLowerCase() === "available" || status?.toLowerCase() === "available now" ? "bg-primary" : "bg-amber-500"} animate-pulse`}></span>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-700">{status}</span>
+                        <span className={cn("font-bold text-neutral-700", isAr ? "text-[12px]" : "text-[10px] uppercase tracking-wider")}>{displayStatus()}</span>
                     </div>
                     {isRequested ? (
-                        <div className="inline-flex self-start items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black tracking-widest bg-amber-100 text-amber-700 border border-amber-300">
+                        <div className={cn("inline-flex self-start items-center gap-1 px-3 py-1 rounded-full font-black bg-amber-100 text-amber-700 border border-amber-300", isAr ? "text-[12px]" : "text-[10px] tracking-widest")}>
                             <MdOutlineSchedule className="text-[12px]" />
-                            REQUESTED
+                            {isAr ? "تم الطلب" : "REQUESTED"}
                         </div>
                     ) : null}
                 </div>
 
-                {/* Type Badge (Bottom Left) */}
-                <div className={`absolute bottom-3 left-3 px-3 py-1 rounded-full text-[10px] font-black tracking-widest shadow-md backdrop-blur-sm select-none ${
+                {/* Type Badge (Bottom Left / Right based on dir) */}
+                <div className={cn(
+                    "absolute bottom-3 px-3 py-1 rounded-full font-black shadow-md backdrop-blur-sm select-none",
+                    isAr ? "right-3 text-[12px]" : "left-3 text-[10px] tracking-widest",
                     type === "LEND" ? "bg-primary text-white" : "bg-rose-500 text-white"
-                }`}>
-                    {type}
+                )}>
+                    {type === "LEND" ? (isAr ? "إعارة" : "LEND") : (isAr ? "بيع" : "SALE")}
                 </div>
 
                 {/* Favorite Button */}
@@ -126,7 +144,7 @@ export default function ItemCard({
                         e.stopPropagation();
                         onFavoriteClick?.(id);
                     }}
-                    className={`absolute top-3 right-3 size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center transition-all shadow-sm cursor-pointer ${isFavorited ? "text-rose-500" : "text-neutral-500 hover:text-rose-500"
+                    className={`absolute top-3 ${isAr ? "left-3" : "right-3"} size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center transition-all shadow-sm cursor-pointer ${isFavorited ? "text-rose-500" : "text-neutral-500 hover:text-rose-500"
                         }`}
                 >
                     {isFavorited ? (
@@ -140,12 +158,12 @@ export default function ItemCard({
             {/* Content */}
             <div className="grow flex flex-col">
                 <div className="flex items-start justify-between mb-1">
-                    <h3 className="text-lg font-bold text-neutral-800 line-clamp-1 group-hover:text-primary transition-colors">
+                    <h3 className={`text-lg font-bold text-neutral-800 line-clamp-1 group-hover:text-primary transition-colors ${isAr ? "text-right" : "text-left"}`}>
                         {title}
                     </h3>
                 </div>
-                <p className="text-xs font-semibold text-neutral-400 mb-3 uppercase tracking-wide">
-                    {category}
+                <p className={`text-xs font-semibold text-neutral-400 mb-3 uppercase tracking-wide ${isAr ? "text-right" : "text-left"}`}>
+                    {tCat.has(category) ? tCat(category) : category}
                 </p>
 
                 {/* Expand / Collapse Details Button */}
@@ -156,26 +174,26 @@ export default function ItemCard({
                             e.stopPropagation();
                             setIsExpanded(!isExpanded);
                         }}
-                        className="flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors mb-3 cursor-pointer outline-none select-none self-start"
+                        className={`flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors mb-3 cursor-pointer outline-none select-none self-start ${isAr ? "flex-row-reverse" : ""}`}
                     >
                         <MdExpandMore className="text-[16px] transition-transform duration-200" style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }} />
-                        {isExpanded ? "Hide Details" : "Show Details"}
+                        {isExpanded ? (isAr ? "إخفاء التفاصيل" : "Hide Details") : (isAr ? "عرض التفاصيل" : "Show Details")}
                     </button>
                 )}
 
                 {/* Collapsible Details (Dates & Description) */}
                 {isExpanded && (
-                    <div className="flex flex-col gap-2 mb-3 bg-neutral-50/80 p-3 rounded-xl border border-neutral-100/60 text-xs text-neutral-600 transition-all duration-200 w-full">
+                    <div className={`flex flex-col gap-2 mb-3 bg-neutral-50/80 p-3 rounded-xl border border-neutral-100/60 text-xs text-neutral-600 transition-all duration-200 w-full ${isAr ? "text-right" : "text-left"}`}>
                         {type === "LEND" && (hasAvailableFrom || hasAvailableTo) && (
-                            <div className="flex items-center gap-1.5 font-semibold text-[10px] tracking-wide text-neutral-500 uppercase">
+                            <div className={cn("flex items-center gap-1.5 font-bold text-neutral-500", isAr ? "text-[12px] flex-row-reverse" : "text-[10px] uppercase tracking-wide")}>
                                 <MdOutlineCalendarToday className="text-[15px] text-neutral-400 select-none" />
                                 <span>
                                     {hasAvailableFrom && hasAvailableTo ? (
                                         `${formatDate(availableFrom)} - ${formatDate(availableTo)}`
                                     ) : hasAvailableFrom ? (
-                                        `From: ${formatDate(availableFrom)}`
+                                        isAr ? `من: ${formatDate(availableFrom)}` : `From: ${formatDate(availableFrom)}`
                                     ) : (
-                                        `Until: ${formatDate(availableTo)}`
+                                        isAr ? `إلى: ${formatDate(availableTo)}` : `Until: ${formatDate(availableTo)}`
                                     )}
                                 </span>
                             </div>
@@ -189,19 +207,21 @@ export default function ItemCard({
                 )}
 
                 {/* User & Price */}
-                <div className="mt-auto flex items-center justify-between pt-4 border-t border-neutral-50">
-                    <div className="flex items-center gap-2">
-                        <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary border border-primary/20">
+                <div className={`mt-auto flex items-center justify-between pt-4 border-t border-neutral-50 ${isAr ? "flex-row-reverse" : ""}`}>
+                    <div className={`flex items-center gap-2 ${isAr ? "flex-row-reverse" : ""}`}>
+                        <div className={cn("size-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary border border-primary/20", isAr ? "text-[12px]" : "text-[10px]")}>
                             {user.initials}
                         </div>
-                        <div className="flex flex-col">
-                            <span className="text-[10px] font-extrabold text-neutral-700 leading-none mb-0.5">{user.name}</span>
-                            <span className="text-[9px] font-medium text-neutral-400">Posted {user.time}</span>
+                        <div className={`flex flex-col ${isAr ? "items-end" : "items-start"}`}>
+                            <span className={cn("font-extrabold text-neutral-700 leading-none mb-0.5", isAr ? "text-[12px]" : "text-[10px]")}>{user.name}</span>
+                            <span className={cn("font-semibold text-neutral-400", isAr ? "text-[12px]" : "text-[10px]")}>
+                                {isAr ? `نُشر ${user.time}` : `Posted ${user.time}`}
+                            </span>
                         </div>
                     </div>
-                    <div className="text-right">
+                    <div className={isAr ? "text-left" : "text-right"}>
                         <span className={`text-lg font-black ${isFree ? "text-primary italic" : "text-neutral-900"}`}>
-                            {isFree ? "Free" : `${currency || "EGP"} ${price}`}
+                            {isFree ? (isAr ? "مجاني" : "Free") : `${currency || "EGP"} ${price}`}
                         </span>
                     </div>
                 </div>
@@ -217,10 +237,10 @@ export default function ItemCard({
                     className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 ${isRequested
                         ? "bg-amber-100 text-amber-700 cursor-not-allowed"
                         : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
-                        }`}
+                        } ${isAr ? "flex-row-reverse" : ""}`}
                 >
                     <MdSend className="text-lg" />
-                    {isRequested ? "Requested" : "Request Item"}
+                    {isRequested ? (isAr ? "تم الطلب" : "Requested") : (isAr ? "طلب الأدوات" : "Request Item")}
                 </button>
             </div>
         </div>

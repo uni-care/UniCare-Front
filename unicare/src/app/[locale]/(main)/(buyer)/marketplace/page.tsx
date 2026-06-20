@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
@@ -13,6 +12,8 @@ import { chatApi } from "@/api/chat-api";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import { itemsApi } from "@/api/items-api";
 import AuthRequiredModal from "@/components/auth/auth-required-modal";
+import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 import {
   MdOutlineSearch,
   MdOutlineTune,
@@ -46,6 +47,11 @@ export default function MarketplacePage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
+  const tAuth = useTranslations("AuthRequired");
+  const t = useTranslations("Marketplace");
+  const tCat = useTranslations("Categories");
+  const locale = useLocale();
+  const isAr = locale === "ar";
 
   const handleFavoriteToggle = async (itemId: string) => {
     const token = getAuthToken();
@@ -102,7 +108,7 @@ export default function MarketplacePage() {
       try {
         const apiItems = await itemsApi.getAll();
         if (!cancelled) {
-          const mapped = apiItems.map(toMarketplaceItem);
+          const mapped = apiItems.map(item => toMarketplaceItem(item, locale));
           // console.log("Marketplace - Fetched and mapped items:", mapped.map(x => ({ title: x.title, categoryId: x.categoryId, category: x.category })));
           setItems(mapped);
         }
@@ -198,66 +204,74 @@ export default function MarketplacePage() {
   }, [filteredItems, visibleCount]);
 
   return (
-    <div className="bg-neutral-50 min-h-screen pt-28 pb-20 px-4 md:px-8">
+    <div className={cn("bg-neutral-50 min-h-screen pt-36 pb-20 px-4 md:px-8", isAr ? "text-right" : "text-left")}>
       <div className="max-w-7xl mx-auto">
         {/* Header Area */}
         <div className="mb-10">
-          <h1 className="text-5xl font-bold tracking-tight text-neutral-900 mb-2">Marketplace</h1>
+          <h1 className="text-5xl font-bold tracking-tight text-neutral-900 mb-2">{t("title")}</h1>
           <p className="text-lg text-neutral-500 max-w-2xl italic">
-            Discover, share, and trade engineering resources with your trusted community.
+            {t("subtitle")}
           </p>
         </div>
 
         {/* Search & Filters Row */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className={cn("flex flex-col md:flex-row gap-4 mb-8", isAr ? "md:flex-row-reverse" : "")}>
           <div className="relative grow">
-            <MdOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-xl" />
+            <MdOutlineSearch className={cn("absolute top-1/2 -translate-y-1/2 text-neutral-400 text-xl", isAr ? "right-4" : "left-4")} />
             <input
               type="text"
-              placeholder="Search resources, textbooks, tools..."
+              placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              className="w-full bg-white border border-neutral-200 rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm"
+              className={cn(
+                "w-full bg-white border border-neutral-200 rounded-2xl py-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm",
+                isAr ? "pr-12 pl-4 text-right" : "pl-12 pr-4 text-left"
+              )}
             />
           </div>
           <button
             type="button"
             onClick={() => setShowFilters((prev) => !prev)}
-            className="flex items-center justify-center gap-2 bg-white border border-neutral-200 rounded-2xl px-8 py-4 font-bold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm cursor-pointer"
+            className={cn(
+              "flex items-center justify-center gap-2 bg-white border border-neutral-200 rounded-2xl px-8 py-4 font-bold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm cursor-pointer",
+              isAr ? "flex-row-reverse" : ""
+            )}
           >
             <MdOutlineTune className="text-xl" />
-            Filters
+            {t("filters")}
           </button>
         </div>
 
         {/* Post Resource CTA */}
         <Link
           href="/post"
-          className="flex items-center justify-center gap-2 w-full bg-primary/10 hover:bg-primary hover:text-white text-primary border border-primary/20 rounded-2xl py-4 px-6 font-bold transition-all mb-8 cursor-pointer group"
+          className={cn(
+            "flex items-center justify-center gap-2 w-full bg-primary/10 hover:bg-primary hover:text-white text-primary border border-primary/20 rounded-2xl py-4 px-6 font-bold transition-all mb-8 cursor-pointer group",
+            isAr ? "flex-row-reverse" : ""
+          )}
         >
           <MdOutlineFileUpload className="text-xl" />
-          Post a Resource
+          {t("postResourceCta")}
         </Link>
 
         {showFilters && (
           <div className="bg-white border border-neutral-200 rounded-3xl p-6 shadow-sm mb-8 animate-in fade-in slide-in-from-top-4 duration-200">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <div className={cn("grid grid-cols-1 md:grid-cols-3 gap-6 items-start", isAr ? "text-right" : "text-left")}>
               {/* Listing Type Filter */}
               <div className="flex flex-col gap-2.5">
-                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Listing Type</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">{t("listingType")}</span>
                 <div className="flex h-11 p-1 bg-neutral-100/80 rounded-xl border border-neutral-200/50">
                   {(["All", "LEND", "SALE"] as const).map((typeOption) => (
                     <button
                       key={typeOption}
                       type="button"
                       onClick={() => setActiveType(typeOption)}
-                      className={`flex-1 h-full rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
-                        activeType === typeOption
-                          ? "bg-white text-primary shadow-xs"
-                          : "text-neutral-500 hover:text-neutral-800"
-                      }`}
+                      className={`flex-1 h-full rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${activeType === typeOption
+                        ? "bg-white text-primary shadow-xs"
+                        : "text-neutral-500 hover:text-neutral-800"
+                        }`}
                     >
-                      {typeOption === "All" ? "All" : typeOption === "LEND" ? "Lend" : "Sale"}
+                      {typeOption === "All" ? t("all") : typeOption === "LEND" ? t("lend") : t("sale")}
                     </button>
                   ))}
                 </div>
@@ -265,20 +279,19 @@ export default function MarketplacePage() {
 
               {/* Price Filter */}
               <div className="flex flex-col gap-2.5">
-                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Price</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">{t("price")}</span>
                 <div className="flex h-11 p-1 bg-neutral-100/80 rounded-xl border border-neutral-200/50">
                   {(["All", "Free", "Paid"] as const).map((priceOption) => (
                     <button
                       key={priceOption}
                       type="button"
                       onClick={() => setActivePrice(priceOption)}
-                      className={`flex-1 h-full rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
-                        activePrice === priceOption
-                          ? "bg-white text-primary shadow-xs"
-                          : "text-neutral-500 hover:text-neutral-800"
-                      }`}
+                      className={`flex-1 h-full rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${activePrice === priceOption
+                        ? "bg-white text-primary shadow-xs"
+                        : "text-neutral-500 hover:text-neutral-800"
+                        }`}
                     >
-                      {priceOption}
+                      {priceOption === "All" ? t("all") : priceOption === "Free" ? t("free") : t("paid")}
                     </button>
                   ))}
                 </div>
@@ -286,20 +299,19 @@ export default function MarketplacePage() {
 
               {/* Availability Filter */}
               <div className="flex flex-col gap-2.5">
-                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Availability</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">{t("availability")}</span>
                 <div className="flex flex-wrap gap-1.5 min-h-11 items-center">
                   {["All", "Available", "Draft", "Rented", "Unavailable"].map((statusOption) => (
                     <button
                       key={statusOption}
                       type="button"
                       onClick={() => setActiveStatus(statusOption)}
-                      className={`px-3 py-2 rounded-lg text-xs font-bold border transition-all duration-200 cursor-pointer ${
-                        activeStatus === statusOption
-                          ? "bg-primary border-primary text-white shadow-xs"
-                          : "bg-white border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-800"
-                      }`}
+                      className={`px-3 py-2 rounded-lg text-xs font-bold border transition-all duration-200 cursor-pointer ${activeStatus === statusOption
+                        ? "bg-primary border-primary text-white shadow-xs"
+                        : "bg-white border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-800"
+                        }`}
                     >
-                      {statusOption}
+                      {statusOption === "All" ? t("all") : statusOption === "Available" ? t("available") : statusOption === "Draft" ? t("draft") : statusOption === "Rented" ? t("rented") : t("unavailable")}
                     </button>
                   ))}
                 </div>
@@ -309,7 +321,7 @@ export default function MarketplacePage() {
         )}
 
         {/* Categories Bar */}
-        <div className="flex items-center gap-3 overflow-x-auto pb-4 mb-10 no-scrollbar">
+        <div className={cn("flex items-center gap-3 overflow-x-auto pb-4 mb-10 no-scrollbar", isAr ? "flex-row-reverse" : "")}>
           <button
             type="button"
             onClick={() => setActiveCategoryId("All")}
@@ -318,7 +330,7 @@ export default function MarketplacePage() {
               : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
               }`}
           >
-            All Categories
+            {t("allCategories")}
           </button>
           {categories.map((cat) => (
             <button
@@ -330,7 +342,7 @@ export default function MarketplacePage() {
                 : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
                 }`}
             >
-              {cat.name}
+              {tCat.has(cat.name) ? tCat(cat.name) : cat.name}
             </button>
           ))}
         </div>
@@ -339,13 +351,13 @@ export default function MarketplacePage() {
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="size-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-            <p className="text-neutral-500 font-medium">Loading resources...</p>
+            <p className="text-neutral-500 font-medium">{t("loading")}</p>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <MdOutlineInbox className="text-6xl text-neutral-300" />
-            <p className="text-neutral-500 font-medium text-lg">No resources found</p>
-            <p className="text-neutral-400 text-sm">Try adjusting your filters or search query.</p>
+            <p className="text-neutral-500 font-medium text-lg">{t("noResources")}</p>
+            <p className="text-neutral-400 text-sm">{t("noResourcesSub")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
@@ -372,10 +384,12 @@ export default function MarketplacePage() {
           <div className="flex justify-center">
             <button
               onClick={() => setVisibleCount((prev) => prev + 12)}
-              className="group flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-10 py-4 font-bold text-neutral-800 hover:border-primary/60 transition-all shadow-sm cursor-pointer"
+              className={cn(
+                "group flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-10 py-4 font-bold text-neutral-800 hover:border-primary/60 transition-all shadow-sm cursor-pointer",
+              )}
             >
-              View More Resources
-              <MdArrowForward className="transition-transform group-hover:translate-x-1" />
+              {t("viewMore")}
+              <MdArrowForward className={cn("transition-transform inline-block", isAr ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1")} />
             </button>
           </div>
         )}
@@ -473,8 +487,8 @@ export default function MarketplacePage() {
         <AuthRequiredModal
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
-          title="Join the Conversation!"
-          description="Please sign in to request items, message owners, and save resources to your favorites."
+          title={tAuth("marketplaceTitle")}
+          description={tAuth("marketplaceDesc")}
           redirectTo="/marketplace"
         />
       )}

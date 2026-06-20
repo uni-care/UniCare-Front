@@ -2,10 +2,18 @@
 
 import Image from "next/image";
 import { FaInstagram, FaTwitter } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
-const footerLinks = ["Privacy", "Terms", "Safety", "Impact"];
+const footerLinks = [
+  { key: "privacy", label: "Privacy" },
+  { key: "terms", label: "Terms" },
+  { key: "safety", label: "Safety" },
+  { key: "impact", label: "Impact" },
+];
 
 export default function Footer() {
+  const t = useTranslations("Footer");
+
   return (
     <footer className="mt-auto border-t border-black/5 bg-white">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-8 md:px-10">
@@ -24,13 +32,13 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center justify-center gap-6 md:flex-none">
-            {footerLinks.map((label) => (
+            {footerLinks.map((link) => (
               <button
-                key={label}
+                key={link.key}
                 type="button"
-                className="text-sm text-black/55 transition-colors hover:text-black/80"
+                className="text-sm text-black/55 transition-colors hover:text-black/80 cursor-pointer"
               >
-                {label}
+                {t(link.key)}
               </button>
             ))}
           </div>
@@ -54,7 +62,7 @@ export default function Footer() {
         </div>
 
         <p className="text-center text-xs tracking-[0.22em] text-black/40">
-          &copy; 2024 UNICARE PLATFORM. NURTURING TECHNICAL GROWTH.
+          {t("copyright")}
         </p>
       </div>
     </footer>

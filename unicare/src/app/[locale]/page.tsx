@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useLocale } from "next-intl";
 import {
   MdArrowForward,
   MdOutlineInventory,
@@ -10,6 +11,9 @@ import {
 } from "react-icons/md";
 
 export default function Page() {
+  const locale = useLocale();
+  const isAr = locale === "ar";
+
   return (
     <>
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -20,49 +24,56 @@ export default function Page() {
       <div className="relative z-10 flex flex-col min-h-screen pt-12">
         <main className="flex-1 flex flex-col items-center justify-center px-6 lg:px-20 py-24">
           <div className="max-w-300 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 flex flex-col gap-8 order-2 lg:order-1">
+            <div className={`lg:col-span-5 flex flex-col gap-8 order-2 lg:order-1 ${isAr ? "text-right items-end" : "text-left items-start"}`}>
               <div className="flex flex-col gap-4">
                 <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary w-fit text-xs font-bold tracking-widest uppercase">
-                  Community Driven
+                  {isAr ? "يديره المجتمع" : "Community Driven"}
                 </span>
-                <h2 className="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-[#131615]">
-                  The Universities <span className="text-primary italic">Ecosystem</span> of Care
+                <h2 className={`text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-[#131615] ${isAr ? "font-amiri" : ""}`}>
+                  {isAr ? (
+                    <>
+                      منظومة الرعاية <span className="text-primary italic">الجامعية</span>
+                    </>
+                  ) : (
+                    <>
+                      The Universities <span className="text-primary italic">Ecosystem</span> of Care
+                    </>
+                  )}
                 </h2>
                 <p className="text-lg lg:text-xl text-neutral-600 font-light leading-relaxed max-w-md">
-                  A campus marketplace to lend, buy, and share textbooks, lab tools,
-                  and resources across the university community.
+                  {isAr ? "متجر جامعي لإعارة وشراء ومشاركة الكتب المنهجية وأدوات المختبرات والمستلزمات بين مجتمع الجامعة." : "A campus marketplace to lend, buy, and share textbooks, lab tools, and resources across the university community."}
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-4">
-                <Link href="/marketplace" className="group flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/40 hover:translate-y-0.5 transition-all cursor-pointer">
-                  Enter the Ecosystem
-                  <MdArrowForward className="group-hover:translate-x-1 transition-transform text-xl" />
+              <div className={`flex flex-wrap gap-4 ${isAr ? "flex-row-reverse" : ""}`}>
+                <Link href="/marketplace" className={`group flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/40 hover:translate-y-0.5 transition-all cursor-pointer ${isAr ? "flex-row-reverse" : ""}`}>
+                  {isAr ? "دخول المنظومة" : "Enter the Ecosystem"}
+                  <MdArrowForward className={`group-hover:translate-x-1 transition-transform text-xl ${isAr ? "rotate-180" : ""}`} />
                 </Link>
                 <Link href="/marketplace" className="flex items-center gap-3 px-8 py-4 rounded-full text-lg font-bold border border-primary/20 hover:bg-white/50 transition-all cursor-pointer">
-                  Explore Assets
+                  {isAr ? "استكشاف الموارد" : "Explore Assets"}
                 </Link>
               </div>
 
-              <div className="flex items-center gap-8 mt-4">
+              <div className={`flex items-center gap-8 mt-4 ${isAr ? "flex-row-reverse text-right" : ""}`}>
                 <div>
                   <p className="text-2xl font-bold text-primary">5k+</p>
                   <p className="text-xs text-neutral-500 uppercase tracking-widest">
-                    Students
+                    {isAr ? "الطلاب" : "Students"}
                   </p>
                 </div>
                 <div className="h-8 w-px bg-primary/20"></div>
                 <div>
                   <p className="text-2xl font-bold text-primary">10k+</p>
                   <p className="text-xs text-neutral-500 uppercase tracking-widest">
-                    Resources
+                    {isAr ? "الموارد" : "Resources"}
                   </p>
                 </div>
                 <div className="h-8 w-px bg-primary/20"></div>
                 <div>
                   <p className="text-2xl font-bold text-primary">1.2k</p>
                   <p className="text-xs text-neutral-500 uppercase tracking-widest">
-                    Active Roots
+                    {isAr ? "الجذور النشطة" : "Active Roots"}
                   </p>
                 </div>
               </div>
@@ -80,12 +91,14 @@ export default function Page() {
                 <div className="absolute inset-0 bg-linear-to-tr from-primary/40 to-transparent"></div>
               </div>
 
-              <div className="absolute -bottom-8  md:bottom-10 left-0 md:-left-4 glass-card p-6 rounded-3xl border border-white/40 shadow-2xl max-w-60 z-20 animate-[pulse_4s_ease-in-out_infinite] hover:-translate-y-2 transition-transform duration-500">
-                <p className="flex items-center gap-2 font-semibold uppercase tracking-widest text-primary/70 mb-2">
+              <div className={`absolute -bottom-8 md:bottom-10 ${isAr ? "right-0 md:-right-4 text-right" : "left-0 md:-left-4 text-left"} glass-card p-6 rounded-3xl border border-white/40 shadow-2xl max-w-60 z-20 animate-[pulse_4s_ease-in-out_infinite] hover:-translate-y-2 transition-transform duration-500`}>
+                <p className={`flex items-center gap-2 font-semibold uppercase tracking-widest text-primary/70 mb-2 ${isAr ? "flex-row-reverse" : ""}`}>
                   <span className="size-2 rounded-full bg-primary animate-pulse"></span>
-                  Community Driven
+                  {isAr ? "تأثير مجتمعي" : "Community Driven"}
                 </p>
-                <p className="text-lg italic font-serif-art text-primary">&quot;The roots of Uni Students grow through the soil of art.&quot;</p>
+                <p className={`text-lg italic font-serif-art text-primary ${isAr ? "font-amiri" : ""}`}>
+                  {isAr ? "«تنمو جذور طلاب الجامعة في تربة الفنون والرعاية المتبادلة.»" : '"The roots of Uni Students grow through the soil of art."'}
+                </p>
               </div>
             </div>
           </div>
@@ -112,17 +125,25 @@ export default function Page() {
           </div>
 
           <div className="max-w-300 mx-auto relative z-10">
-            <div className="mb-20">
+            <div className={`mb-20 ${isAr ? "text-right" : "text-left"}`}>
               <h3 className="text-4xl font-bold tracking-tight mb-4">
-                The Cycle of <span className="text-primary italic">Support</span>
+                {isAr ? (
+                  <>
+                    دورة <span className="text-primary italic">الدعم</span>
+                  </>
+                ) : (
+                  <>
+                    The Cycle of <span className="text-primary italic">Support</span>
+                  </>
+                )}
               </h3>
               <p className="text-neutral-500 max-w-sm">
-                A seamless flow of academic resources and student support.
+                {isAr ? "تدفق سلس للموارد الأكاديمية ودعم الطلاب المتبادل." : "A seamless flow of academic resources and student support."}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24">
-              <div className="flex flex-col items-start space-y-6 md:translate-y-8">
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24 ${isAr ? "direction-rtl" : ""}`}>
+              <div className={`flex flex-col items-start space-y-6 md:translate-y-8 ${isAr ? "items-end text-right" : "items-start text-left"}`}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-full scale-150 transition-transform group-hover:scale-110"></div>
                   <div className="relative w-48 h-48 flex items-center justify-center">
@@ -139,15 +160,16 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="max-w-60">
-                  <h4 className="text-2xl font-bold mb-3 tracking-tight">Post</h4>
+                  <h4 className="text-2xl font-bold mb-3 tracking-tight">
+                    {isAr ? "انشر" : "Post"}
+                  </h4>
                   <p className="text-neutral-600 font-light leading-relaxed italic">
-                    Release your unused textbooks, drawing boards, or tools; let them
-                    support another student&apos;s campus journey.
+                    {isAr ? "اعرض أدواتك الجامعية أو لوحات الرسم أو الكتب غير المستخدمة لمساندة مسيرة زميل آخر في الحرم الجامعي." : "Release your unused textbooks, drawing boards, or tools; let them support another student's campus journey."}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col items-start space-y-6 md:-translate-y-8">
+              <div className={`flex flex-col items-start space-y-6 md:-translate-y-8 ${isAr ? "items-end text-right" : "items-start text-left"}`}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-muted-teal/15 blur-2xl rounded-full scale-150 transition-transform group-hover:scale-110"></div>
                   <div className="relative w-48 h-48 flex items-center justify-center">
@@ -164,15 +186,16 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="max-w-60">
-                  <h4 className="text-2xl font-bold mb-3 tracking-tight">Share</h4>
+                  <h4 className="text-2xl font-bold mb-3 tracking-tight">
+                    {isAr ? "شارك" : "Share"}
+                  </h4>
                   <p className="text-neutral-600 font-light leading-relaxed italic">
-                    Find or share resources within your campus. Connect with peers in a trusted,
-                    secure student marketplace built on mutual trust.
+                    {isAr ? "ابحث عن الموارد أو شاركها داخل حرمك الجامعي. تواصل مع أقرانك في متجر طلابي آمن يقوم على الثقة المتبادلة." : "Find or share resources within your campus. Connect with peers in a trusted, secure student marketplace built on mutual trust."}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col items-start space-y-6 md:translate-y-12">
+              <div className={`flex flex-col items-start space-y-6 md:translate-y-12 ${isAr ? "items-end text-right" : "items-start text-left"}`}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 transition-transform group-hover:scale-110"></div>
                   <div className="relative w-48 h-48 flex items-center justify-center">
@@ -190,11 +213,10 @@ export default function Page() {
                 </div>
                 <div className="max-w-60">
                   <h4 className="text-2xl font-bold mb-3 tracking-tight">
-                    Impact
+                    {isAr ? "الأثر" : "Impact"}
                   </h4>
                   <p className="text-neutral-600 font-light leading-relaxed italic">
-                    Watch the student community thrive as we share resources, helping every
-                    student succeed without financial burden.
+                    {isAr ? "شاهد مجتمع الطلاب يزدهر بينما نتشارك الموارد، مما يتيح لكل طالب سبل النجاح دون أعباء مادية." : "Watch the student community thrive as we share resources, helping every student succeed without financial burden."}
                   </p>
                 </div>
               </div>
@@ -204,21 +226,21 @@ export default function Page() {
 
         <section className="px-6 lg:px-20 py-24 bg-primary/5">
           <div className="max-w-300 mx-auto">
-            <div className="flex items-end justify-between mb-12">
-              <div className="flex flex-col gap-2">
+            <div className={`flex items-end justify-between mb-12 ${isAr ? "flex-row-reverse" : ""}`}>
+              <div className={`flex flex-col gap-2 ${isAr ? "text-right" : "text-left"}`}>
                 <h3 className="text-3xl font-bold tracking-tight">
-                  Cultivate Your Toolkit
+                  {isAr ? "طوّر مجموعة أدواتك" : "Cultivate Your Toolkit"}
                 </h3>
                 <p className="text-neutral-500">
-                  Discover textbooks, tools, and dorm items shared by peer students.
+                  {isAr ? "اكتشف المناهج الدراسية، الأدوات، ومستلزمات السكن الجامعي المشاركة من الطلاب." : "Discover textbooks, tools, and dorm items shared by peer students."}
                 </p>
               </div>
-              <Link href="/marketplace" className="flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer">
-                View all <MdTrendingFlat className="text-xl" />
+              <Link href="/marketplace" className={`flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer ${isAr ? "flex-row-reverse" : ""}`}>
+                {isAr ? "عرض الكل" : "View all"} <MdTrendingFlat className={`text-xl ${isAr ? "rotate-180" : ""}`} />
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6`}>
               <Link href="/marketplace" className="group relative aspect-4/5 overflow-hidden rounded-xl cursor-pointer">
                 <Image
                   fill
@@ -228,11 +250,13 @@ export default function Page() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
-                <div className="absolute bottom-6 left-6 text-white">
+                <div className={`absolute bottom-6 ${isAr ? "right-6 text-right" : "left-6 text-left"} text-white`}>
                   <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    Supplies
+                    {isAr ? "مستلزمات" : "Supplies"}
                   </p>
-                  <h4 className="text-xl font-bold">Lab & Science Supplies</h4>
+                  <h4 className="text-xl font-bold">
+                    {isAr ? "أدوات المختبرات والعلوم" : "Lab & Science Supplies"}
+                  </h4>
                 </div>
               </Link>
 
@@ -245,11 +269,13 @@ export default function Page() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
-                <div className="absolute bottom-6 left-6 text-white">
+                <div className={`absolute bottom-6 ${isAr ? "right-6 text-right" : "left-6 text-left"} text-white`}>
                   <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    Textbooks
+                    {isAr ? "الكتب" : "Textbooks"}
                   </p>
-                  <h4 className="text-xl font-bold">Course Materials</h4>
+                  <h4 className="text-xl font-bold">
+                    {isAr ? "المناهج والمساقات" : "Course Materials"}
+                  </h4>
                 </div>
               </Link>
 
@@ -262,11 +288,13 @@ export default function Page() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
-                <div className="absolute bottom-6 left-6 text-white">
+                <div className={`absolute bottom-6 ${isAr ? "right-6 text-right" : "left-6 text-left"} text-white`}>
                   <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    Devices
+                    {isAr ? "أجهزة" : "Devices"}
                   </p>
-                  <h4 className="text-xl font-bold">Calculators & Electronics</h4>
+                  <h4 className="text-xl font-bold">
+                    {isAr ? "الآلات الحاسبة والإلكترونيات" : "Calculators & Electronics"}
+                  </h4>
                 </div>
               </Link>
 
@@ -274,9 +302,11 @@ export default function Page() {
                 <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <MdAdd className="text-primary text-3xl" />
                 </div>
-                <h4 className="text-lg font-bold">Lend Your Own</h4>
+                <h4 className="text-lg font-bold">
+                  {isAr ? "شارك مواردك" : "Lend Your Own"}
+                </h4>
                 <p className="text-sm text-neutral-500 mt-2 italic font-light">
-                  Share your unused resources with fellow students.
+                  {isAr ? "شارك مواردك غير المستخدمة مع زملائك من الطلاب." : "Share your unused resources with fellow students."}
                 </p>
               </Link>
             </div>

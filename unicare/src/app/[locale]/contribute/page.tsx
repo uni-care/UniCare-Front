@@ -1,69 +1,73 @@
+"use client";
+
 import Image from "next/image";
 import JoinTeamForm from "@/components/forms/JoinTeamForm";
+import { useTranslations } from "next-intl";
 import {
     MdOutlineLock,
-    MdOutlineCode,
-    MdOutlineDns,
-    MdOutlineEngineering
+    MdOutlineTerminal,
+    MdOutlineCloudQueue,
+    MdOutlineArchitecture
 } from "react-icons/md";
-
-const TEAM_ROLES = [
-    {
-        icon: "code",
-        title: "Feature Development",
-        subtitle: "Frontend & Backend",
-    },
-    {
-        icon: "dns",
-        title: "Server Hosting",
-        subtitle: "DevOps & Infrastructure",
-    },
-    {
-        icon: "engineering",
-        title: "Core Engineering",
-        subtitle: "Architecture & Performance",
-    },
-];
 
 const getRoleIcon = (iconName: string) => {
     switch (iconName) {
-        case "code":
-            return <MdOutlineCode className="text-xl" />;
-        case "dns":
-            return <MdOutlineDns className="text-xl" />;
-        case "engineering":
-            return <MdOutlineEngineering className="text-xl" />;
+        case "terminal":
+            return <MdOutlineTerminal className="text-xl" />;
+        case "cloud":
+            return <MdOutlineCloudQueue className="text-xl" />;
+        case "architecture":
+            return <MdOutlineArchitecture className="text-xl" />;
         default:
             return null;
     }
 };
 
 export default function ContributePage() {
+    const t = useTranslations("Contribute");
+
+    const TEAM_ROLES = [
+        {
+            icon: "terminal",
+            title: t("role1Title"),
+            subtitle: t("role1Subtitle"),
+        },
+        {
+            icon: "cloud",
+            title: t("role2Title"),
+            subtitle: t("role2Subtitle"),
+        },
+        {
+            icon: "architecture",
+            title: t("role3Title"),
+            subtitle: t("role3Subtitle"),
+        },
+    ];
+
     return (
-        <div className="bg-background-light min-h-screen pt-28 pb-20">
+        <div className="bg-background-light min-h-screen pt-36 pb-20">
             <div className="max-w-6xl mx-auto px-4 md:px-8 w-full flex flex-col gap-16">
 
                 {/* Hero Section */}
                 <section className="flex flex-col gap-8 py-10 lg:flex-row lg:items-center lg:gap-16">
-                    <div className="flex flex-col gap-6 lg:w-1/2">
-                        <div className="flex flex-col gap-3 text-left">
-                            <span className="text-primary font-bold tracking-wider uppercase text-sm">
-                                Join the Community
+                    <div className="flex flex-col gap-6 lg:w-1/2 text-start items-start">
+                        <div className="flex flex-col gap-3 text-start items-start">
+                            <span className="text-primary font-bold tracking-wider uppercase text-sm font-sans">
+                                {t("heroLabel")}
                             </span>
                             <h1 className="text-neutral-900 text-4xl font-black leading-tight tracking-tight md:text-5xl lg:text-6xl">
-                                Build the Future of University Resources
+                                {t("heroTitle")}
                             </h1>
                             <p className="text-neutral-500 text-lg font-normal leading-relaxed max-w-xl">
-                                Join our community of contributors. Whether you&apos;re into feature development, server hosting, or
-                                core engineering, there&apos;s a place for you at UniCare.
+                                {t("heroDesc")}
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-4 pt-2">
                             <button className="flex cursor-pointer items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-white h-12 px-6 text-base font-bold shadow-lg shadow-primary/20 transition-colors">
-                                View Open Roles
+                                {t("rolesCta")}
                             </button>
                             <button className="flex h-12 px-6 items-center justify-center rounded-xl border-2 border-primary/20 hover:border-primary/50 text-neutral-900 text-base font-bold transition-all bg-transparent cursor-pointer">
-                                Read Documentation
+                                {t("docsCta")}
                             </button>
                         </div>
                     </div>
@@ -83,42 +87,40 @@ export default function ContributePage() {
                 </section>
 
                 {/* Beta CTA Banner */}
-                <section className="w-full bg-primary/10 border border-primary/20 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-                    <div className="flex flex-col gap-2">
+                <section className="w-full bg-primary/10 border border-primary/20 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-start">
+                    <div className="flex flex-col gap-2 text-start items-start">
                         <div className="flex items-center justify-center md:justify-start gap-2 text-primary font-bold mb-1">
                             <MdOutlineLock className="text-xl" />
-                            <span className="text-sm uppercase tracking-wider">Limited Access</span>
+                            <span className="text-sm uppercase tracking-wider">{t("limitedAccessLabel")}</span>
                         </div>
                         <h3 className="text-2xl md:text-3xl font-bold text-neutral-900">
-                            Closed-Source Beta Program
+                            {t("betaTitle")}
                         </h3>
                         <p className="text-neutral-500 max-w-xl">
-                            Be among the first to try our upcoming AI-powered student verification, smart lending system, and
-                            real-time community tools — and help us refine them before they go live across universities.
+                            {t("betaDesc")}
                         </p>
                     </div>
                     <button className="flex cursor-pointer items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-white h-12 px-8 text-sm font-bold whitespace-nowrap shadow-lg shadow-primary/20 transition-colors">
-                        Apply for Beta Access
+                        {t("betaCta")}
                     </button>
                 </section>
 
                 {/* Join the Team */}
                 <section className="flex flex-col lg:flex-row gap-12 py-10 items-start">
-                    <div className="lg:w-1/3 flex flex-col gap-6 lg:sticky lg:top-28">
+                    <div className="lg:w-1/3 flex flex-col gap-6 lg:sticky lg:top-28 text-start items-start">
                         <h2 className="text-neutral-900 text-3xl font-bold leading-tight tracking-tight">
-                            Join the Team
+                            {t("formTitle")}
                         </h2>
                         <p className="text-neutral-500 text-lg leading-relaxed">
-                            Interested in shaping UniCare? Fill out the form to get involved in our development cycle. We are looking
-                            for passionate individuals who care about open engineering culture.
+                            {t("formDesc")}
                         </p>
-                        <div className="flex flex-col gap-4 mt-4">
+                        <div className="flex flex-col gap-4 mt-4 w-full">
                             {TEAM_ROLES.map((role) => (
                                 <div
                                     key={role.title}
-                                    className="flex items-center gap-4 p-4 rounded-xl bg-white border border-neutral-100 shadow-sm"
+                                    className="flex items-center gap-4 p-4 rounded-xl bg-white border border-neutral-100 shadow-sm w-full text-start"
                                 >
-                                    <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary shrink-0">
                                         {getRoleIcon(role.icon)}
                                     </div>
                                     <div>

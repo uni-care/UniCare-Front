@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/hooks/useAuth";
-import { DUMMY_ITEMS } from "@/app/(main)/(buyer)/marketplace/data";
+import { DUMMY_ITEMS } from "@/app/[locale]/(main)/(buyer)/marketplace/data";
 
 const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";
 
@@ -74,7 +74,7 @@ export default function ProfilePage() {
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen bg-neutral-100 px-4 pb-10 pt-28 md:px-8">
+      <div className="min-h-screen bg-neutral-100 px-4 pb-10 pt-36 md:px-8">
         <div className="mx-auto max-w-5xl rounded-3xl border border-neutral-200 bg-white p-8 shadow-sm">
           <p className="text-sm text-neutral-500">Loading profile...</p>
         </div>
@@ -83,7 +83,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-100 px-4 pb-12 pt-28 md:px-8">
+    <div className="min-h-screen bg-neutral-100 px-4 pb-12 pt-36 md:px-8">
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-[220px_1fr]">
         <aside className="rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm">
           <p className="mb-4 px-2 text-sm font-bold uppercase tracking-wide text-neutral-500">Dashboard</p>

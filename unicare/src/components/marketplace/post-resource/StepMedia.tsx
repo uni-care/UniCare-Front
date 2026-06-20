@@ -1,150 +1,139 @@
 import { useRef } from "react";
-import Image from "next/image";
+import ProgressStepper from "./ProgressStepper";
 import type { StepProps } from "./types";
+import { useLocale } from "next-intl";
 import {
     MdOutlineCloudUpload,
-    MdArrowBack,
+    MdClose,
     MdArrowForward,
-    MdOutlineLightMode,
-    MdOutlineVisibility
+    MdLightbulbOutline
 } from "react-icons/md";
 
 export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
-    const fileRef = useRef<HTMLInputElement>(null);
+    const locale = useLocale();
+    const isAr = locale === "ar";
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selected = Array.from(e.target.files ?? []);
-        const newPreviews = selected.map((f) => URL.createObjectURL(f));
-        update("files", [...form.files, ...selected]);
-        update("previews", [...form.previews, ...newPreviews]);
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
+        const newFiles = Array.from(e.target.files);
+
+        // Limit to max 5 files
+        const updatedFiles = [...form.files, ...newFiles].slice(0, 5);
+        update("files", updatedFiles);
+
+        // Generate previews
+        const newPreviews = updatedFiles.map((file) => URL.createObjectURL(file));
+        update("previews", newPreviews);
     };
 
-    const removeFile = (i: number) => {
-        URL.revokeObjectURL(form.previews[i]);
-        update("files", form.files.filter((_, idx) => idx !== i));
-        update("previews", form.previews.filter((_, idx) => idx !== i));
+    const removeFile = (index: number) => {
+        const updatedFiles = form.files.filter((_, i) => i !== index);
+        const updatedPreviews = form.previews.filter((_, i) => i !== index);
+        update("files", updatedFiles);
+        update("previews", updatedPreviews);
     };
-
-    const progress = (2 / 3) * 100;
 
     return (
-        <div className="bg-background-light min-h-screen pt-32 pb-20">
-            <div className="max-w-5xl mx-auto px-4 md:px-8 flex flex-col gap-8">
+        <div className="bg-background-light min-h-screen pt-28 pb-20">
+            <div className="max-w-[800px] mx-auto px-4 md:px-8 flex flex-col gap-8">
                 {/* Stepper */}
-                <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-end mb-2">
-                        <span className="text-sm font-medium text-primary uppercase tracking-wider">Step 2 of 3</span>
-                        <span className="text-sm text-neutral-500">Media</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-neutral-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
-                    </div>
-                </div>
+                <ProgressStepper
+                    currentStep={1}
+                    totalSteps={3}
+                    stepLabel={isAr ? "صور المورد" : "Resource Media"}
+                    nextLabel={isAr ? "شروط التبادل" : "Exchange Terms"}
+                />
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                    {/* Main Upload Area */}
-                    <div className="lg:col-span-2 flex flex-col gap-6">
+                {/* Upload Card */}
+                <div className={`bg-white border border-neutral-200 rounded-3xl p-6 md:p-8 shadow-sm ${isAr ? "text-right" : "text-left"}`}>
+                    <div className="flex flex-col gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-bold text-neutral-900">Add photos or video</h1>
-                            <p className="text-neutral-500 text-lg mt-2">
-                                Showcase your resource with clear, high-quality images to help others understand what you&apos;re sharing.
+                            <h2 className="text-2xl font-bold text-neutral-900">
+                                {isAr ? "ارفع صور المورد" : "Upload Photos"}
+                            </h2>
+                            <p className="text-neutral-500 text-base mt-1">
+                                {isAr ? "الصور الواضحة تساعد في إظهار حالة ونوع المورد بشكل أفضل للطلاب." : "Clear photos help other students verify the item's condition."}
                             </p>
                         </div>
 
-                        {/* Upload Zone */}
+                        {/* Dropzone Area */}
                         <div
-                            onClick={() => fileRef.current?.click()}
-                            className="group relative flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-neutral-300 bg-white hover:border-primary/50 hover:bg-neutral-50 transition-all duration-200 py-16 px-6 cursor-pointer"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="border-2 border-dashed border-neutral-300 hover:border-primary rounded-2xl p-8 flex flex-col items-center justify-center gap-3 bg-neutral-50 hover:bg-primary/5 transition-all cursor-pointer group"
                         >
-                            <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                <MdOutlineCloudUpload className="text-4xl text-primary" />
-                            </div>
-                            <p className="text-lg font-bold text-neutral-900">Tap to upload</p>
-                            <p className="text-sm text-neutral-500">Support JPG, PNG, MP4 up to 50MB</p>
-                            <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}
-                                className="mt-4 px-6 py-2.5 rounded-lg bg-white border border-neutral-200 text-sm font-bold shadow-sm hover:shadow hover:border-primary/30 transition-all cursor-pointer"
-                            >
-                                Select Files
-                            </button>
                             <input
-                                ref={fileRef}
                                 type="file"
-                                accept="image/*,video/*"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
                                 multiple
+                                accept="image/*"
                                 className="hidden"
-                                onChange={handleFiles}
                             />
+                            <div className="size-14 rounded-full bg-white shadow-xs border border-neutral-100 flex items-center justify-center text-neutral-400 group-hover:text-primary group-hover:scale-110 transition-all">
+                                <MdOutlineCloudUpload className="text-2xl" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-bold text-neutral-800">
+                                    {isAr ? "اضغط لرفع الصور" : "Click to upload"}
+                                </p>
+                                <p className="text-xs text-neutral-400 mt-1">
+                                    {isAr ? "ملفات JPG، PNG تصل إلى 5 صور" : "Supports JPG, PNG up to 5 photos"}
+                                </p>
+                            </div>
                         </div>
 
-                        {/* Previews */}
+                        {/* Previews Strip */}
                         {form.previews.length > 0 && (
-                            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                                {form.previews.map((src, i) => (
-                                    <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-neutral-200 group">
-                                        <Image src={src} alt={`Upload ${i + 1}`} fill className="object-cover" />
+                            <div className={`flex flex-wrap gap-4 ${isAr ? "flex-row-reverse" : ""}`}>
+                                {form.previews.map((preview, index) => (
+                                    <div
+                                        key={preview}
+                                        className="relative size-24 rounded-xl border border-neutral-200 overflow-hidden bg-neutral-100 animate-in fade-in zoom-in-95 duration-200"
+                                    >
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={preview} alt="Upload preview" className="w-full h-full object-cover" />
                                         <button
-                                            onClick={() => removeFile(i)}
-                                            className="absolute top-1 right-1 size-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs cursor-pointer"
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                removeFile(index);
+                                            }}
+                                            className="absolute top-1 right-1 size-5 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white cursor-pointer transition-colors"
                                         >
-                                            ✕
+                                            <MdClose className="text-[12px]" />
                                         </button>
                                     </div>
                                 ))}
                             </div>
                         )}
 
-                        {/* Actions */}
-                        <div className="flex justify-between items-center pt-4">
-                            <button onClick={onBack} className="text-neutral-500 font-bold hover:text-neutral-900 transition-colors flex items-center gap-2 cursor-pointer">
-                                <MdArrowBack className="text-sm" /> Back
-                            </button>
-                            <button
-                                onClick={onNext}
-                                className="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2 cursor-pointer"
-                            >
-                                Continue <MdArrowForward className="text-sm" />
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Sidebar Tips */}
-                    <div className="lg:col-span-1 flex flex-col gap-6">
-                        <div className="rounded-lg overflow-hidden shadow-sm bg-white border border-neutral-100">
-                            <div
-                                className="h-48 bg-neutral-200 w-full relative overflow-hidden"
-                                style={{
-                                    backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuBONFRteCRq_y_xe13JI0Ixh41C9BLGaG9F3GFQeulqIl7u5_z0cqrZXj8Vpz4_J-lF0Pt-2etCNt3Sak1zoezUwajMOchx8sPiwSSjfuZNxS9EzJMn0RTmL2Ev8n2vN7Xmflwg0U28FTaxbw1FUIcH25yCMqd8bk5iMKYHoiaYrdVeRROHFvhQCsuCrcd9UuO6Sh-YnIO3T9WoREAJIUAmlTDV09GWWcNv6j7Q56OkLjuoUQqwW7AWKrxV_u6DMHiPiaFala3ixbaV")`,
-                                    backgroundSize: "cover",
-                                    backgroundPosition: "center",
-                                }}
-                            >
-                                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
-                                <div className="absolute bottom-4 left-4 right-4 text-white">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <MdOutlineLightMode className="text-lg" />
-                                        <span className="text-xs font-bold uppercase tracking-wider opacity-90">Pro Tip</span>
-                                    </div>
-                                    <h3 className="font-bold text-lg leading-tight">Lighting Matters</h3>
-                                </div>
-                            </div>
-                            <div className="p-5">
-                                <p className="text-sm text-neutral-600 leading-relaxed">
-                                    Use natural lighting whenever possible. Place your item near a window to show true colors and avoid harsh shadows.
+                        {/* Pro Tip */}
+                        <div className={`p-4 rounded-xl bg-amber-50 border border-amber-200/50 flex gap-3 items-start ${isAr ? "flex-row-reverse text-right" : ""}`}>
+                            <MdLightbulbOutline className="text-amber-600 text-lg mt-0.5 shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-xs text-amber-900">
+                                    {isAr ? "نصيحة للمحترفين" : "Pro Tip"}
+                                </h4>
+                                <p className="text-xs text-amber-800 mt-0.5 leading-relaxed">
+                                    {isAr ? "التقط صوراً في إضاءة جيدة واعرض أي خدوش أو علامات استخدام بوضوح لبناء الثقة مع زملائك." : "Take pictures in natural light and show any signs of wear to build trust with potential requestors."}
                                 </p>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="rounded-lg p-5 bg-primary/10 border border-primary/20 flex flex-col gap-3">
-                            <div className="flex items-center gap-3 text-primary">
-                                <MdOutlineVisibility className="text-xl" />
-                                <h3 className="font-bold">Be Transparent</h3>
-                            </div>
-                            <p className="text-sm text-neutral-600 leading-relaxed">
-                                If your resource has wear or defects, take a close-up photo. Honesty builds trust in our community.
-                            </p>
-                        </div>
+                    {/* Actions */}
+                    <div className={`flex items-center justify-between mt-10 gap-4 ${isAr ? "flex-row-reverse" : ""}`}>
+                        <button onClick={onBack} className="px-6 py-3 rounded-lg text-neutral-600 font-bold hover:bg-neutral-100 transition-colors cursor-pointer">
+                            {isAr ? "رجوع" : "Back"}
+                        </button>
+                        <button
+                            onClick={onNext}
+                            className={`flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-bold shadow-lg shadow-primary/20 transition-all cursor-pointer ${isAr ? "flex-row-reverse" : ""}`}
+                        >
+                            {isAr ? "متابعة" : "Continue"}
+                            <MdArrowForward className={`text-sm ${isAr ? "rotate-180" : ""}`} />
+                        </button>
                     </div>
                 </div>
             </div>

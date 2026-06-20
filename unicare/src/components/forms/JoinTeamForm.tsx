@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-
-const WHATSAPP_NUMBER = "201068359667";
+import { useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
+import { MdExpandMore, MdOutlineLink } from "react-icons/md";
 
 export default function JoinTeamForm() {
+    const locale = useLocale();
+    const isAr = locale === "ar";
+
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
@@ -19,20 +23,21 @@ export default function JoinTeamForm() {
     };
 
     const handleSubmit = () => {
-        const message = [
-            `*New UniCare Contributor Application* 🌿`,
+        const subject = encodeURIComponent("New UniCare Contributor Application");
+        const body = encodeURIComponent([
+            `New UniCare Contributor Application`,
+            `----------------------------------`,
+            `Name: ${form.firstName} ${form.lastName}`,
+            `Email: ${form.email}`,
+            `Area of Contribution: ${form.area || "Not specified"}`,
+            `Portfolio/GitHub URL: ${form.portfolio || "Not provided"}`,
             ``,
-            `*Name:* ${form.firstName} ${form.lastName}`,
-            `*Email:* ${form.email}`,
-            `*Area:* ${form.area || "Not specified"}`,
-            `*Portfolio:* ${form.portfolio || "Not provided"}`,
-            ``,
-            `*Why they want to join:*`,
+            `Why they want to join:`,
             form.reason || "No reason provided.",
-        ].join("\n");
+        ].join("\n"));
 
-        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-        window.open(url, "_blank");
+        const url = `mailto:almonther.art@gmail.com?subject=${subject}&body=${body}`;
+        window.open(url, "_self");
     };
 
     return (
@@ -46,11 +51,11 @@ export default function JoinTeamForm() {
             >
                 <div className="flex flex-col md:flex-row gap-6">
                     <label className="flex flex-col flex-1">
-                        <span className="text-neutral-900 text-base font-medium leading-normal pb-2">First Name</span>
+                        <span className={cn("text-neutral-900 text-base font-medium leading-normal pb-2", isAr ? "text-right" : "text-left")}>{isAr ? "الاسم الأول" : "First Name"}</span>
                         <input
-                            className="w-full rounded-xl border border-neutral-200 bg-white h-14 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                            className={cn("w-full rounded-xl border border-neutral-200 bg-white h-14 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all", isAr ? "text-right" : "text-left")}
                             name="firstName"
-                            placeholder="Jane"
+                            placeholder={isAr ? "مثال: أحمد" : "Jane"}
                             type="text"
                             value={form.firstName}
                             onChange={handleChange}
@@ -58,11 +63,11 @@ export default function JoinTeamForm() {
                         />
                     </label>
                     <label className="flex flex-col flex-1">
-                        <span className="text-neutral-900 text-base font-medium leading-normal pb-2">Last Name</span>
+                        <span className={cn("text-neutral-900 text-base font-medium leading-normal pb-2", isAr ? "text-right" : "text-left")}>{isAr ? "اسم العائلة" : "Last Name"}</span>
                         <input
-                            className="w-full rounded-xl border border-neutral-200 bg-white h-14 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                            className={cn("w-full rounded-xl border border-neutral-200 bg-white h-14 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all", isAr ? "text-right" : "text-left")}
                             name="lastName"
-                            placeholder="Doe"
+                            placeholder={isAr ? "مثال: علي" : "Doe"}
                             type="text"
                             value={form.lastName}
                             onChange={handleChange}
@@ -72,9 +77,9 @@ export default function JoinTeamForm() {
                 </div>
 
                 <label className="flex flex-col flex-1">
-                    <span className="text-neutral-900 text-base font-medium leading-normal pb-2">Email Address</span>
+                    <span className={cn("text-neutral-900 text-base font-medium leading-normal pb-2", isAr ? "text-right" : "text-left")}>{isAr ? "البريد الإلكتروني" : "Email Address"}</span>
                     <input
-                        className="w-full rounded-xl border border-neutral-200 bg-white h-14 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                        className={cn("w-full rounded-xl border border-neutral-200 bg-white h-14 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all", isAr ? "text-right" : "text-left")}
                         name="email"
                         placeholder="jane@example.com"
                         type="email"
@@ -85,62 +90,64 @@ export default function JoinTeamForm() {
                 </label>
 
                 <label className="flex flex-col flex-1">
-                    <span className="text-neutral-900 text-base font-medium leading-normal pb-2">Area of Contribution</span>
+                    <span className={cn("text-neutral-900 text-base font-medium leading-normal pb-2", isAr ? "text-right" : "text-left")}>{isAr ? "مجال المساهمة" : "Area of Contribution"}</span>
                     <div className="relative">
                         <select
-                            className="w-full rounded-xl border border-neutral-200 bg-white h-14 px-4 text-base text-neutral-900 appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                            className={cn("w-full rounded-xl border border-neutral-200 bg-white h-14 text-base text-neutral-900 appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-primary/50 transition-all", isAr ? "pr-4 pl-10 text-right" : "pl-4 pr-10 text-left")}
                             name="area"
                             value={form.area}
                             onChange={handleChange}
                             required
                         >
-                            <option disabled value="">Select an area...</option>
-                            <option value="Feature Development">Feature Development</option>
-                            <option value="Server Hosting">Server Hosting</option>
-                            <option value="Core Engineering">Core Engineering</option>
-                            <option value="UI/UX Design">UI/UX Design</option>
+                            <option disabled value="">{isAr ? "اختر مجالاً..." : "Select an area..."}</option>
+                            <option value="Feature Development">{isAr ? "تطوير الميزات" : "Feature Development"}</option>
+                            <option value="Server Hosting">{isAr ? "استضافة الخوادم" : "Server Hosting"}</option>
+                            <option value="Core Engineering">{isAr ? "الهندسة الأساسية" : "Core Engineering"}</option>
+                            <option value="UI/UX Design">{isAr ? "تصميم واجهة المستخدم" : "UI/UX Design"}</option>
                         </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">
-                            <span className="material-symbols-outlined">expand_more</span>
+                        <div className={cn("absolute top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center", isAr ? "left-4" : "right-4")}>
+                            <MdExpandMore className="text-xl" />
                         </div>
                     </div>
                 </label>
 
                 <label className="flex flex-col flex-1">
-                    <span className="text-neutral-900 text-base font-medium leading-normal pb-2">Portfolio or GitHub URL</span>
+                    <span className={cn("text-neutral-900 text-base font-medium leading-normal pb-2", isAr ? "text-right" : "text-left")}>{isAr ? "رابط أعمالك أو حساب GitHub" : "Portfolio or GitHub URL"}</span>
                     <div className="relative">
                         <input
-                            className="w-full rounded-xl border border-neutral-200 bg-white h-14 pl-12 pr-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                            className={cn("w-full rounded-xl border border-neutral-200 bg-white h-14 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all", isAr ? "pr-4 pl-12 text-left" : "pl-12 pr-4 text-left")}
                             name="portfolio"
                             placeholder="https://github.com/janedoe"
                             type="url"
                             value={form.portfolio}
                             onChange={handleChange}
                         />
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center">
-                            <span className="material-symbols-outlined text-[20px]">link</span>
+                        <div className={cn("absolute top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center", isAr ? "left-4" : "left-4")}>
+                            <MdOutlineLink className="text-xl" />
                         </div>
                     </div>
                 </label>
 
                 <label className="flex flex-col flex-1">
-                    <span className="text-neutral-900 text-base font-medium leading-normal pb-2">Why do you want to join?</span>
+                    <span className={cn("text-neutral-900 text-base font-medium leading-normal pb-2", isAr ? "text-right" : "text-left")}>
+                        {isAr ? "لماذا تريد الانضمام؟" : "Why do you want to join?"}
+                    </span>
                     <textarea
-                        className="w-full rounded-lg border border-neutral-200 bg-white h-32 px-4 py-3 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
+                        className={cn("w-full rounded-lg border border-neutral-200 bg-white h-32 px-4 py-3 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none", isAr ? "text-right" : "text-left")}
                         name="reason"
-                        placeholder="Tell us about your experience and what you'd like to work on..."
+                        placeholder={isAr ? "أخبرنا عن خبرتك وما تود العمل عليه..." : "Tell us about your experience and what you'd like to work on..."}
                         value={form.reason}
                         onChange={handleChange}
                         required
                     />
                 </label>
 
-                <div className="pt-2">
+                <div className={cn("pt-2 flex", isAr ? "justify-end" : "justify-start")}>
                     <button
                         className="flex cursor-pointer items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-white h-14 w-full md:w-auto px-10 text-base font-bold shadow-lg shadow-primary/20 transition-colors"
                         type="submit"
                     >
-                        Submit Application
+                        {isAr ? "إرسال الطلب" : "Submit Application"}
                     </button>
                 </div>
             </form>
