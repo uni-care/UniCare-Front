@@ -98,7 +98,7 @@ export default function RequestItemModal({
         <div className="space-y-4">
           <div>
             <label className="mb-2 block text-lg font-semibold text-neutral-700">
-              {isAr ? "مرحباً! ما هي المدة التي تحتاج فيها هذا المورد؟" : "Hey! How long do you need this for?"}
+              {isAr ? "مرحبًا! ما هي المدة التي تحتاج فيها هذا المورد؟" : "Hey! How long do you need this for?"}
             </label>
             <div className={`flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-3 ${isAr ? "flex-row-reverse" : ""}`}>
               <MdOutlineCalendarMonth className="text-base text-primary/70" />
@@ -119,7 +119,7 @@ export default function RequestItemModal({
               value={note}
               onChange={(event) => setNote(event.target.value)}
               className={`h-28 w-full resize-none rounded-3xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-700 outline-none placeholder:text-neutral-400 ${isAr ? "text-right" : "text-left"}`}
-              placeholder={isAr ? "مرحباً! أود استعارة هذا لمشروع التخرج الخاص بي. يمكنني إعادته بحلول يوم الجمعة..." : "Hi! I'd love to borrow this for my capstone project. I can return it by Friday..."}
+              placeholder={isAr ? "مرحبًا! أود استعارة هذا لمشروع التخرج الخاص بي. يمكنني إعادته بحلول يوم الجمعة..." : "Hi! I'd love to borrow this for my capstone project. I can return it by Friday..."}
             />
           </div>
         </div>

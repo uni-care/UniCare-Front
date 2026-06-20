@@ -89,7 +89,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                             />
                                         </div>
                                         <span className="text-xs text-neutral-400">
-                                            {isAr ? "فترة الإعارة القياسية هي 7-14 يوماً." : "Standard loan period is 7-14 days."}
+                                            {isAr ? "فترة الإعارة القياسية هي 7-14 يومًا." : "Standard loan period is 7-14 days."}
                                         </span>
                                     </label>
                                     <label className="flex flex-col gap-2">
@@ -107,7 +107,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                             />
                                         </div>
                                         <span className="text-xs text-neutral-400">
-                                            {isAr ? "مسترد بالكامل عند إرجاع المورد سليماً." : "Fully refundable upon safe return."}
+                                            {isAr ? "مسترد بالكامل عند إرجاع المورد سليمًا." : "Fully refundable upon safe return."}
                                         </span>
                                     </label>
                                 </>

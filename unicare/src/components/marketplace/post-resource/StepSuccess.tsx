@@ -47,7 +47,7 @@ export default function StepSuccess({ form, categoryName, itemId }: StepSuccessP
                         {isAr ? "تم نشر المورد بنجاح!" : "Resource Posted Successfully!"}
                     </h1>
                     <p className="text-neutral-500 text-lg max-w-[500px] leading-relaxed">
-                        {isAr ? "أصبح المورد الخاص بك معروضاً الآن في المتجر الجامعي. يمكن للطلاب الآخرين الآن العثور عليه، أو طلبه، أو شراؤه منك مباشرة!" : "Your resource is now live on the campus marketplace. Other students can now find, request, or buy it directly from you!"}
+                        {isAr ? "أصبح المورد الخاص بك معروضًا الآن في المتجر الجامعي. يمكن للطلاب الآخرين الآن العثور عليه، أو طلبه، أو شراؤه منك مباشرة!" : "Your resource is now live on the campus marketplace. Other students can now find, request, or buy it directly from you!"}
                     </p>
                 </div>
 

@@ -99,7 +99,7 @@ export default function JoinTeamForm() {
                             onChange={handleChange}
                             required
                         >
-                            <option disabled value="">{isAr ? "اختر مجالاً..." : "Select an area..."}</option>
+                            <option disabled value="">{isAr ? "اختر مجالًا..." : "Select an area..."}</option>
                             <option value="Feature Development">{isAr ? "تطوير الميزات" : "Feature Development"}</option>
                             <option value="Server Hosting">{isAr ? "استضافة الخوادم" : "Server Hosting"}</option>
                             <option value="Core Engineering">{isAr ? "الهندسة الأساسية" : "Core Engineering"}</option>

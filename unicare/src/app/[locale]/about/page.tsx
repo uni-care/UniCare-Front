@@ -60,7 +60,7 @@ export default function AboutPage() {
                         {/* Overlay Badge */}
                         <div className="absolute bottom-6 start-6 z-20 bg-white/90 backdrop-blur-sm p-4 rounded-lg border border-primary/20">
                             <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1 text-start">Est. 2024</p>
-                            <p className="text-sm text-neutral-800 text-start">{isAr ? "نصمم المستقبل معاً." : "Designing the future, together."}</p>
+                            <p className="text-sm text-neutral-800 text-start">{isAr ? "نصمم المستقبل معًا." : "Designing the future, together."}</p>
                         </div>
                     </div>
                 </div>

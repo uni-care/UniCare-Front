@@ -120,7 +120,7 @@ export default function ChatPageClient() {
         if (!isDisposed) {
           setIsRealtimeConnected(false);
           if (!signalRErrorShown) {
-            toast.message(isAr ? "الاتصال المباشر غير متوفر. جاري مزامنة الرسائل تلقائياً." : "Realtime unavailable. Chat is syncing automatically.");
+            toast.message(isAr ? "الاتصال المباشر غير متوفر. جاري مزامنة الرسائل تلقائيًا." : "Realtime unavailable. Chat is syncing automatically.");
             setSignalRErrorShown(true);
           }
         }
@@ -177,7 +177,7 @@ export default function ChatPageClient() {
             {isAr ? "لم يتم تحديد أي محادثة" : "No chat selected"}
           </h1>
           <p className="mt-2 text-neutral-500">
-            {isAr ? "أرسل طلباً من المتجر لفتح محادثة مع صاحب المورد." : "Send a marketplace request to open a conversation with an item owner."}
+            {isAr ? "أرسل طلبًا من المتجر لفتح محادثة مع صاحب المورد." : "Send a marketplace request to open a conversation with an item owner."}
           </p>
         </div>
       </div>

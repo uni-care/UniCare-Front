@@ -217,7 +217,7 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
             {isAr ? "المورد غير موجود" : "Resource Not Found"}
           </h1>
           <p className="text-neutral-500 max-w-md font-medium">
-            {isAr ? "قد يكون المورد الذي تبحث عنه قد تم أرشفته، أو حذفه، أو أنك اتبعت رابطاً غير صالح." : "The resource you are looking for might have been archived, deleted, or you followed an invalid link."}
+            {isAr ? "قد يكون المورد الذي تبحث عنه قد تم أرشفته، أو حذفه، أو أنك اتبعت رابطًا غير صالح." : "The resource you are looking for might have been archived, deleted, or you followed an invalid link."}
           </p>
         </div>
         <Link

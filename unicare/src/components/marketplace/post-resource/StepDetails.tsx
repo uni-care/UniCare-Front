@@ -52,7 +52,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
     }, []);
 
     const TIPS = [
-        { icon: "verified", title: isAr ? "كن دقيقاً" : "Be Accurate", desc: isAr ? "تأكد من إدخال نوع المورد وحالته بشكل صحيح." : "Ensure the model number and condition are correct." },
+        { icon: "verified", title: isAr ? "كن دقيقًا" : "Be Accurate", desc: isAr ? "تأكد من إدخال نوع المورد وحالته بشكل صحيح." : "Ensure the model number and condition are correct." },
         { icon: "photo_camera", title: isAr ? "الصور في الخطوة التالية" : "Photos Next", desc: isAr ? "ستتمكن من رفع ما يصل إلى 5 صور في الخطوة التالية." : "You'll be able to upload up to 5 photos in the next step." },
         { icon: "security", title: isAr ? "مشاركة آمنة" : "Safe Sharing", desc: isAr ? "لن تظهر بيانات الاتصال الخاصة بك إلا بعد قبولك لطلب التبادل." : "Your contact info is only shared after you approve a request." },
     ];
@@ -84,7 +84,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
     };
 
     const selectedCategory = categories.find(c => c.id === form.discipline);
-    const categorySelectorLabel = selectedCategory ? getTranslatedCategoryName(selectedCategory) : (isAr ? "اختر تصنيفاً" : "Select a discipline");
+    const categorySelectorLabel = selectedCategory ? getTranslatedCategoryName(selectedCategory) : (isAr ? "اختر تصنيفًا" : "Select a discipline");
 
     return (
         <div className="bg-background-light min-h-screen pt-28 pb-20">
@@ -193,7 +193,7 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
                             <MdOutlineEditNote className={`absolute bottom-4 ${isAr ? "left-4" : "right-4"} text-neutral-300 text-2xl pointer-events-none`} />
                         </div>
                         <p className="text-xs text-neutral-500">
-                            {isAr ? "كن مبدعاً! الوصف الجيد للمورد يجعل التبادل أكثر متعة." : "Be creative! A good story makes sharing more fun."}
+                            {isAr ? "كن مبدعًا! الوصف الجيد للمورد يجعل التبادل أكثر متعة." : "Be creative! A good story makes sharing more fun."}
                         </p>
                     </div>
 

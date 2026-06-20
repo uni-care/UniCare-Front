@@ -116,7 +116,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                                     {isAr ? "نصيحة للمحترفين" : "Pro Tip"}
                                 </h4>
                                 <p className="text-xs text-amber-800 mt-0.5 leading-relaxed">
-                                    {isAr ? "التقط صوراً في إضاءة جيدة واعرض أي خدوش أو علامات استخدام بوضوح لبناء الثقة مع زملائك." : "Take pictures in natural light and show any signs of wear to build trust with potential requestors."}
+                                    {isAr ? "التقط صورًا في إضاءة جيدة واعرض أي خدوش أو علامات استخدام بوضوح لبناء الثقة مع زملائك." : "Take pictures in natural light and show any signs of wear to build trust with potential requestors."}
                                 </p>
                             </div>
                         </div>
