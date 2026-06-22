@@ -35,6 +35,11 @@ export function proxy(request: NextRequest) {
     });
   }
 
+  // Do not apply locale routing to local API routes (like /api/auth)
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
+
   // 2. Locale Routing
   return intlMiddleware(request);
 }
