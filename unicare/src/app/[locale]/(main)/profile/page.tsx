@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -22,7 +22,7 @@ interface RequestedItemRecord {
 
 type ProfileSection = "borrows" | "loans" | "settings";
 
-export default function ProfilePage() {
+function ProfilePageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -86,7 +86,7 @@ export default function ProfilePage() {
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen bg-neutral-100 px-4 pb-10 pt-36 md:px-8">
+      <div className="min-h-screen bg-neutral-100 px-4 pb-10 pt-28 md:px-8">
         <div className="mx-auto max-w-5xl rounded-3xl border border-neutral-200 bg-white p-8 shadow-sm">
           <p className="text-sm text-neutral-500">Loading profile...</p>
         </div>
@@ -95,7 +95,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-100 px-4 pb-12 pt-36 md:px-8">
+    <div className="min-h-screen bg-neutral-100 px-4 pb-12 pt-28 md:px-8">
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-[220px_1fr]">
         <aside className="sticky top-[80px] lg:top-28 z-30 -mx-4 px-4 py-3 bg-neutral-100/95 backdrop-blur-md border-b border-neutral-200 lg:static lg:z-auto lg:mx-0 lg:px-4 lg:py-4 lg:bg-white lg:border lg:border-neutral-200 lg:rounded-3xl lg:shadow-sm lg:h-fit">
           <p className="hidden lg:block mb-4 px-2 text-sm font-bold uppercase tracking-wide text-neutral-500">Dashboard</p>
@@ -184,5 +184,21 @@ export default function ProfilePage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-neutral-100 px-4 pb-10 pt-28 md:px-8">
+          <div className="mx-auto max-w-5xl rounded-3xl border border-neutral-200 bg-white p-8 shadow-sm">
+            <p className="text-sm text-neutral-500">Loading profile...</p>
+          </div>
+        </div>
+      }
+    >
+      <ProfilePageClient />
+    </Suspense>
   );
 }

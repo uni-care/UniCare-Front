@@ -85,7 +85,7 @@ export default function HandoverPage() {
     };
 
     return (
-        <div className="bg-neutral-50 min-h-screen pt-36 pb-20 px-4 md:px-8">
+        <div className="bg-neutral-50 min-h-screen pt-28 pb-20 px-4 md:px-8">
             <div className="max-w-lg mx-auto flex flex-col gap-8">
                 {/* Back Link */}
                 <Link

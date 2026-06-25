@@ -43,7 +43,7 @@ export default function Navbar() {
 
     return (
         <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
-            <header className="glass-navbar flex items-center justify-between px-6 py-3 lg:px-8 mx-auto max-w-7xl rounded-full shadow-lg shadow-primary/5 border border-primary/10 relative">
+            <header className="glass-navbar flex items-center justify-between px-6 lg:px-8 mx-auto max-w-7xl rounded-full shadow-lg shadow-primary/5 border border-primary/10 relative">
                 <Link href="/" className="flex items-center gap-2.5 group cursor-pointer z-50">
                     <Image
                         src="/Logo.svg"
@@ -106,10 +106,10 @@ export default function Navbar() {
                                         alt={`${user.fullName} profile`}
                                         width={40}
                                         height={40}
-                                        className="h-10 w-10 rounded-full object-cover border border-primary/20"
+                                        className="h-8 w-8 rounded-full object-cover border border-primary/20"
                                     />
                                 ) : (
-                                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
+                                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
                                         {userInitial}
                                     </span>
                                 )}
@@ -143,7 +143,7 @@ export default function Navbar() {
                                         </span>
                                         <MdExpandMore className={cn("text-[18px] text-neutral-400 transition-transform duration-200", isActivityOpen ? "rotate-180" : "")} />
                                     </button>
-                                    
+
                                     {isActivityOpen && (
                                         <div className="mt-1 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
                                             <Link

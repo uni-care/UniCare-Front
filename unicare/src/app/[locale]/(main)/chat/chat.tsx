@@ -171,7 +171,7 @@ export default function ChatPageClient() {
 
   if (!chatId) {
     return (
-      <div className="min-h-screen bg-neutral-100 px-4 pb-10 pt-36 md:px-8">
+      <div className="min-h-screen bg-neutral-100 px-4 pb-10 pt-28 md:px-8">
         <div className="mx-auto max-w-3xl rounded-3xl bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-bold text-neutral-800">
             {isAr ? "لم يتم تحديد أي محادثة" : "No chat selected"}

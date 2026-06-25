@@ -45,7 +45,7 @@ export default function ContributePage() {
     ];
 
     return (
-        <div className="bg-background-light min-h-screen pt-36 pb-20">
+        <div className="bg-background-light min-h-screen pt-28 pb-20">
             <div className="max-w-6xl mx-auto px-4 md:px-8 w-full flex flex-col gap-16">
 
                 {/* Hero Section */}

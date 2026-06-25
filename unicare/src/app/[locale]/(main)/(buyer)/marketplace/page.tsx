@@ -204,7 +204,7 @@ export default function MarketplacePage() {
   }, [filteredItems, visibleCount]);
 
   return (
-    <div className={cn("bg-neutral-50 min-h-screen pt-36 pb-20 px-4 md:px-8", isAr ? "text-right" : "text-left")}>
+    <div className={cn("bg-neutral-50 min-h-screen pt-28 pb-20 px-4 md:px-8", isAr ? "text-right" : "text-left")}>
       <div className="max-w-7xl mx-auto">
         {/* Header Area */}
         <div className="mb-10">
