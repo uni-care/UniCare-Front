@@ -9,7 +9,10 @@
     "about": "About",
     "join": "Join Ecosystem",
     "profile": "Profile",
-    "transactions": "Transactions"
+    "transactions": "Transactions",
+    "myLoans": "My Loans",
+    "myBorrows": "My Borrows",
+    "wishlist": "Wishlist"
   },
   "AuthRequired": {
     "title": "Let's Sign You In!",

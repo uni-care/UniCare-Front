@@ -14,12 +14,18 @@ import {
     MdOutlinePerson,
     MdOutlineReceiptLong,
     MdOutlineLogout,
-    MdOutlineLanguage
+    MdOutlineLanguage,
+    MdCreditCard,
+    MdSell,
+    MdOutlineFavoriteBorder,
+    MdOutlineExplore
 } from "react-icons/md";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [isActivityOpen, setIsActivityOpen] = useState(false);
+    const [isMobileActivityOpen, setIsMobileActivityOpen] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
     const { isAuthenticated, isLoading, user, signOut } = useAuth();
@@ -111,32 +117,88 @@ export default function Navbar() {
                             </button>
 
                             <div
-                                className={`absolute ${isAr ? "left-0" : "right-0"} top-14 w-48 rounded-2xl border border-primary/15 bg-white p-2 shadow-xl transition-all ${isUserMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"}`}
+                                className={`absolute ${isAr ? "left-0" : "right-0"} top-14 w-56 rounded-2xl border border-primary/15 bg-white p-2 shadow-xl transition-all ${isUserMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"}`}
                             >
                                 <Link
                                     href="/profile"
-                                    onClick={() => setIsUserMenuOpen(false)}
+                                    onClick={() => {
+                                        setIsUserMenuOpen(false);
+                                        setIsActivityOpen(false);
+                                    }}
                                     className={cn("flex items-center gap-2 rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10", isAr ? "text-[16px] flex-row-reverse" : "text-sm")}
                                 >
                                     <MdOutlinePerson className="text-[22px]" />
                                     {t("profile")}
                                 </Link>
-                                <Link
-                                    href="/transactions"
-                                    onClick={() => setIsUserMenuOpen(false)}
-                                    className={cn("flex items-center gap-2 rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10", isAr ? "text-[16px] flex-row-reverse" : "text-sm")}
-                                >
-                                    <MdOutlineReceiptLong className="text-[22px]" />
-                                    {t("transactions")}
-                                </Link>
+
+                                <div className="border-t border-neutral-100 my-1 pt-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsActivityOpen((prev) => !prev)}
+                                        className={cn("flex w-full items-center justify-between rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10 cursor-pointer", isAr ? "text-[16px] flex-row-reverse" : "text-sm")}
+                                    >
+                                        <span className={cn("flex items-center gap-2", isAr ? "flex-row-reverse" : "")}>
+                                            <MdOutlineExplore className="text-[22px] text-neutral-500" />
+                                            <span>{isAr ? "نشاطاتي" : "My Activity"}</span>
+                                        </span>
+                                        <MdExpandMore className={cn("text-[18px] text-neutral-400 transition-transform duration-200", isActivityOpen ? "rotate-180" : "")} />
+                                    </button>
+                                    
+                                    {isActivityOpen && (
+                                        <div className="mt-1 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
+                                            <Link
+                                                href="/profile?section=borrows"
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                            >
+                                                <MdCreditCard className="text-[16px] text-neutral-400" />
+                                                {t("myBorrows")}
+                                            </Link>
+                                            <Link
+                                                href="/profile?section=loans"
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                            >
+                                                <MdSell className="text-[16px] text-neutral-400" />
+                                                {t("myLoans")}
+                                            </Link>
+                                            <Link
+                                                href="/wishlist"
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                            >
+                                                <MdOutlineFavoriteBorder className="text-[16px] text-neutral-400" />
+                                                {t("wishlist")}
+                                            </Link>
+                                            <Link
+                                                href="/transactions"
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                            >
+                                                <MdOutlineReceiptLong className="text-[16px] text-neutral-400" />
+                                                {t("transactions")}
+                                            </Link>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <button
                                     type="button"
                                     onClick={async () => {
                                         await signOut();
                                         setIsUserMenuOpen(false);
+                                        setIsActivityOpen(false);
                                         router.push("/login");
                                     }}
-                                    className={cn("flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-2 font-semibold text-red-600 transition-colors hover:bg-red-50", isAr ? "text-[16px] text-right flex-row-reverse" : "text-left text-sm")}
+                                    className={cn("flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-2 font-semibold text-red-600 transition-colors hover:bg-red-50 border-t border-neutral-100 mt-1 pt-2", isAr ? "text-[16px] text-right flex-row-reverse" : "text-left text-sm")}
                                 >
                                     <MdOutlineLogout className="text-[22px]" />
                                     {t("logout")}
@@ -244,19 +306,76 @@ export default function Navbar() {
                                         </span>
                                     )}
                                 </Link>
-                                <Link
-                                    href="/transactions"
-                                    onClick={() => setIsOpen(false)}
-                                    className={cn("flex items-center gap-3 rounded-2xl border border-primary/20 bg-white/70 px-4 py-3 text-neutral-700 font-bold", isAr ? "text-[18px] flex-row-reverse" : "")}
-                                >
-                                    <MdOutlineReceiptLong className="text-primary text-2xl" />
-                                    {t("transactions")}
-                                </Link>
+                                {/* Collapsible Activity Section on Mobile */}
+                                <div className="rounded-2xl border border-primary/20 bg-white/70 overflow-hidden transition-all">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsMobileActivityOpen((prev) => !prev)}
+                                        className={cn("flex w-full items-center justify-between px-4 py-3 font-bold text-neutral-700 cursor-pointer", isAr ? "text-[18px] flex-row-reverse" : "text-sm")}
+                                    >
+                                        <span className={cn("flex items-center gap-3", isAr ? "flex-row-reverse" : "")}>
+                                            <MdOutlineExplore className="text-primary text-2xl" />
+                                            <span>{isAr ? "نشاطاتي" : "My Activity"}</span>
+                                        </span>
+                                        <MdExpandMore className={cn("text-xl text-neutral-500 transition-transform duration-200", isMobileActivityOpen ? "rotate-180" : "")} />
+                                    </button>
+
+                                    {isMobileActivityOpen && (
+                                        <div className="flex flex-col border-t border-primary/10 bg-white/40 p-2 gap-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                                            <Link
+                                                href="/profile?section=borrows"
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    setIsMobileActivityOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                            >
+                                                <MdCreditCard className="text-[18px] text-neutral-400" />
+                                                {t("myBorrows")}
+                                            </Link>
+                                            <Link
+                                                href="/profile?section=loans"
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    setIsMobileActivityOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                            >
+                                                <MdSell className="text-[18px] text-neutral-400" />
+                                                {t("myLoans")}
+                                            </Link>
+                                            <Link
+                                                href="/wishlist"
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    setIsMobileActivityOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                            >
+                                                <MdOutlineFavoriteBorder className="text-[18px] text-neutral-400" />
+                                                {t("wishlist")}
+                                            </Link>
+                                            <Link
+                                                href="/transactions"
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    setIsMobileActivityOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                            >
+                                                <MdOutlineReceiptLong className="text-[18px] text-neutral-400" />
+                                                {t("transactions")}
+                                            </Link>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <button
                                     type="button"
                                     onClick={async () => {
                                         await signOut();
                                         setIsOpen(false);
+                                        setIsMobileActivityOpen(false);
                                         router.push("/login");
                                     }}
                                     className={cn("flex w-full items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 py-3 font-bold text-red-600 transition-colors hover:bg-red-100", isAr ? "text-[18px] flex-row-reverse" : "text-sm")}

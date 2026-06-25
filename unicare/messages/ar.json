@@ -9,7 +9,10 @@
     "about": "عنّا",
     "join": "انضم للمجتمع",
     "profile": "الملف الشخصي",
-    "transactions": "المعاملات"
+    "transactions": "المعاملات",
+    "myLoans": "إعاراتي",
+    "myBorrows": "طلباتي",
+    "wishlist": "المفضلة"
   },
   "AuthRequired": {
     "title": "دعنا نسجل دخولك!",
