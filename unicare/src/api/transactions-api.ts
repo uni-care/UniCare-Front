@@ -9,7 +9,7 @@ import type {
   VerifyCodeResponse,
 } from "@/types/transactions";
 
-const BASE = "/api/transactions";
+const BASE = "/api/v1/transactions";
 
 export const transactionsApi = {
   /** POST /api/transactions — create a new transaction */
@@ -73,16 +73,16 @@ export const transactionsApi = {
     return data;
   },
 
-  /** GET /api/transactions/{transactionId}/handover/status */
+  /** GET /api/v1/handover/status */
   getHandoverStatus: async (
     transactionId: string,
     type: number,
     token: string,
   ): Promise<HandoverStatus> => {
     const { data } = await axiosInstance.get<HandoverStatus>(
-      `${BASE}/${transactionId}/handover/status`,
+      `/api/v1/handover/status`,
       {
-        params: { type },
+        params: { transactionId, type },
         headers: { Authorization: `Bearer ${token}` },
       },
     );

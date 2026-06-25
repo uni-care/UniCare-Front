@@ -8,8 +8,8 @@ import type {
 } from "@/types/chat";
 
 const CHAT_ENDPOINTS = {
-  root: "/api/chats",
-  forTransaction: "/api/chats/for-transaction",
+  root: "/api/v1/chats",
+  forTransaction: "/api/v1/chats/for-transaction",
 } as const;
 
 const GUID_REGEX =

@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/hooks/useAuth";
 import { DUMMY_ITEMS } from "@/app/[locale]/(main)/(buyer)/marketplace/data";
+import BorrowsSection from "@/components/profile/BorrowsSection";
+import LoansSection from "@/components/profile/LoansSection";
+import { MdCreditCard, MdSell, MdStorefront, MdSettings } from "react-icons/md";
 
 const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";
 
@@ -93,7 +96,7 @@ export default function ProfilePage() {
               onClick={() => setActiveSection("borrows")}
               className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold cursor-pointer ${activeSection === "borrows" ? "bg-primary/10 font-bold text-primary" : "text-neutral-600 hover:bg-neutral-100"}`}
             >
-              <span className="material-symbols-outlined text-[18px]">credit_card</span>
+              <MdCreditCard className="text-[18px]" />
               My Borrows
             </button>
             <button
@@ -101,11 +104,11 @@ export default function ProfilePage() {
               onClick={() => setActiveSection("loans")}
               className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold cursor-pointer ${activeSection === "loans" ? "bg-primary/10 font-bold text-primary" : "text-neutral-600 hover:bg-neutral-100"}`}
             >
-              <span className="material-symbols-outlined text-[18px]">sell</span>
+              <MdSell className="text-[18px]" />
               My Loans
             </button>
             <Link href="/marketplace" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-neutral-600 hover:bg-neutral-100">
-              <span className="material-symbols-outlined text-[18px]">storefront</span>
+              <MdStorefront className="text-[18px]" />
               Marketplace
             </Link>
             <button
@@ -113,7 +116,7 @@ export default function ProfilePage() {
               onClick={() => setActiveSection("settings")}
               className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold cursor-pointer ${activeSection === "settings" ? "bg-primary/10 font-bold text-primary" : "text-neutral-600 hover:bg-neutral-100"}`}
             >
-              <span className="material-symbols-outlined text-[18px]">settings</span>
+              <MdSettings className="text-[18px]" />
               Settings
             </button>
           </nav>
@@ -141,48 +144,9 @@ export default function ProfilePage() {
 
           <section>
             {activeSection === "borrows" ? (
-              <>
-                <h2 className="text-xl font-bold text-neutral-900">Requested Products</h2>
-                <p className="mt-1 text-sm text-neutral-500">Open chat directly with owners for your requests.</p>
-
-                {requestedItemsWithImage.length === 0 ? (
-                  <div className="mt-5 rounded-2xl border border-dashed border-neutral-300 p-8 text-center text-sm text-neutral-500">
-                    You haven&apos;t requested any products yet.
-                  </div>
-                ) : (
-                  <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {requestedItemsWithImage.map((item) => (
-                      <div key={item.transactionId} className="flex items-center gap-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-                        <div className="relative h-20 w-20 overflow-hidden rounded-xl bg-neutral-50 border border-neutral-200 flex items-center justify-center shrink-0">
-                          {item.image ? (
-                            <Image src={item.image} alt={item.itemTitle} fill className="object-cover" />
-                          ) : (
-                            <span className="material-symbols-outlined text-neutral-400 text-2xl">image</span>
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-bold text-neutral-800">{item.itemTitle}</p>
-                          <p className="text-xs text-neutral-500">
-                            Requested {new Date(item.requestedAt).toLocaleDateString()}
-                          </p>
-                          <Link
-                            href={`/chat?chatId=${item.chatId}&itemTitle=${encodeURIComponent(item.itemTitle)}`}
-                            className="mt-2 inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-white"
-                          >
-                            Open Chat
-                            <span className="material-symbols-outlined text-[14px]">chat</span>
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
+              <BorrowsSection items={requestedItemsWithImage} />
             ) : activeSection === "loans" ? (
-              <>
-                <h2 className="text-xl font-bold text-neutral-900">My Loans</h2>
-                <p className="mt-1 text-sm text-neutral-500">There are no items in your loans yet.</p>
-              </>
+              <LoansSection userId={user.id} isActive={activeSection === "loans"} />
             ) : (
               <>
                 <h2 className="text-xl font-bold text-neutral-900">Settings</h2>

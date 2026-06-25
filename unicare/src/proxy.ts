@@ -11,9 +11,6 @@ export function proxy(request: NextRequest) {
   // 1. Backend API Proxy (Authorization injection)
   if (
     pathname.startsWith("/api/v1") ||
-    pathname.startsWith("/api/Categories") ||
-    pathname.startsWith("/api/transactions") ||
-    pathname.startsWith("/api/chats") ||
     pathname.startsWith("/hubs/chat")
   ) {
     const token = request.cookies.get("auth_token")?.value;
