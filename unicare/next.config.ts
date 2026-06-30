@@ -29,38 +29,6 @@ const nextConfig: NextConfig = {
         source: "/api/v1/:path*",
         destination: `${API_URL}/api/v1/:path*`,
       },
-      {
-        source: "/api/Categories",
-        destination: `${API_URL}/api/Categories`,
-      },
-      {
-        source: "/api/Categories/:path*",
-        destination: `${API_URL}/api/Categories/:path*`,
-      },
-      {
-        source: "/api/transactions",
-        destination: `${API_URL}/api/transactions`,
-      },
-      {
-        source: "/api/transactions/:path*",
-        destination: `${API_URL}/api/transactions/:path*`,
-      },
-      {
-        source: "/api/chats",
-        destination: `${API_URL}/api/chats`,
-      },
-      {
-        source: "/api/chats/:path*",
-        destination: `${API_URL}/api/chats/:path*`,
-      },
-      {
-        source: "/hubs/chat",
-        destination: `${API_URL}/hubs/chat`,
-      },
-      {
-        source: "/hubs/chat/:path*",
-        destination: `${API_URL}/hubs/chat/:path*`,
-      },
     ];
   },
 };

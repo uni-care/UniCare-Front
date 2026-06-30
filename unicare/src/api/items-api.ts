@@ -68,16 +68,15 @@ export const itemsApi = {
     const formData = new FormData();
     formData.append("file", file);
 
-    const { data } = await axiosInstance.post<{ url: string; publicId: string }>(
-      `${BASE}/${itemId}/images`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axiosInstance.post<{
+      url: string;
+      publicId: string;
+    }>(`${BASE}/${itemId}/images`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return data;
   },
 };

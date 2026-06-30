@@ -9,17 +9,15 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Backend API Proxy (Authorization injection)
-  if (
-    pathname.startsWith("/api/v1") ||
-    pathname.startsWith("/hubs/chat")
-  ) {
+  if (pathname.startsWith("/api/v1") || pathname.startsWith("/hubs/chat")) {
     const token = request.cookies.get("auth_token")?.value;
     const requestHeaders = new Headers(request.headers);
     if (token) {
       requestHeaders.set("Authorization", `Bearer ${token}`);
     }
 
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5111";
+    const backendUrl =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:5111";
     const url = new URL(
       request.nextUrl.pathname + request.nextUrl.search,
       backendUrl,
@@ -33,7 +31,7 @@ export function proxy(request: NextRequest) {
   }
 
   // Do not apply locale routing to local API routes (like /api/auth)
-  if (pathname.startsWith("/api/")) {
+  if (pathname.startsWith("/api/v1/")) {
     return NextResponse.next();
   }
 
