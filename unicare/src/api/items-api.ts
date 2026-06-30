@@ -11,8 +11,16 @@ const BASE = "/api/v1/Items";
 export const itemsApi = {
   /** GET /api/v1/Items — list all items */
   getAll: async (): Promise<ItemResponse[]> => {
-    const { data } = await axiosInstance.get<ItemResponse[]>(BASE);
-    return data;
+    const { data } = await axiosInstance.get<{
+      items: ItemResponse[];
+      pageNumber: number;
+      pageSize: number;
+      totalCount: number;
+      totalPages: number;
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+    }>(BASE);
+    return data.items;
   },
 
   /** GET /api/v1/Items/:itemId — single item */
