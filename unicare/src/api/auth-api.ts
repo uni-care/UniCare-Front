@@ -7,9 +7,9 @@ import type {
 } from "@/types/auth";
 
 export const AUTH_ENDPOINTS = {
-  register: "/api/v1/auth/register",
-  login: "/api/v1/auth/login",
-  logout: "/api/v1/auth/logout",
+  register: "/api/auth/register",
+  login: "/api/auth/login",
+  logout: "/api/auth/logout",
   profile: "/api/v1/profile/me",
 } as const;
 

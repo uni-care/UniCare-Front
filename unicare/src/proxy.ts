@@ -5,7 +5,7 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
-export function proxy(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Backend API Proxy (Authorization injection)
@@ -15,13 +15,15 @@ export function proxy(request: NextRequest) {
     if (token) {
       requestHeaders.set("Authorization", `Bearer ${token}`);
     }
-
     const backendUrl =
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:5111";
+      (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5111").trim();
     const url = new URL(
       request.nextUrl.pathname + request.nextUrl.search,
       backendUrl,
     );
+    requestHeaders.set("host", url.host);
+
+    console.log(`[Proxy] Path: ${pathname} | Token: ${token ? "Found" : "Missing"} | Target: ${url.toString()}`);
 
     return NextResponse.rewrite(url, {
       request: {

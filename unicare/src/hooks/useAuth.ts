@@ -6,22 +6,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/api/auth-api";
 import type { UserProfile } from "@/types/auth";
 
+import { getAuthToken, setAuthToken, clearAuthToken } from "@/api/token-store";
+
+export { getAuthToken, setAuthToken, clearAuthToken };
 export const AUTH_ME_QUERY_KEY = ["auth", "me"] as const;
-
-// In-memory token storage (XSS-resistant, does not persist in localStorage)
-let inMemoryToken: string | null = null;
-
-export const getAuthToken = () => {
-  return inMemoryToken;
-};
-
-export const setAuthToken = (token: string | null) => {
-  inMemoryToken = token;
-};
-
-export const clearAuthToken = () => {
-  inMemoryToken = null;
-};
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -34,21 +22,25 @@ export const useAuth = () => {
     queryKey: AUTH_ME_QUERY_KEY,
     queryFn: async () => {
       try {
-        // Fetch the user profile (cookie is automatically sent via the Next.js proxy)
-        const profile = await authApi.getCurrentProfile();
-
-        // Restore token in-memory for SignalR / client-side calls
-        try {
-          const res = await fetch("/api/auth/token");
-          if (res.ok) {
-            const tokenData = await res.json();
-            if (tokenData.token) {
-              setAuthToken(tokenData.token);
+        // 1. Restore token in-memory first so subsequent API calls include the Authorization header
+        let token = getAuthToken();
+        if (!token) {
+          try {
+            const res = await fetch("/api/auth/token");
+            if (res.ok) {
+              const tokenData = await res.json();
+              if (tokenData.token) {
+                token = tokenData.token;
+                setAuthToken(token);
+              }
             }
+          } catch (tokenErr) {
+            console.error("Failed to restore token in-memory:", tokenErr);
           }
-        } catch (tokenErr) {
-          console.error("Failed to restore token in-memory:", tokenErr);
         }
+
+        // 2. Fetch the user profile (Authorization header will be attached by Axios interceptor)
+        const profile = await authApi.getCurrentProfile();
 
         return profile;
       } catch {

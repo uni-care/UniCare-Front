@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { authApi } from "@/api/auth-api";
 import { registerSchema, type RegisterInput } from "@/types/auth-schemas";
 import { RegistrationMethod } from "@/types/auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
 

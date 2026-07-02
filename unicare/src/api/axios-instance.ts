@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuthToken } from "./token-store";
 
 const baseURL = "/";
 
@@ -8,6 +9,19 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = getAuthToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 axiosInstance.interceptors.response.use(
   (response) => response,

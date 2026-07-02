@@ -5,7 +5,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm, useWatch } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 
 import { authApi } from "@/api/auth-api";
