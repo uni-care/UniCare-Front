@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
@@ -19,7 +19,9 @@ import {
   MdOutlineTune,
   MdOutlineFileUpload,
   MdArrowForward,
-  MdOutlineInbox
+  MdOutlineInbox,
+  MdChevronLeft,
+  MdChevronRight
 } from "react-icons/md";
 
 const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
@@ -33,13 +35,14 @@ interface RequestedItemRecord {
 }
 
 export default function MarketplacePage() {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState<string>("All");
-  const [showFilters, setShowFilters] = useState(false);
   const [activeType, setActiveType] = useState<"All" | "LEND" | "SALE">("All");
-  const [activeStatus, setActiveStatus] = useState<string>("All");
-  const [activePrice, setActivePrice] = useState<"All" | "Free" | "Paid">("All");
+  const [showFilters, setShowFilters] = useState(false);
+  const [activePrice, setActivePrice] = useState<"All" | "Free">("All");
+  const [activeStatus, setActiveStatus] = useState<"All" | "Available">("All");
   const [selectedItem, setSelectedItem] = useState<MarketplaceItem | null>(null);
   const [requestedTransactionIds, setRequestedTransactionIds] = useState<string[]>([]);
   const [isRequestedStateHydrated, setIsRequestedStateHydrated] = useState(false);
@@ -52,6 +55,18 @@ export default function MarketplacePage() {
   const tCat = useTranslations("Categories");
   const locale = useLocale();
   const isAr = locale === "ar";
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 240;
+      const multiplier = isAr ? -1 : 1;
+      const offset = direction === "left" ? -scrollAmount : scrollAmount;
+      scrollRef.current.scrollBy({
+        left: offset * multiplier,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const handleFavoriteToggle = async (itemId: string) => {
     const token = getAuthToken();
@@ -82,7 +97,7 @@ export default function MarketplacePage() {
 
   useEffect(() => {
     setVisibleCount(12);
-  }, [searchQuery, activeCategoryId, activeType, activeStatus, activePrice]);
+  }, [searchQuery, activeCategoryId, activeType, activePrice, activeStatus]);
 
   useEffect(() => {
     let cancelled = false;
@@ -164,7 +179,6 @@ export default function MarketplacePage() {
 
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    // console.log("Marketplace - Filtering items with activeCategoryId:", activeCategoryId);
 
     return items.filter((item) => {
       const matchesCategory =
@@ -178,26 +192,25 @@ export default function MarketplacePage() {
 
       const matchesType = activeType === "All" || item.type === activeType;
 
-      const matchesStatus =
-        activeStatus === "All" || item.status?.toLowerCase() === activeStatus.toLowerCase();
-
+      // Price filter: "All" or "Free"
       const isFree = item.price === "Free" || item.price === 0 || item.price === 0.01;
-      const matchesPrice =
-        activePrice === "All"
-          ? true
-          : activePrice === "Free"
-            ? isFree
-            : !isFree;
+      const matchesPrice = activePrice === "All" ? true : isFree;
+
+      // Status filter: "All" or "Available"
+      // Draft and Archived items should NEVER be shown in the marketplace
+      const matchesStatus = item.status !== "Draft" && item.status !== "Archived" && (
+        activeStatus === "All" ? true : item.status === "Available"
+      );
 
       return (
         matchesCategory &&
         matchesQuery &&
         matchesType &&
-        matchesStatus &&
-        matchesPrice
+        matchesPrice &&
+        matchesStatus
       );
     });
-  }, [activeCategoryId, activePrice, activeStatus, activeType, searchQuery, items]);
+  }, [activeCategoryId, activeType, activePrice, activeStatus, searchQuery, items]);
 
   const slicedItems = useMemo(() => {
     return filteredItems.slice(0, visibleCount);
@@ -281,7 +294,7 @@ export default function MarketplacePage() {
               <div className="flex flex-col gap-2.5">
                 <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">{t("price")}</span>
                 <div className="flex h-11 p-1 bg-neutral-100/80 rounded-xl border border-neutral-200/50">
-                  {(["All", "Free", "Paid"] as const).map((priceOption) => (
+                  {(["All", "Free"] as const).map((priceOption) => (
                     <button
                       key={priceOption}
                       type="button"
@@ -291,7 +304,7 @@ export default function MarketplacePage() {
                         : "text-neutral-500 hover:text-neutral-800"
                         }`}
                     >
-                      {priceOption === "All" ? t("all") : priceOption === "Free" ? t("free") : t("paid")}
+                      {priceOption === "All" ? t("all") : t("free")}
                     </button>
                   ))}
                 </div>
@@ -300,18 +313,18 @@ export default function MarketplacePage() {
               {/* Availability Filter */}
               <div className="flex flex-col gap-2.5">
                 <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">{t("availability")}</span>
-                <div className="flex flex-wrap gap-1.5 min-h-11 items-center">
-                  {["All", "Available", "Draft", "Rented", "Unavailable"].map((statusOption) => (
+                <div className="flex h-11 p-1 bg-neutral-100/80 rounded-xl border border-neutral-200/50">
+                  {(["All", "Available"] as const).map((statusOption) => (
                     <button
                       key={statusOption}
                       type="button"
                       onClick={() => setActiveStatus(statusOption)}
-                      className={`px-3 py-2 rounded-lg text-xs font-bold border transition-all duration-200 cursor-pointer ${activeStatus === statusOption
-                        ? "bg-primary border-primary text-white shadow-xs"
-                        : "bg-white border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-800"
+                      className={`flex-1 h-full rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${activeStatus === statusOption
+                        ? "bg-white text-primary shadow-xs"
+                        : "text-neutral-500 hover:text-neutral-800"
                         }`}
                     >
-                      {statusOption === "All" ? t("all") : statusOption === "Available" ? t("available") : statusOption === "Draft" ? t("draft") : statusOption === "Rented" ? t("rented") : t("unavailable")}
+                      {statusOption === "All" ? t("all") : t("available")}
                     </button>
                   ))}
                 </div>
@@ -320,31 +333,63 @@ export default function MarketplacePage() {
           </div>
         )}
 
-        {/* Categories Bar */}
-        <div className={cn("flex items-center gap-3 overflow-x-auto pb-4 mb-10 no-scrollbar", isAr ? "flex-row-reverse" : "")}>
+
+        {/* Categories Bar Wrapper */}
+        <div className="relative flex items-center mb-10 group/scroll w-full">
+          {/* Left Fade & Button */}
+          <div className="absolute left-0 top-0 bottom-4 w-16 bg-gradient-to-r from-neutral-50 to-transparent pointer-events-none z-10 hidden md:block opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-300" />
           <button
             type="button"
-            onClick={() => setActiveCategoryId("All")}
-            className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeCategoryId === "All"
-              ? "bg-primary text-white shadow-lg shadow-primary/20"
-              : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
-              }`}
+            onClick={() => scroll("left")}
+            className="absolute left-2 z-20 flex items-center justify-center size-9 rounded-full border border-neutral-200/80 bg-white/95 text-neutral-600 shadow-md hover:bg-neutral-50 transition-all hover:scale-105 active:scale-95 opacity-0 group-hover/scroll:opacity-100 cursor-pointer hidden md:flex duration-300"
+            aria-label="Scroll left"
           >
-            {t("allCategories")}
+            <MdChevronLeft className="text-xl" />
           </button>
-          {categories.map((cat) => (
+
+          {/* Categories Container */}
+          <div
+            ref={scrollRef}
+            className={cn(
+              "flex items-center gap-3 overflow-x-auto pb-4 w-full no-scrollbar scroll-smooth",
+              isAr ? "flex-row-reverse" : ""
+            )}
+          >
             <button
-              key={cat.id}
               type="button"
-              onClick={() => setActiveCategoryId(cat.id)}
-              className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeCategoryId === cat.id
+              onClick={() => setActiveCategoryId("All")}
+              className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeCategoryId === "All"
                 ? "bg-primary text-white shadow-lg shadow-primary/20"
                 : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
                 }`}
             >
-              {tCat.has(cat.name) ? tCat(cat.name) : cat.name}
+              {t("allCategories")}
             </button>
-          ))}
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setActiveCategoryId(cat.id)}
+                className={`whitespace-nowrap px-6 py-2.5 rounded-full font-bold text-sm transition-all cursor-pointer ${activeCategoryId === cat.id
+                  ? "bg-primary text-white shadow-lg shadow-primary/20"
+                  : "bg-white text-neutral-600 border border-neutral-200 hover:border-primary/40"
+                  }`}
+              >
+                {tCat.has(cat.name) ? tCat(cat.name) : cat.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Right Fade & Button */}
+          <div className="absolute right-0 top-0 bottom-4 w-16 bg-gradient-to-l from-neutral-50 to-transparent pointer-events-none z-10 hidden md:block opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-300" />
+          <button
+            type="button"
+            onClick={() => scroll("right")}
+            className="absolute right-2 z-20 flex items-center justify-center size-9 rounded-full border border-neutral-200/80 bg-white/95 text-neutral-600 shadow-md hover:bg-neutral-50 transition-all hover:scale-105 active:scale-95 opacity-0 group-hover/scroll:opacity-100 cursor-pointer hidden md:flex duration-300"
+            aria-label="Scroll right"
+          >
+            <MdChevronRight className="text-xl" />
+          </button>
         </div>
 
         {/* Items Grid */}

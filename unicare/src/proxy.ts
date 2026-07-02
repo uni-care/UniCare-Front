@@ -31,7 +31,7 @@ export function proxy(request: NextRequest) {
   }
 
   // Do not apply locale routing to local API routes (like /api/auth)
-  if (pathname.startsWith("/api/v1/")) {
+  if (pathname.startsWith("/api/")) {
     return NextResponse.next();
   }
 

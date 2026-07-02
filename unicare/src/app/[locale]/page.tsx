@@ -87,6 +87,7 @@ export default function Page() {
                   className="w-full h-full object-cover grayscale-20 group-hover:scale-110 transition-transform duration-700"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpIkpKbh7d1et9JsXU_OHwKrOjuqrSLDUpsDpxk1HCsOHYvubsHTchUdd3KYHV7KTo6QDqU8kt2e67a9KvCQFzNi4xbzmOQLCeS0UTpdbkhmZ9gCXrCvmYVY0f40E9cudqsE5IAzkfYppK0L_RWXEFPbKly_Opy9F5h6cbgbFaTB-k7reTei3SSCf0H04y6ygoh0uKGhdKUBkp7PPywRE2pdDh7GYLbvUS9lBnp7pJc39fQhDxNbaU5WhtTmsrGMxLdUveVqd_chmM"
                   sizes="(max-width: 768px) 100vw, 500px"
+                  priority
                 />
                 <div className="absolute inset-0 bg-linear-to-tr from-primary/40 to-transparent"></div>
               </div>

@@ -107,6 +107,7 @@ export default function Navbar() {
                                         width={40}
                                         height={40}
                                         className="h-8 w-8 rounded-full object-cover border border-primary/20"
+                                        priority
                                     />
                                 ) : (
                                     <span className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
@@ -299,6 +300,7 @@ export default function Navbar() {
                                             width={40}
                                             height={40}
                                             className="h-10 w-10 rounded-full object-cover border border-primary/20"
+                                            priority
                                         />
                                     ) : (
                                         <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
