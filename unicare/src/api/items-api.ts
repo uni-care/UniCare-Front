@@ -1,16 +1,16 @@
-import { axiosInstance } from "./axios-instance";
+import { axiosInstance } from './axios-instance';
 import type {
   ItemResponse,
   CreateItemPayload,
   UpdateItemPayload,
   FavoriteResponse,
-} from "@/types/items";
+} from '@/types/items';
 
-const BASE = "/api/v1/Items";
+const BASE = '/api/v1/Items';
 
 export const itemsApi = {
   /** GET /api/v1/Items — list all items */
-  getAll: async (): Promise<ItemResponse[]> => {
+  getAll: async (token?: string): Promise<ItemResponse[]> => {
     const { data } = await axiosInstance.get<{
       items: ItemResponse[];
       pageNumber: number;
@@ -19,13 +19,20 @@ export const itemsApi = {
       totalPages: number;
       hasPreviousPage: boolean;
       hasNextPage: boolean;
-    }>(BASE);
+    }>(BASE, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
     return data.items;
   },
 
   /** GET /api/v1/Items/:itemId — single item */
-  getById: async (itemId: string): Promise<ItemResponse> => {
-    const { data } = await axiosInstance.get<ItemResponse>(`${BASE}/${itemId}`);
+  getById: async (itemId: string, token?: string): Promise<ItemResponse> => {
+    const { data } = await axiosInstance.get<ItemResponse>(
+      `${BASE}/${itemId}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      },
+    );
     return data;
   },
 
@@ -74,14 +81,14 @@ export const itemsApi = {
     token: string,
   ): Promise<{ url: string; publicId: string }> => {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
     const { data } = await axiosInstance.post<{
       url: string;
       publicId: string;
     }>(`${BASE}/${itemId}/images`, formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     });
