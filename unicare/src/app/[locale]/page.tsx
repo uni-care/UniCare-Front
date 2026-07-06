@@ -92,10 +92,7 @@ export default function Page() {
                 <div className="absolute inset-0 bg-linear-to-tr from-primary/40 to-transparent"></div>
               </div>
 
-              <div className={`absolute -bottom-8 md:bottom-10 ${isAr ? "right-0 md:-right-4 text-right" : "left-0 md:-left-4 text-left"} p-6 max-w-60 z-20 animate-[pulse_4s_ease-in-out_infinite] hover:-translate-y-2 transition-transform duration-500`}>
-                {/* Glass Background Sibling Layer */}
-                <div className="absolute inset-0 bg-white/30 backdrop-blur-xl border border-primary/10 rounded-3xl shadow-2xl -z-10" />
-
+              <div className={`absolute -bottom-8 md:bottom-10 ${isAr ? "right-0 md:-right-4 text-right" : "left-0 md:-left-4 text-left"} glass-card p-6 rounded-3xl border border-white/40 shadow-2xl max-w-60 z-20 animate-[pulse_4s_ease-in-out_infinite] hover:-translate-y-2 transition-transform duration-500`}>
                 <p className={`flex items-center gap-2 font-semibold uppercase tracking-widest text-[#2d4339] mb-2 ${isAr ? "flex-row-reverse" : ""}`}>
                   <span className="size-2 rounded-full bg-[#2d4339] animate-pulse"></span>
                   {isAr ? "تأثير مجتمعي" : "Community Driven"}
