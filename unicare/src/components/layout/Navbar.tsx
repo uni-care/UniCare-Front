@@ -168,6 +168,16 @@ export default function Navbar() {
                                                 {t("myLoans")}
                                             </Link>
                                             <Link
+                                                href="/my-items"
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                            >
+                                                <MdOutlineStorefront className="text-[16px] text-neutral-400" />
+                                                {t("myItems")}
+                                            </Link>
+                                            <Link
                                                 href="/wishlist"
                                                 onClick={() => {
                                                     setIsUserMenuOpen(false);
@@ -345,6 +355,17 @@ export default function Navbar() {
                                             >
                                                 <MdSell className="text-[18px] text-neutral-400" />
                                                 {t("myLoans")}
+                                            </Link>
+                                            <Link
+                                                href="/my-items"
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    setIsMobileActivityOpen(false);
+                                                }}
+                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                            >
+                                                <MdOutlineStorefront className="text-[18px] text-neutral-400" />
+                                                {t("myItems")}
                                             </Link>
                                             <Link
                                                 href="/wishlist"

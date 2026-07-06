@@ -5,6 +5,7 @@ export interface ItemResponse {
   description: string;
   price: number;
   currency: string;
+  itemType: number; // 1 = ForSale, 2 = ForRent
   status: string;
   ownerId: string;
   ownerName: string;
@@ -33,8 +34,18 @@ export interface CreateItemPayload {
   imageUrls?: string[];
 }
 
-export interface UpdateItemPayload extends CreateItemPayload {
+export interface UpdateItemPayload {
+  title?: string;
+  description?: string;
+  price?: number;
+  itemType?: number;
+  currency?: string;
+  categoryId?: string;
   status?: string;
+  availableFrom?: string;
+  availableTo?: string;
+  location?: string;
+  imageUrls?: string[];
 }
 
 /* ─── Favorite toggle response ─── */

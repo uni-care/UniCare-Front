@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import {
     MdOutlineImage,
     MdOutlineSchedule,
@@ -10,7 +11,9 @@ import {
     MdFavoriteBorder,
     MdExpandMore,
     MdOutlineCalendarToday,
-    MdSend
+    MdSend,
+    MdMoreVert,
+    MdEdit
 } from "react-icons/md";
 
 interface ItemCardProps {
@@ -35,6 +38,7 @@ interface ItemCardProps {
     availableFrom?: string;
     availableTo?: string;
     description?: string;
+    ownerId?: string;
 }
 
 export default function ItemCard({
@@ -55,12 +59,16 @@ export default function ItemCard({
     availableFrom,
     availableTo,
     description,
+    ownerId,
 }: ItemCardProps) {
     const router = useRouter();
     const locale = useLocale();
     const isAr = locale === "ar";
     const tCat = useTranslations("Categories");
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const { user: currentUser } = useAuth();
+    const isOwner = currentUser?.id === ownerId;
     const isValidImage = typeof image === "string" && (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/"));
     const isFree = price === 0 || price === "Free" || price === 0.01 || price === "0.01";
     const hasAvailableFrom = typeof availableFrom === "string" && availableFrom.trim().length > 0;
@@ -137,22 +145,63 @@ export default function ItemCard({
                     {type === "LEND" ? (isAr ? "إعارة" : "LEND") : (isAr ? "بيع" : "SALE")}
                 </div>
 
-                {/* Favorite Button */}
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onFavoriteClick?.(id);
-                    }}
-                    className={`absolute top-3 ${isAr ? "left-3" : "right-3"} size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center transition-all shadow-sm cursor-pointer ${isFavorited ? "text-rose-500" : "text-neutral-500 hover:text-rose-500"
-                        }`}
-                >
-                    {isFavorited ? (
-                        <MdFavorite className="text-xl text-rose-500" />
-                    ) : (
-                        <MdFavoriteBorder className="text-xl" />
-                    )}
-                </button>
+                {/* Favorite Button / Owner Actions Dropdown */}
+                {isOwner ? (
+                    <div className={`absolute top-3 ${isAr ? "left-3" : "right-3"}`}>
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsDropdownOpen((prev) => !prev);
+                            }}
+                            className="size-10 rounded-full bg-white/85 backdrop-blur-md border border-white/45 flex items-center justify-center transition-all shadow-sm cursor-pointer text-neutral-600 hover:text-primary hover:bg-white active:scale-95 animate-in fade-in zoom-in-95 duration-200"
+                            title={isAr ? "خيارات المورد" : "Item Options"}
+                        >
+                            <MdMoreVert className="text-xl" />
+                        </button>
+                        {isDropdownOpen && (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-40"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsDropdownOpen(false);
+                                    }}
+                                />
+                                <div className={`absolute ${isAr ? "left-0" : "right-0"} mt-2 z-50 w-32 rounded-2xl border border-neutral-100 bg-white/95 backdrop-blur-lg p-1.5 shadow-xl animate-in fade-in slide-in-from-top-2 duration-150`}>
+                                    <button
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsDropdownOpen(false);
+                                            router.push(`/my-items/${id}/edit`);
+                                        }}
+                                        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-neutral-700 hover:bg-primary/10 hover:text-primary transition-all cursor-pointer ${isAr ? "flex-row-reverse text-right" : "text-left"}`}
+                                    >
+                                        <MdEdit className="text-sm shrink-0" />
+                                        <span>{isAr ? "تعديل" : "Edit"}</span>
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onFavoriteClick?.(id);
+                        }}
+                        className={`absolute top-3 ${isAr ? "left-3" : "right-3"} size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center transition-all shadow-sm cursor-pointer ${isFavorited ? "text-rose-500" : "text-neutral-500 hover:text-rose-500"
+                            }`}
+                    >
+                        {isFavorited ? (
+                            <MdFavorite className="text-xl text-rose-500" />
+                        ) : (
+                            <MdFavoriteBorder className="text-xl" />
+                        )}
+                    </button>
+                )}
             </div>
 
             {/* Content */}
@@ -226,22 +275,36 @@ export default function ItemCard({
                     </div>
                 </div>
 
-                {/* Request Button */}
-                <button
-                    type="button"
-                    disabled={isRequested}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onRequestClick?.(id);
-                    }}
-                    className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 ${isRequested
-                        ? "bg-amber-100 text-amber-700 cursor-not-allowed"
-                        : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
-                        } ${isAr ? "flex-row-reverse" : ""}`}
-                >
-                    <MdSend className="text-lg" />
-                    {isRequested ? (isAr ? "تم الطلب" : "Requested") : (isAr ? "طلب الأدوات" : "Request Item")}
-                </button>
+                {/* Request Button / Edit Button */}
+                {isOwner ? (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/my-items/${id}/edit`);
+                        }}
+                        className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 bg-primary text-white hover:bg-primary/95 shadow-md shadow-primary/10 hover:shadow-lg cursor-pointer ${isAr ? "flex-row-reverse" : ""}`}
+                    >
+                        <MdEdit className="text-lg" />
+                        <span>{isAr ? "تعديل المورد" : "Edit Item"}</span>
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        disabled={isRequested}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onRequestClick?.(id);
+                        }}
+                        className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 ${isRequested
+                            ? "bg-amber-100 text-amber-700 cursor-not-allowed"
+                            : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
+                            } ${isAr ? "flex-row-reverse" : ""}`}
+                    >
+                        <MdSend className="text-lg" />
+                        {isRequested ? (isAr ? "تم الطلب" : "Requested") : (isAr ? "طلب الأدوات" : "Request Item")}
+                    </button>
+                )}
             </div>
         </div>
     );

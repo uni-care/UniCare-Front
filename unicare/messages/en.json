@@ -12,7 +12,8 @@
     "transactions": "Transactions",
     "myLoans": "My Loans",
     "myBorrows": "My Borrows",
-    "wishlist": "Wishlist"
+    "wishlist": "Wishlist",
+    "myItems": "My Items"
   },
   "AuthRequired": {
     "title": "Let's Sign You In!",

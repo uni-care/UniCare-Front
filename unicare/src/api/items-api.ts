@@ -61,6 +61,20 @@ export const itemsApi = {
     return data;
   },
 
+  /** PATCH /api/v1/Items/:itemId — partially update an existing item */
+  patch: async (
+    itemId: string,
+    payload: UpdateItemPayload,
+    token: string,
+  ): Promise<ItemResponse> => {
+    const { data } = await axiosInstance.patch<ItemResponse>(
+      `${BASE}/${itemId}`,
+      payload,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    return data;
+  },
+
   /** POST /api/v1/Items/:itemId/favorite — toggle favorite */
   toggleFavorite: async (
     itemId: string,

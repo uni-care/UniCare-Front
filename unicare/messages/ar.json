@@ -12,7 +12,8 @@
     "transactions": "المعاملات",
     "myLoans": "إعاراتي",
     "myBorrows": "طلباتي",
-    "wishlist": "المفضلة"
+    "wishlist": "المفضلة",
+    "myItems": "مواردي"
   },
   "AuthRequired": {
     "title": "دعنا نسجل دخولك!",
