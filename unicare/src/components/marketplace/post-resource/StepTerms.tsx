@@ -74,13 +74,14 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {form.exchangeType === "lend" ? (
                                 <>
-                                    <label className="flex flex-col gap-2">
-                                        <p className="text-neutral-900 text-sm font-semibold">
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="maxDuration" className="text-neutral-900 text-sm font-semibold">
                                             {isAr ? "المدة القصوى (بالأيام)" : "Max Duration (Days)"}
-                                        </p>
+                                        </label>
                                         <div className="relative flex items-center">
                                             <MdOutlineCalendarMonth className={`absolute ${isAr ? "right-4" : "left-4"} text-neutral-400 text-[20px]`} />
                                             <input
+                                                id="maxDuration"
                                                 className={`w-full h-12 ${isAr ? "pr-11 pl-4 text-right" : "pl-11 pr-4 text-left"} rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all`}
                                                 placeholder={isAr ? "مثال: 7" : "e.g., 7"}
                                                 type="number"
@@ -91,14 +92,15 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                         <span className="text-xs text-neutral-400">
                                             {isAr ? "فترة الإعارة القياسية هي 7-14 يومًا." : "Standard loan period is 7-14 days."}
                                         </span>
-                                    </label>
-                                    <label className="flex flex-col gap-2">
-                                        <p className="text-neutral-900 text-sm font-semibold">
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="deposit" className="text-neutral-900 text-sm font-semibold">
                                             {isAr ? "مبلغ التأمين (ج.م)" : "Security Deposit (EGP)"}
-                                        </p>
+                                        </label>
                                         <div className="relative flex items-center">
                                             <MdOutlineVerifiedUser className={`absolute ${isAr ? "right-4" : "left-4"} text-neutral-400 text-[20px]`} />
                                             <input
+                                                id="deposit"
                                                 className={`w-full h-12 ${isAr ? "pr-11 pl-4 text-right" : "pl-11 pr-4 text-left"} rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all`}
                                                 placeholder={isAr ? "مثال: 50.00" : "e.g., 50.00"}
                                                 type="number"
@@ -109,16 +111,17 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                         <span className="text-xs text-neutral-400">
                                             {isAr ? "مسترد بالكامل عند إرجاع المورد سليمًا." : "Fully refundable upon safe return."}
                                         </span>
-                                    </label>
+                                    </div>
                                 </>
                             ) : (
-                                <label className="flex flex-col gap-2">
-                                    <p className="text-neutral-900 text-sm font-semibold">
+                                <div className="flex flex-col gap-2">
+                                    <label htmlFor="price" className="text-neutral-900 text-sm font-semibold">
                                         {isAr ? "سعر البيع (ج.م)" : "Selling Price (EGP)"}
-                                    </p>
+                                    </label>
                                     <div className="relative flex items-center">
                                         <MdAttachMoney className={`absolute ${isAr ? "right-4" : "left-4"} text-neutral-400 text-[20px]`} />
                                         <input
+                                            id="price"
                                             className={`w-full h-12 ${isAr ? "pr-11 pl-4 text-right" : "pl-11 pr-4 text-left"} rounded-lg border border-neutral-200 bg-background-light text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all`}
                                             placeholder={isAr ? "مثال: 120.00" : "e.g., 120.00"}
                                             type="number"
@@ -126,7 +129,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                             onChange={(e) => update("price", e.target.value)}
                                         />
                                     </div>
-                                </label>
+                                </div>
                             )}
                         </div>
 

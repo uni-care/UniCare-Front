@@ -234,7 +234,7 @@ export default function AboutPage() {
                     <div className="w-full lg:w-1/2 flex flex-col gap-6 lg:pe-12 animate-in fade-in slide-in-from-left duration-700">
                         <div className="flex flex-col gap-2 text-start items-start">
                             <div className="flex gap-3 mb-2 items-center">
-                                <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold w-fit uppercase tracking-wide">
+                                <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-[#345144] text-xs font-bold w-fit uppercase tracking-wide">
                                     {t("ourStory")}
                                 </span>
                                 <span className="text-neutral-400 text-xs font-semibold tracking-wide">

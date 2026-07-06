@@ -127,14 +127,17 @@ export default function StepDetails({ form, update, onNext }: StepProps) {
 
                     {/* Discipline */}
                     <div className={`col-span-1 md:col-span-2 flex flex-col gap-2 ${isAr ? "text-right" : "text-left"}`}>
-                        <label className="text-sm font-bold text-neutral-700">
+                        <label htmlFor="discipline-btn" className="text-sm font-bold text-neutral-700">
                             {isAr ? "تصنيف المادة" : "Discipline Category"}
                         </label>
                         <div className="relative">
                             <button
+                                id="discipline-btn"
                                 type="button"
                                 onClick={() => setShowCategories(!showCategories)}
                                 className={`w-full h-14 ${isAr ? "pr-12 pl-10 text-right flex-row-reverse" : "pl-12 pr-10 text-left"} rounded-lg border border-neutral-200 bg-white text-neutral-900 font-semibold focus:border-primary transition-all outline-none flex items-center justify-between cursor-pointer`}
+                                aria-expanded={showCategories}
+                                aria-haspopup="true"
                             >
                                 <div className={`flex items-center gap-2 ${isAr ? "flex-row-reverse" : ""}`}>
                                     <MdOutlineCategory className="text-neutral-400 text-[20px]" />

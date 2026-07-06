@@ -39,6 +39,10 @@ export const useAuth = () => {
           }
         }
 
+        if (!token) {
+          return null;
+        }
+
         // 2. Fetch the user profile (Authorization header will be attached by Axios interceptor)
         const profile = await authApi.getCurrentProfile();
 

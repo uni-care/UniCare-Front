@@ -69,6 +69,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                                 multiple
                                 accept="image/*"
                                 className="hidden"
+                                aria-label={isAr ? "رفع صور المورد" : "Upload resource photos"}
                             />
                             <div className="size-14 rounded-full bg-white shadow-xs border border-neutral-100 flex items-center justify-center text-neutral-400 group-hover:text-primary group-hover:scale-110 transition-all">
                                 <MdOutlineCloudUpload className="text-2xl" />
@@ -100,6 +101,7 @@ export default function StepMedia({ form, update, onNext, onBack }: StepProps) {
                                                 removeFile(index);
                                             }}
                                             className="absolute top-1 right-1 size-5 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white cursor-pointer transition-colors"
+                                            aria-label={isAr ? `إزالة الصورة رقم ${index + 1}` : `Remove image ${index + 1}`}
                                         >
                                             <MdClose className="text-[12px]" />
                                         </button>

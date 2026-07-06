@@ -156,6 +156,9 @@ export default function ItemCard({
                             }}
                             className="size-10 rounded-full bg-white/85 backdrop-blur-md border border-white/45 flex items-center justify-center transition-all shadow-sm cursor-pointer text-neutral-600 hover:text-primary hover:bg-white active:scale-95 animate-in fade-in zoom-in-95 duration-200"
                             title={isAr ? "خيارات المورد" : "Item Options"}
+                            aria-label={isAr ? "خيارات المورد" : "Item Options"}
+                            aria-haspopup="true"
+                            aria-expanded={isDropdownOpen}
                         >
                             <MdMoreVert className="text-xl" />
                         </button>
@@ -194,6 +197,7 @@ export default function ItemCard({
                         }}
                         className={`absolute top-3 ${isAr ? "left-3" : "right-3"} size-10 rounded-full bg-white/80 backdrop-blur-md border border-white/40 flex items-center justify-center transition-all shadow-sm cursor-pointer ${isFavorited ? "text-rose-500" : "text-neutral-500 hover:text-rose-500"
                             }`}
+                        aria-label={isFavorited ? (isAr ? "إزالة من المفضلة" : "Remove from favorites") : (isAr ? "إضافة إلى المفضلة" : "Add to favorites")}
                     >
                         {isFavorited ? (
                             <MdFavorite className="text-xl text-rose-500" />
@@ -224,6 +228,7 @@ export default function ItemCard({
                             setIsExpanded(!isExpanded);
                         }}
                         className={`flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors mb-3 cursor-pointer outline-none select-none self-start ${isAr ? "flex-row-reverse" : ""}`}
+                        aria-expanded={isExpanded}
                     >
                         <MdExpandMore className="text-[16px] transition-transform duration-200" style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }} />
                         {isExpanded ? (isAr ? "إخفاء التفاصيل" : "Hide Details") : (isAr ? "عرض التفاصيل" : "Show Details")}

@@ -82,12 +82,13 @@ export default function DetailGallery({
         <div className="flex gap-2.5 overflow-x-auto py-1 scrollbar-thin scrollbar-thumb-neutral-200">
           {validImages.map((url, idx) => (
             <button
-              key={idx}
+              key={url}
               type="button"
               onClick={() => onImageChange(idx)}
               className={`relative size-20 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all duration-200 shrink-0 ${
                 activeImageIndex === idx ? "border-primary scale-95 shadow-sm" : "border-transparent opacity-75 hover:opacity-100"
               }`}
+              aria-label={isAr ? `عرض الصورة رقم ${idx + 1}` : `Show image ${idx + 1}`}
             >
               <Image src={url} alt={`Thumbnail ${idx + 1}`} fill sizes="80px" className="object-cover" />
             </button>

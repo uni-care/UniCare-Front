@@ -20,16 +20,16 @@ function LoginContent() {
 
   if (isLoading || user) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background-light px-4 py-32">
+      <div className="flex min-h-screen items-center justify-center bg-background-light px-4 py-32">
         <div className="size-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background-light px-4 py-32">
+    <div className="flex min-h-screen items-center justify-center bg-background-light px-4 py-32">
       <LoginForm redirectTo={redirectTo} />
-    </main>
+    </div>
   );
 }
 
@@ -37,9 +37,9 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-background-light px-4 py-32">
+        <div className="flex min-h-screen items-center justify-center bg-background-light px-4 py-32">
           <div className="size-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-        </main>
+        </div>
       }
     >
       <LoginContent />

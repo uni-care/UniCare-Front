@@ -1,0 +1,9 @@
+# UniCare
+
+A community-driven peer-to-peer campus marketplace for university students to share, lend, buy, and sell academic textbooks, lab equipment, drawing tools, and electronics.
+
+## Core Sections
+
+- [Marketplace](https://uni-care-front.vercel.app/en/marketplace) - Discover and search for available academic supplies and campus tools.
+- [Contribute](https://uni-care-front.vercel.app/en/contribute) - Learn about developer roles, beta program access, and hosting infrastructure.
+- [About Us](https://uni-care-front.vercel.app/en/about) - Read the team's narrative, vision, and core pillars of trust and accessibility.

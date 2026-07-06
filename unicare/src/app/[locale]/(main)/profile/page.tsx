@@ -149,7 +149,7 @@ function ProfilePageClient() {
           </nav>
         </aside>
 
-        <main className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+        <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-black text-neutral-900">My Profile</h1>
@@ -181,7 +181,7 @@ function ProfilePageClient() {
               </>
             )}
           </section>
-        </main>
+        </div>
       </div>
     </div>
   );

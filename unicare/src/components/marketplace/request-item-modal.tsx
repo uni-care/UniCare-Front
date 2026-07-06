@@ -97,12 +97,13 @@ export default function RequestItemModal({
 
         <div className="space-y-4">
           <div>
-            <label className="mb-2 block text-lg font-semibold text-neutral-700">
+            <label htmlFor="duration" className="mb-2 block text-lg font-semibold text-neutral-700">
               {isAr ? "مرحبًا! ما هي المدة التي تحتاج فيها هذا المورد؟" : "Hey! How long do you need this for?"}
             </label>
             <div className={`flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-3 ${isAr ? "flex-row-reverse" : ""}`}>
               <MdOutlineCalendarMonth className="text-base text-primary/70" />
               <input
+                id="duration"
                 value={duration}
                 onChange={(event) => setDuration(event.target.value)}
                 className={`w-full bg-transparent text-sm text-neutral-700 outline-none placeholder:text-neutral-400 ${isAr ? "text-right" : "text-left"}`}
@@ -112,10 +113,11 @@ export default function RequestItemModal({
           </div>
 
           <div>
-            <label className="mb-2 block text-lg font-semibold text-neutral-700">
+            <label htmlFor="note" className="mb-2 block text-lg font-semibold text-neutral-700">
               {isAr ? "هل تود ترك رسالة لمالك المورد؟" : "Want to leave a note for the owner?"}
             </label>
             <textarea
+              id="note"
               value={note}
               onChange={(event) => setNote(event.target.value)}
               className={`h-28 w-full resize-none rounded-3xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-700 outline-none placeholder:text-neutral-400 ${isAr ? "text-right" : "text-left"}`}

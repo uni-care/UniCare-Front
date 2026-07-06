@@ -16,20 +16,20 @@ export default function Page() {
 
   return (
     <>
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         <div className="absolute top-[-10%] right-[-5%] w-125 h-125 rounded-full bg-primary/20 organic-glow"></div>
         <div className="absolute bottom-[10%] left-[-10%] w-150 h-150 rounded-full bg-muted-teal/20 organic-glow"></div>
       </div>
 
-      <div className="relative z-10 flex flex-col min-h-screen pt-12">
-        <main className="flex-1 flex flex-col items-center justify-center px-6 lg:px-20 py-24">
+      <div className="relative z-10 flex flex-col min-h-screen pt-4">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 lg:px-20 py-24">
           <div className="max-w-300 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className={`lg:col-span-5 flex flex-col gap-8 order-2 lg:order-1 ${isAr ? "text-right items-end" : "text-left items-start"}`}>
               <div className="flex flex-col gap-4">
-                <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary w-fit text-xs font-bold tracking-widest uppercase">
+                <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-[#345144] w-fit text-xs font-bold tracking-widest uppercase">
                   {isAr ? "يديره المجتمع" : "Community Driven"}
                 </span>
-                <h2 className={`text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-[#131615] ${isAr ? "font-amiri" : ""}`}>
+                <h2 className={`text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-[#131615] ${isAr ? "font-amiri" : ""}`}>
                   {isAr ? (
                     <>
                       منظومة الرعاية <span className="text-primary italic">الجامعية</span>
@@ -58,21 +58,21 @@ export default function Page() {
               <div className={`flex items-center gap-8 mt-4 ${isAr ? "flex-row-reverse text-right" : ""}`}>
                 <div>
                   <p className="text-2xl font-bold text-primary">5k+</p>
-                  <p className="text-xs text-neutral-500 uppercase tracking-widest">
+                  <p className="text-xs text-neutral-600 uppercase tracking-widest">
                     {isAr ? "الطلاب" : "Students"}
                   </p>
                 </div>
                 <div className="h-8 w-px bg-primary/20"></div>
                 <div>
                   <p className="text-2xl font-bold text-primary">10k+</p>
-                  <p className="text-xs text-neutral-500 uppercase tracking-widest">
+                  <p className="text-xs text-neutral-600 uppercase tracking-widest">
                     {isAr ? "الموارد" : "Resources"}
                   </p>
                 </div>
                 <div className="h-8 w-px bg-primary/20"></div>
                 <div>
                   <p className="text-2xl font-bold text-primary">1.2k</p>
-                  <p className="text-xs text-neutral-500 uppercase tracking-widest">
+                  <p className="text-xs text-neutral-600 uppercase tracking-widest">
                     {isAr ? "الجذور النشطة" : "Active Roots"}
                   </p>
                 </div>
@@ -85,7 +85,7 @@ export default function Page() {
                   fill
                   alt="Abstract 3D shapes"
                   className="w-full h-full object-cover grayscale-20 group-hover:scale-110 transition-transform duration-700"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpIkpKbh7d1et9JsXU_OHwKrOjuqrSLDUpsDpxk1HCsOHYvubsHTchUdd3KYHV7KTo6QDqU8kt2e67a9KvCQFzNi4xbzmOQLCeS0UTpdbkhmZ9gCXrCvmYVY0f40E9cudqsE5IAzkfYppK0L_RWXEFPbKly_Opy9F5h6cbgbFaTB-k7reTei3SSCf0H04y6ygoh0uKGhdKUBkp7PPywRE2pdDh7GYLbvUS9lBnp7pJc39fQhDxNbaU5WhtTmsrGMxLdUveVqd_chmM"
+                  src="/hero-image.png"
                   sizes="(max-width: 768px) 100vw, 500px"
                   priority
                 />
@@ -93,17 +93,17 @@ export default function Page() {
               </div>
 
               <div className={`absolute -bottom-8 md:bottom-10 ${isAr ? "right-0 md:-right-4 text-right" : "left-0 md:-left-4 text-left"} glass-card p-6 rounded-3xl border border-white/40 shadow-2xl max-w-60 z-20 animate-[pulse_4s_ease-in-out_infinite] hover:-translate-y-2 transition-transform duration-500`}>
-                <p className={`flex items-center gap-2 font-semibold uppercase tracking-widest text-primary/70 mb-2 ${isAr ? "flex-row-reverse" : ""}`}>
-                  <span className="size-2 rounded-full bg-primary animate-pulse"></span>
+                <p className={`flex items-center gap-2 font-semibold uppercase tracking-widest text-[#2d4339] mb-2 ${isAr ? "flex-row-reverse" : ""}`}>
+                  <span className="size-2 rounded-full bg-[#2d4339] animate-pulse"></span>
                   {isAr ? "تأثير مجتمعي" : "Community Driven"}
                 </p>
-                <p className={`text-lg italic font-serif-art text-primary ${isAr ? "font-amiri" : ""}`}>
+                <p className={`text-lg italic font-serif-art text-[#1e3227] ${isAr ? "font-amiri" : ""}`}>
                   {isAr ? "«تنمو جذور طلاب الجامعة في تربة الفنون والرعاية المتبادلة.»" : '"The roots of Uni Students grow through the soil of art."'}
                 </p>
               </div>
             </div>
           </div>
-        </main>
+        </div>
 
         <section className="relative px-6 lg:px-20 py-32 overflow-hidden">
           <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
@@ -114,14 +114,13 @@ export default function Page() {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                className="step-path animate-dash"
                 d="M100 300 C 300 100, 600 500, 720 300 S 1100 100, 1340 300"
-                stroke="#6a907f"
+                stroke="#517565"
                 strokeLinecap="round"
                 strokeWidth="2"
               ></path>
-              <circle cx="400" cy="600" fill="#6a907f" r="4"></circle>
-              <circle cx="800" cy="400" fill="#6a907f" r="4"></circle>
+              <circle cx="400" cy="600" fill="#517565" r="4"></circle>
+              <circle cx="800" cy="400" fill="#517565" r="4"></circle>
             </svg>
           </div>
 
@@ -138,7 +137,7 @@ export default function Page() {
                   </>
                 )}
               </h3>
-              <p className="text-neutral-500 max-w-sm">
+              <p className="text-neutral-600 max-w-sm">
                 {isAr ? "تدفق سلس للموارد الأكاديمية ودعم الطلاب المتبادل." : "A seamless flow of academic resources and student support."}
               </p>
             </div>
@@ -232,7 +231,7 @@ export default function Page() {
                 <h3 className="text-3xl font-bold tracking-tight">
                   {isAr ? "طوّر مجموعة أدواتك" : "Cultivate Your Toolkit"}
                 </h3>
-                <p className="text-neutral-500">
+                <p className="text-neutral-600">
                   {isAr ? "اكتشف المناهج الدراسية، الأدوات، ومستلزمات السكن الجامعي المشاركة من الطلاب." : "Discover textbooks, tools, and dorm items shared by peer students."}
                 </p>
               </div>
@@ -247,8 +246,9 @@ export default function Page() {
                   fill
                   alt="Instruments"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrpsacMm6siyKn3E_mlMtinA1SVP5fmtrcDvMA3mr7hzUryrf_hs-sICQQUr5O7epG7FvZVDz0F0lQmupxBOaIICoQfCdgIsi2sQLj5_U8Li_vrAHWstKaMWfuEgDSdaTxfkiUuF2znWapVAHUalGzVkMis4dwEVvUPWRuISaby2IrKJ5_tccZT80MvaGGuJy64ATjsqgmGSUvH-Qqq9v5938MYKHAXSnEGXEJoAl3KYc2L0LU7Shi3CHQ9l4sKCXPYohIl5toSCog"
+                  src="/lab-vision.png"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  priority
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
                 <div className={`absolute bottom-6 ${isAr ? "right-6 text-right" : "left-6 text-left"} text-white`}>
@@ -287,6 +287,7 @@ export default function Page() {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   src="/electronics-vision.png"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  priority
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
                 <div className={`absolute bottom-6 ${isAr ? "right-6 text-right" : "left-6 text-left"} text-white`}>
@@ -306,7 +307,7 @@ export default function Page() {
                 <h4 className="text-lg font-bold">
                   {isAr ? "شارك مواردك" : "Lend Your Own"}
                 </h4>
-                <p className="text-sm text-neutral-500 mt-2 italic font-light">
+                <p className="text-sm text-neutral-600 mt-2 italic font-light">
                   {isAr ? "شارك مواردك غير المستخدمة مع زملائك من الطلاب." : "Share your unused resources with fellow students."}
                 </p>
               </Link>

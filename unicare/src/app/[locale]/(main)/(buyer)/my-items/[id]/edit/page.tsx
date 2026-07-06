@@ -322,14 +322,17 @@ export default function EditItemPage({ params }: Props) {
 
                         {/* Category */}
                         <div className="col-span-1 md:col-span-2 flex flex-col gap-2">
-                            <label className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                            <label htmlFor="category-btn" className="text-xs font-bold uppercase tracking-wider text-neutral-500">
                                 {isAr ? "التصنيف" : "Category"}
                             </label>
                             <div className="relative">
                                 <button
+                                    id="category-btn"
                                     type="button"
                                     onClick={() => setShowCategories(!showCategories)}
                                     className={`w-full h-12 ${isAr ? "pr-12 pl-10 text-right flex-row-reverse" : "pl-12 pr-10 text-left"} rounded-xl border border-neutral-200 bg-white text-neutral-900 font-semibold focus:border-primary transition-all outline-none flex items-center justify-between cursor-pointer text-sm`}
+                                    aria-expanded={showCategories}
+                                    aria-haspopup="true"
                                 >
                                     <div className={`flex items-center gap-2 ${isAr ? "flex-row-reverse" : ""}`}>
                                         <MdOutlineCategory className="text-neutral-400 text-[20px]" />

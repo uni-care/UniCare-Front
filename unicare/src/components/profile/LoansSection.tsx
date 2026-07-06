@@ -207,6 +207,9 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
               type="button"
               onClick={() => setIsSortDropdownOpen((prev) => !prev)}
               className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 focus:border-primary focus:outline-none transition-all shadow-xs cursor-pointer"
+              aria-expanded={isSortDropdownOpen}
+              aria-haspopup="true"
+              aria-label="Sort loans options"
             >
               <span>
                 {sortBy === LoanSortBy.LoanDate
@@ -269,6 +272,7 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
             type="button"
             onClick={() => setSortDescending((prev) => !prev)}
             title={sortDescending ? "Descending Order" : "Ascending Order"}
+            aria-label={sortDescending ? "Descending Order" : "Ascending Order"}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 transition-colors shadow-xs cursor-pointer text-neutral-600"
           >
             {sortDescending ? (
@@ -420,6 +424,7 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
                       onClick={() => handleChatWithBorrower(loan)}
                       disabled={isStartingChat === loan.transactionId}
                       title="Chat with Borrower"
+                      aria-label="Chat with Borrower"
                       className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-600 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-all cursor-pointer disabled:opacity-50"
                     >
                       {isStartingChat === loan.transactionId ? (

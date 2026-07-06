@@ -10,22 +10,25 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const amiri = Amiri({
   variable: "--font-amiri",
   subsets: ["arabic"],
   weight: ["400", "700"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

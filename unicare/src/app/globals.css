@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-primary: #6a907f;
+  --color-primary: #517565;
   --color-mint-cream: #f6fff8;
   --color-muted-teal: #a4c3b2;
   --color-background-light: #f6fff8;
@@ -16,14 +16,6 @@
 
   --radius-lg: 2rem;
   --radius-xl: 3rem;
-
-  --animate-dash: dash 10s linear infinite;
-
-  @keyframes dash {
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
 
   --font-heading: var(--font-sans);
 
@@ -124,18 +116,13 @@
   .glass-card {
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(106, 144, 127, 0.1);
+    border: 1px solid rgba(81, 117, 101, 0.1);
   }
 
   .glass-navbar {
     background: rgba(246, 255, 248, 0.6);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(106, 144, 127, 0.15);
-  }
-
-  .step-path {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+    border: 1px solid rgba(81, 117, 101, 0.15);
   }
 }
 

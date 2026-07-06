@@ -36,7 +36,7 @@ export default function Footer() {
               <button
                 key={link.key}
                 type="button"
-                className="text-sm text-black/55 transition-colors hover:text-black/80 cursor-pointer"
+                className="text-sm text-black/70 transition-colors hover:text-black/90 cursor-pointer"
               >
                 {t(link.key)}
               </button>
@@ -61,7 +61,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="text-center text-xs tracking-[0.22em] text-black/40">
+        <p className="text-center text-xs tracking-[0.22em] text-black/60">
           {t("copyright")}
         </p>
       </div>
