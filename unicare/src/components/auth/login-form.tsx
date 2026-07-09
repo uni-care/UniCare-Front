@@ -15,8 +15,6 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 export function LoginForm({ redirectTo = "/" }: { redirectTo?: string }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [submitError, setSubmitError] = useState("");
 
   const {
     register,
@@ -40,9 +38,6 @@ export function LoginForm({ redirectTo = "/" }: { redirectTo?: string }) {
   const queryClient = useQueryClient();
 
   const onSubmit = async (values: LoginInput) => {
-    setSuccessMessage("");
-    setSubmitError("");
-
     try {
       const response = await authApi.login({
         email:
@@ -211,17 +206,6 @@ export function LoginForm({ redirectTo = "/" }: { redirectTo?: string }) {
         >
           {isSubmitting ? "Logging in..." : "Log In"}
         </button>
-
-        {successMessage ? (
-          <p className="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-center text-xs text-primary">
-            {successMessage}
-          </p>
-        ) : null}
-        {submitError ? (
-          <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-center text-xs text-red-600">
-            {submitError}
-          </p>
-        ) : null}
 
         <p className="text-center text-sm text-neutral-600">
           Don&apos;t have an account?{" "}
