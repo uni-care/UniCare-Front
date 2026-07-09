@@ -43,3 +43,8 @@ vi.mock("sonner", () => ({
     error: vi.fn((msg) => msg),
   },
 }));
+
+// Mock next-intl translations
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => key,
+}));
