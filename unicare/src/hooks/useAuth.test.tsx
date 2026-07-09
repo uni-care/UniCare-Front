@@ -2,6 +2,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { useAuth } from "./useAuth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { authApi } from "@/api/auth-api";
+import { VerificationStatus, type UserProfile } from "@/types/auth";
 import { getAuthToken, setAuthToken, clearAuthToken } from "@/api/token-store";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
@@ -67,7 +68,14 @@ describe("useAuth hook", () => {
       json: async () => ({ token: "bff-jwt-token" }),
     } as Response);
 
-    const mockProfile = { id: "1", name: "John Doe", email: "john@uni.edu" };
+    const mockProfile: UserProfile = {
+      id: "1",
+      fullName: "John Doe",
+      email: "john@uni.edu",
+      verificationStatus: VerificationStatus.Verified,
+      isVerifiedStudent: true,
+      createdAt: "2026-07-09T12:00:00Z",
+    };
     vi.mocked(authApi.getCurrentProfile).mockResolvedValueOnce(mockProfile);
 
     const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
@@ -85,7 +93,14 @@ describe("useAuth hook", () => {
   it("should use in-memory token directly and skip BFF check if present", async () => {
     setAuthToken("existing-jwt-token");
 
-    const mockProfile = { id: "2", name: "Jane Doe", email: "jane@uni.edu" };
+    const mockProfile: UserProfile = {
+      id: "2",
+      fullName: "Jane Doe",
+      email: "jane@uni.edu",
+      verificationStatus: VerificationStatus.Verified,
+      isVerifiedStudent: true,
+      createdAt: "2026-07-09T12:00:00Z",
+    };
     vi.mocked(authApi.getCurrentProfile).mockResolvedValueOnce(mockProfile);
 
     const { result } = renderHook(() => useAuth(), { wrapper: createWrapper() });
@@ -117,7 +132,14 @@ describe("useAuth hook", () => {
 
   it("should sign out successfully", async () => {
     setAuthToken("existing-jwt-token");
-    const mockProfile = { id: "2", name: "Jane Doe", email: "jane@uni.edu" };
+    const mockProfile: UserProfile = {
+      id: "2",
+      fullName: "Jane Doe",
+      email: "jane@uni.edu",
+      verificationStatus: VerificationStatus.Verified,
+      isVerifiedStudent: true,
+      createdAt: "2026-07-09T12:00:00Z",
+    };
     vi.mocked(authApi.getCurrentProfile).mockResolvedValueOnce(mockProfile);
     vi.mocked(authApi.logout).mockResolvedValueOnce();
 
