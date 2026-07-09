@@ -125,9 +125,16 @@ describe("LoginForm", () => {
   it("should call login API and redirect on successful form submission", async () => {
     const user = userEvent.setup();
     vi.mocked(authApi.login).mockResolvedValueOnce({
-      data: { token: "successful-login-jwt-token" },
+      data: {
+        token: "successful-login-jwt-token",
+        expiresAt: "2026-07-09T12:00:00Z",
+        userId: "user-123",
+        fullName: "Test User",
+        verificationStatus: 2,
+      },
       success: true,
       message: "Logged in",
+      timestamp: "2026-07-09T12:00:00Z",
     });
 
     renderWithProviders(<LoginForm redirectTo="/marketplace" />);
