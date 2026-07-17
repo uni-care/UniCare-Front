@@ -67,10 +67,10 @@ export default function Page() {
                 <div className="hidden sm:block h-8 w-px bg-primary/20"></div>
                 <div className="flex flex-col gap-0.5">
                   <p className="text-sm font-bold text-primary">
-                    {isAr ? "خالٍ من العمولات" : "Zero Commission"}
+                    {isAr ? "تبادل مباشر" : "Direct Exchange"}
                   </p>
                   <p className="text-xs text-neutral-500 font-light">
-                    {isAr ? "مجاني أو بأسعار رمزية" : "Free or affordable shares"}
+                    {isAr ? "معاملات مباشرة بين الطلاب" : "Peer-to-peer transactions"}
                   </p>
                 </div>
                 <div className="hidden sm:block h-8 w-px bg-primary/20"></div>
