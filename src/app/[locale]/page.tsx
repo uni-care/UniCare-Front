@@ -55,25 +55,31 @@ export default function Page() {
                 </Link>
               </div>
 
-              <div className={`flex items-center gap-8 mt-4 ${isAr ? "flex-row-reverse text-right" : ""}`}>
-                <div>
-                  <p className="text-2xl font-bold text-primary">5k+</p>
-                  <p className="text-xs text-neutral-600 uppercase tracking-widest">
-                    {isAr ? "الطلاب" : "Students"}
+              <div className={`flex flex-wrap items-center gap-y-4 gap-x-6 md:gap-x-8 mt-4 ${isAr ? "flex-row-reverse text-right" : ""}`}>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm font-bold text-primary">
+                    {isAr ? "تبادل طلابي موثق" : "Student Verified"}
+                  </p>
+                  <p className="text-xs text-neutral-500 font-light">
+                    {isAr ? "أعضاء جامعيون فقط" : "Campus members only"}
                   </p>
                 </div>
-                <div className="h-8 w-px bg-primary/20"></div>
-                <div>
-                  <p className="text-2xl font-bold text-primary">10k+</p>
-                  <p className="text-xs text-neutral-600 uppercase tracking-widest">
-                    {isAr ? "الموارد" : "Resources"}
+                <div className="hidden sm:block h-8 w-px bg-primary/20"></div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm font-bold text-primary">
+                    {isAr ? "خالٍ من العمولات" : "Zero Commission"}
+                  </p>
+                  <p className="text-xs text-neutral-500 font-light">
+                    {isAr ? "مجاني أو بأسعار رمزية" : "Free or affordable shares"}
                   </p>
                 </div>
-                <div className="h-8 w-px bg-primary/20"></div>
-                <div>
-                  <p className="text-2xl font-bold text-primary">1.2k</p>
-                  <p className="text-xs text-neutral-600 uppercase tracking-widest">
-                    {isAr ? "الجذور النشطة" : "Active Roots"}
+                <div className="hidden sm:block h-8 w-px bg-primary/20"></div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm font-bold text-primary">
+                    {isAr ? "رعاية مشتركة" : "Shared Care"}
+                  </p>
+                  <p className="text-xs text-neutral-500 font-light">
+                    {isAr ? "دعم جامعي حقيقي" : "Students helping students"}
                   </p>
                 </div>
               </div>
