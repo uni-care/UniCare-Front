@@ -109,14 +109,11 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="flex flex-col flex-1">
-                            <span className={cn("text-neutral-800 text-xs font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                            <span className="text-neutral-800 text-xs font-semibold pb-1.5 text-start">
                                 {isAr ? "الاسم (اختياري)" : "Name (Optional)"}
                             </span>
                             <input
-                                className={cn(
-                                    "w-full rounded-xl border border-neutral-200 bg-white h-11 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                                    isAr ? "text-right" : "text-left"
-                                )}
+                                className="w-full rounded-xl border border-neutral-200 bg-white h-11 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all text-start"
                                 type="text"
                                 placeholder={isAr ? "مثال: أحمد" : "Jane Doe"}
                                 value={name}
@@ -125,14 +122,11 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                         </label>
 
                         <label className="flex flex-col flex-1">
-                            <span className={cn("text-neutral-800 text-xs font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                            <span className="text-neutral-800 text-xs font-semibold pb-1.5 text-start">
                                 {isAr ? "البريد الإلكتروني (اختياري)" : "Email (Optional)"}
                             </span>
                             <input
-                                className={cn(
-                                    "w-full rounded-xl border border-neutral-200 bg-white h-11 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                                    isAr ? "text-right" : "text-left"
-                                )}
+                                className="w-full rounded-xl border border-neutral-200 bg-white h-11 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all text-start"
                                 type="email"
                                 placeholder="jane@example.com"
                                 value={email}
@@ -142,14 +136,11 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     </div>
 
                     <label className="flex flex-col w-full">
-                        <span className={cn("text-neutral-800 text-xs font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                        <span className="text-neutral-800 text-xs font-semibold pb-1.5 text-start">
                             {t("feedbackFormLabel")}
                         </span>
                         <textarea
-                            className={cn(
-                                "w-full rounded-xl border border-neutral-200 bg-white h-32 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all resize-none",
-                                isAr ? "text-right" : "text-left"
-                            )}
+                            className="w-full rounded-xl border border-neutral-200 bg-white h-32 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all resize-none text-start"
                             placeholder={t("feedbackFormPlaceholder")}
                             value={feedback}
                             onChange={(e) => setFeedback(e.target.value)}
@@ -159,10 +150,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
                     <button
                         type="submit"
-                        className={cn(
-                            "flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#517565] hover:bg-[#517565]/90 text-white h-12 w-full text-sm font-bold shadow-lg shadow-[#517565]/10 transition-all active:scale-[0.98] mt-2",
-                            isAr ? "flex-row-reverse" : "flex-row"
-                        )}
+                        className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#517565] hover:bg-[#517565]/90 text-white h-12 w-full text-sm font-bold shadow-lg shadow-[#517565]/10 transition-all active:scale-[0.98] mt-2 flex-row"
                     >
                         <MdEmail className="text-base" />
                         {t("feedbackFormSubmit")}

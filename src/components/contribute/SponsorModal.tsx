@@ -113,14 +113,11 @@ export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
 
                 <form className="flex flex-col gap-4.5" onSubmit={handleSubmit}>
                     <label className="flex flex-col w-full">
-                        <span className={cn("text-neutral-800 text-xs font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                        <span className="text-neutral-800 text-xs font-semibold pb-1.5 text-start">
                             {isAr ? "الجهة الراعية / الاسم" : "Organization / Name"}
                         </span>
                         <input
-                            className={cn(
-                                "w-full rounded-xl border border-neutral-200 bg-white h-11 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                                isAr ? "text-right" : "text-left"
-                            )}
+                            className="w-full rounded-xl border border-neutral-200 bg-white h-11 px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all text-start"
                             type="text"
                             placeholder={isAr ? "مؤسسة، شركة، جامعة، أو بصفتك الشخصية" : "e.g. HostCompany, University Dean, or Self"}
                             value={orgName}
@@ -130,15 +127,12 @@ export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
                     </label>
 
                     <label className="flex flex-col w-full">
-                        <span className={cn("text-neutral-800 text-xs font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                        <span className="text-neutral-800 text-xs font-semibold pb-1.5 text-start">
                             {t("sponsorTypeLabel")}
                         </span>
                         <div className="relative">
                             <select
-                                className={cn(
-                                    "w-full rounded-xl border border-neutral-200 bg-white h-11 text-sm text-neutral-900 appearance-none cursor-pointer outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                                    isAr ? "pr-4 pl-10 text-right" : "pl-4 pr-10 text-left"
-                                )}
+                                className="w-full rounded-xl border border-neutral-200 bg-white h-11 text-sm text-neutral-900 appearance-none cursor-pointer outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all ps-4 pe-10 text-start"
                                 value={sponsorType}
                                 onChange={(e) => setSponsorType(e.target.value)}
                             >
@@ -147,10 +141,7 @@ export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
                                 <option value="venture">{t("sponsorTypeVenture")}</option>
                             </select>
                             <div
-                                className={cn(
-                                    "absolute top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center",
-                                    isAr ? "left-4" : "right-4"
-                                )}
+                                className="absolute top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center end-4"
                             >
                                 <MdExpandMore className="text-xl" />
                             </div>
@@ -158,14 +149,11 @@ export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
                     </label>
 
                     <label className="flex flex-col w-full">
-                        <span className={cn("text-neutral-800 text-xs font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                        <span className="text-neutral-800 text-xs font-semibold pb-1.5 text-start">
                             {t("sponsorMessageLabel")}
                         </span>
                         <textarea
-                            className={cn(
-                                "w-full rounded-xl border border-neutral-200 bg-white h-28 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all resize-none",
-                                isAr ? "text-right" : "text-left"
-                            )}
+                            className="w-full rounded-xl border border-neutral-200 bg-white h-28 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all resize-none text-start"
                             placeholder={t("sponsorMessagePlaceholder")}
                             value={details}
                             onChange={(e) => setDetails(e.target.value)}
@@ -175,10 +163,7 @@ export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
 
                     <button
                         type="submit"
-                        className={cn(
-                            "flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#517565] hover:bg-[#517565]/90 text-white h-12 w-full text-sm font-bold shadow-lg shadow-[#517565]/10 transition-all active:scale-[0.98] mt-1.5",
-                            isAr ? "flex-row-reverse" : "flex-row"
-                        )}
+                        className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#517565] hover:bg-[#517565]/90 text-white h-12 w-full text-sm font-bold shadow-lg shadow-[#517565]/10 transition-all active:scale-[0.98] mt-1.5 flex-row"
                     >
                         <MdFavorite className="text-base text-red-400" />
                         {t("sponsorFormSubmit")}

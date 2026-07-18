@@ -37,8 +37,8 @@ export default function ContributePage() {
                 
                 {/* Hero Section */}
                 <section className="flex flex-col-reverse lg:flex-row items-center gap-10 lg:gap-14 py-6">
-                    <div className={cn("flex flex-col gap-6 lg:w-1/2 w-full", isAr ? "text-right items-end" : "text-left items-start")}>
-                        <div className={cn("flex flex-col gap-3.5 w-full", isAr ? "items-end" : "items-start")}>
+                    <div className="flex flex-col gap-6 lg:w-1/2 w-full text-start items-start">
+                        <div className="flex flex-col gap-3.5 w-full items-start">
                             <span className="text-[#517565] font-bold tracking-widest uppercase text-xs px-3 py-1 rounded-full bg-[#517565]/10 w-fit">
                                 {t("heroLabel")}
                             </span>
@@ -52,7 +52,7 @@ export default function ContributePage() {
                                 {t("heroDesc")}
                             </p>
                         </div>
-                        <div className={cn("flex flex-wrap gap-4 pt-1", isAr ? "flex-row-reverse" : "flex-row")}>
+                        <div className="flex flex-wrap gap-4 pt-1 flex-row">
                             <a 
                                 href="#build-form-section" 
                                 className="flex cursor-pointer items-center justify-center rounded-xl bg-[#517565] hover:bg-[#517565]/90 text-white h-12 px-7 text-base font-bold shadow-lg shadow-[#517565]/20 transition-all hover:-translate-y-0.5 active:translate-y-0"
@@ -77,7 +77,7 @@ export default function ContributePage() {
                     
                     {/* Path 1: Spread the Word */}
                     <div className="group bg-white p-7 rounded-2xl border border-[#517565]/10 shadow-[0_4px_20px_rgba(81,117,101,0.03)] flex flex-col justify-between hover:shadow-[0_10px_30px_rgba(81,117,101,0.08)] hover:border-[#517565]/20 transition-all duration-300">
-                        <div className={cn("flex flex-col gap-4", isAr ? "text-right items-end" : "text-left items-start")}>
+                        <div className="flex flex-col gap-4 text-start items-start">
                             <div className="size-14 rounded-2xl bg-[#517565]/8 flex items-center justify-center text-[#517565]">
                                 <svg viewBox="0 0 100 100" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <style>{`
@@ -102,7 +102,7 @@ export default function ContributePage() {
                                     {t("sharePathDesc")}
                                 </p>
                             </div>
-                            <div className={cn("w-full bg-[#f6fff8] p-3 rounded-xl border border-neutral-100/80 text-xs text-neutral-600 font-light italic leading-normal", isAr ? "text-right" : "text-left")}>
+                            <div className="w-full bg-[#f6fff8] p-3 rounded-xl border border-neutral-100/80 text-xs text-neutral-600 font-light italic leading-normal text-start">
                                 &quot;{t("shareMessage")}&quot;...
                             </div>
                         </div>
@@ -119,7 +119,7 @@ export default function ContributePage() {
 
                     {/* Path 2: Share Feedback */}
                     <div className="group bg-white p-7 rounded-2xl border border-[#517565]/10 shadow-[0_4px_20px_rgba(81,117,101,0.03)] flex flex-col justify-between hover:shadow-[0_10px_30px_rgba(81,117,101,0.08)] hover:border-[#517565]/20 transition-all duration-300">
-                        <div className={cn("flex flex-col gap-4", isAr ? "text-right items-end" : "text-left items-start")}>
+                        <div className="flex flex-col gap-4 text-start items-start">
                             <div className="size-14 rounded-2xl bg-[#a4c3b2]/12 flex items-center justify-center text-[#517565]">
                                 <svg viewBox="0 0 100 100" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <style>{`
@@ -160,7 +160,7 @@ export default function ContributePage() {
 
                     {/* Path 3: Sponsor & Venture */}
                     <div className="group bg-white p-7 rounded-2xl border border-[#517565]/10 shadow-[0_4px_20px_rgba(81,117,101,0.03)] flex flex-col justify-between hover:shadow-[0_10px_30px_rgba(81,117,101,0.08)] hover:border-[#517565]/20 transition-all duration-300">
-                        <div className={cn("flex flex-col gap-4", isAr ? "text-right items-end" : "text-left items-start")}>
+                        <div className="flex flex-col gap-4 text-start items-start">
                             <div className="size-14 rounded-2xl bg-[#517565]/8 flex items-center justify-center text-[#517565]">
                                 <svg viewBox="0 0 100 100" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <style>{`
@@ -202,7 +202,7 @@ export default function ContributePage() {
 
                 {/* Form & Apply Builder Section */}
                 <section id="build-form-section" className="flex flex-col lg:flex-row gap-10 lg:gap-14 py-8 items-start">
-                    <div className={cn("lg:w-5/12 flex flex-col gap-6 lg:sticky lg:top-28 w-full", isAr ? "text-right items-end" : "text-left items-start")}>
+                    <div className="lg:w-5/12 flex flex-col gap-6 lg:sticky lg:top-28 w-full text-start items-start">
                         <div className="flex items-center gap-2.5 px-3 py-1 rounded-full bg-[#a4c3b2]/20 text-[#517565] text-xs font-bold w-fit">
                             <MdHelpOutline className="text-base" />
                             <span>{isAr ? "مفتوح للتعاون" : "Open Collaboration"}</span>
@@ -219,19 +219,19 @@ export default function ContributePage() {
                         
                         {/* Bullet indicators explaining specialty paths */}
                         <div className="flex flex-col gap-3.5 w-full mt-2">
-                            <div className={cn("flex gap-3 items-start", isAr ? "flex-row-reverse" : "flex-row")}>
+                            <div className="flex gap-3 items-start flex-row">
                                 <div className="size-6 rounded-full bg-[#517565]/10 text-[#517565] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">1</div>
                                 <p className="text-neutral-500 text-sm leading-normal">
                                     {isAr ? "تطوير الواجهات الأمامية (Next.js, TypeScript, Tailwind) والخلفية (.NET)" : "Frontend (Next.js, TypeScript, Tailwind) & Backend (.NET) Development"}
                                 </p>
                             </div>
-                            <div className={cn("flex gap-3 items-start", isAr ? "flex-row-reverse" : "flex-row")}>
+                            <div className="flex gap-3 items-start flex-row">
                                 <div className="size-6 rounded-full bg-[#517565]/10 text-[#517565] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</div>
                                 <p className="text-neutral-500 text-sm leading-normal">
                                     {isAr ? "التصميم الإبداعي وواجهات المستخدم ورسم الأشكال التجريدية" : "UI/UX Design & Creative Art/Asset Illustration"}
                                 </p>
                             </div>
-                            <div className={cn("flex gap-3 items-start", isAr ? "flex-row-reverse" : "flex-row")}>
+                            <div className="flex gap-3 items-start flex-row">
                                 <div className="size-6 rounded-full bg-[#517565]/10 text-[#517565] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">3</div>
                                 <p className="text-neutral-500 text-sm leading-normal">
                                     {isAr ? "الكتابة والترجمة وبناء ثقافة البناء المشترك" : "Content writing, translation, & community culture building"}

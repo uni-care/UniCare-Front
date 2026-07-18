@@ -251,7 +251,7 @@ export default function ShareModal({ isOpen, onClose }: ShareModalProps) {
                 )}
 
                 {/* Quick Copy Link Row */}
-                <div className={cn("w-full bg-white border border-[#517565]/10 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-[0_4px_15px_rgba(81,117,101,0.02)]", isAr ? "flex-row-reverse" : "flex-row")}>
+                <div className="w-full bg-white border border-[#517565]/10 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-[0_4px_15px_rgba(81,117,101,0.02)] flex-row">
                     <div className="truncate text-xs font-light text-neutral-500 select-all max-w-[240px]">
                         {getShareContent().text.substring(0, 50)}...
                     </div>

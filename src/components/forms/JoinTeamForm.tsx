@@ -43,10 +43,10 @@ export default function JoinTeamForm() {
 
     return (
         <div className="w-full bg-white p-6 md:p-8 rounded-2xl border border-[#517565]/10 shadow-[0_10px_30px_rgba(81,117,101,0.05)]">
-            <h3 className={cn("text-xl font-bold text-neutral-900 mb-6", isAr ? "text-right" : "text-left")}>
+            <h3 className="text-xl font-bold text-neutral-900 mb-6 text-start">
                 {t("buildFormTitle")}
             </h3>
-            <p className={cn("text-neutral-500 text-sm mb-6 -mt-4", isAr ? "text-right" : "text-left")}>
+            <p className="text-neutral-500 text-sm mb-6 -mt-4 text-start">
                 {t("buildFormDesc")}
             </p>
             <form
@@ -58,14 +58,11 @@ export default function JoinTeamForm() {
             >
                 <div className="flex flex-col md:flex-row gap-5">
                     <label className="flex flex-col flex-1">
-                        <span className={cn("text-neutral-800 text-sm font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                        <span className="text-neutral-800 text-sm font-semibold pb-1.5 text-start">
                             {t("formFirstName")}
                         </span>
                         <input
-                            className={cn(
-                                "w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                                isAr ? "text-right" : "text-left"
-                            )}
+                            className="w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all text-start"
                             name="firstName"
                             placeholder={isAr ? "مثال: أحمد" : "Jane"}
                             type="text"
@@ -75,14 +72,11 @@ export default function JoinTeamForm() {
                         />
                     </label>
                     <label className="flex flex-col flex-1">
-                        <span className={cn("text-neutral-800 text-sm font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                        <span className="text-neutral-800 text-sm font-semibold pb-1.5 text-start">
                             {t("formLastName")}
                         </span>
                         <input
-                            className={cn(
-                                "w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                                isAr ? "text-right" : "text-left"
-                            )}
+                            className="w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all text-start"
                             name="lastName"
                             placeholder={isAr ? "مثال: علي" : "Doe"}
                             type="text"
@@ -94,14 +88,11 @@ export default function JoinTeamForm() {
                 </div>
 
                 <label className="flex flex-col flex-1">
-                    <span className={cn("text-neutral-800 text-sm font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                    <span className="text-neutral-800 text-sm font-semibold pb-1.5 text-start">
                         {t("formEmail")}
                     </span>
                     <input
-                        className={cn(
-                            "w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                            isAr ? "text-right" : "text-left"
-                        )}
+                        className="w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all text-start"
                         name="email"
                         placeholder="jane@example.com"
                         type="email"
@@ -112,15 +103,12 @@ export default function JoinTeamForm() {
                 </label>
 
                 <label className="flex flex-col flex-1">
-                    <span className={cn("text-neutral-800 text-sm font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                    <span className="text-neutral-800 text-sm font-semibold pb-1.5 text-start">
                         {t("formRole")}
                     </span>
                     <div className="relative">
                         <select
-                            className={cn(
-                                "w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 text-base text-neutral-900 appearance-none cursor-pointer outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all",
-                                isAr ? "pr-4 pl-10 text-right" : "pl-4 pr-10 text-left"
-                            )}
+                            className="w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-12 text-base text-neutral-900 appearance-none cursor-pointer outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all ps-4 pe-10 text-start"
                             name="area"
                             value={form.area}
                             onChange={handleChange}
@@ -149,10 +137,7 @@ export default function JoinTeamForm() {
                             </option>
                         </select>
                         <div
-                            className={cn(
-                                "absolute top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center",
-                                isAr ? "left-4" : "right-4"
-                            )}
+                            className="absolute top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center end-4"
                         >
                             <MdExpandMore className="text-xl" />
                         </div>
@@ -187,14 +172,11 @@ export default function JoinTeamForm() {
                 </label>
 
                 <label className="flex flex-col flex-1">
-                    <span className={cn("text-neutral-800 text-sm font-semibold pb-1.5", isAr ? "text-right" : "text-left")}>
+                    <span className="text-neutral-800 text-sm font-semibold pb-1.5 text-start">
                         {t("formOffer")}
                     </span>
                     <textarea
-                        className={cn(
-                            "w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-28 px-4 py-3 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all resize-none",
-                            isAr ? "text-right" : "text-left"
-                        )}
+                        className="w-full rounded-xl border border-neutral-200 bg-neutral-50/30 h-28 px-4 py-3 text-base text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-[#517565] focus:ring-2 focus:ring-[#517565]/20 transition-all resize-none text-start"
                         name="reason"
                         placeholder={t("formOfferPlaceholder")}
                         value={form.reason}
@@ -203,7 +185,7 @@ export default function JoinTeamForm() {
                     />
                 </label>
 
-                <div className={cn("pt-2 flex", isAr ? "justify-end" : "justify-start")}>
+                <div className="pt-2 flex justify-start">
                     <button
                         className="flex cursor-pointer items-center justify-center rounded-xl bg-[#517565] hover:bg-[#517565]/90 text-white h-12 w-full md:w-auto px-10 text-base font-bold shadow-lg shadow-[#517565]/20 transition-all active:scale-98"
                         type="submit"
