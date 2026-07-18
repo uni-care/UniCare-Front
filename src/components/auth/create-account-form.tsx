@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
@@ -8,13 +7,15 @@ import { toast } from "sonner";
 import { authApi } from "@/api/auth-api";
 import { registerSchema, type RegisterInput } from "@/types/auth-schemas";
 import { RegistrationMethod } from "@/types/auth";
-import { useRouter } from "@/i18n/routing";
-import { IoEyeOffOutline } from "react-icons/io5";
-import { IoEyeOutline } from "react-icons/io5";
+import { Link, useRouter } from "@/i18n/routing";
+import { useTranslations, useLocale } from "next-intl";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 export function CreateAccountForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const t = useTranslations("Auth");
+  const locale = useLocale();
 
   const {
     register,
@@ -53,7 +54,7 @@ export function CreateAccountForm() {
         phoneNumber:
           values.contactMethod === "phone" ? values.phoneNumber : undefined,
       });
-      toast.success("Account created successfully. You can now sign in.", {
+      toast.success(locale === "ar" ? "تم إنشاء الحساب بنجاح. يمكنك الآن تسجيل الدخول." : "Account created successfully. You can now sign in.", {
         duration: 2000,
       });
       reset();
@@ -64,80 +65,87 @@ export function CreateAccountForm() {
       const message =
         error instanceof Error
           ? error.message
+          : locale === "ar"
+          ? "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى."
           : "Failed to create account. Please try again.";
       toast.error(message);
     }
   };
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-xl border border-primary/10 bg-white px-8 py-10 shadow-md shadow-primary/5">
-      <h1 className="mb-1 text-center text-4xl font-bold leading-none text-[#131615] sm:text-3xl">
-        Create Account
-      </h1>
-      <p className="mb-7 text-center text-sm text-neutral-500">
-        Unlock your academic and professional potential.
-      </p>
+    <div className="w-full rounded-3xl bg-white/90 border border-[#517565]/10 p-8 md:p-10 shadow-xl shadow-primary/5 backdrop-blur-md">
+      <div className="flex flex-col gap-2 mb-6 text-start">
+        <h1 className="text-3xl font-black leading-tight text-neutral-900">
+          {t("registerTitle")}
+        </h1>
+        <p className="text-sm text-neutral-500 font-normal leading-relaxed">
+          {t("registerDesc")}
+        </p>
+      </div>
 
       <form className="space-y-4" noValidate onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 rounded-lg border border-primary/15 bg-primary/5 p-1">
+        {/* Role Toggle Selector */}
+        <div className="grid grid-cols-2 rounded-xl border border-[#517565]/10 bg-[#517565]/5 p-1">
           <button
-            className={`rounded-md cursor-pointer px-4 py-2 text-sm font-semibold transition ${role === "student" ? "bg-primary/10 text-[#131615]" : "text-neutral-600"}`}
+            className={`rounded-lg py-2 text-sm font-semibold transition cursor-pointer ${role === "student" ? "bg-white text-[#517565] shadow-sm" : "text-neutral-600 hover:text-neutral-800"}`}
             type="button"
             onClick={() =>
               setValue("role", "student", { shouldValidate: true })
             }
           >
-            Student
+            {t("student")}
           </button>
           <button
-            className={`rounded-md cursor-pointer px-4 py-2 text-sm font-semibold transition ${role === "alumni" ? "bg-white text-primary shadow-sm" : "text-neutral-600"}`}
+            className={`rounded-lg py-2 text-sm font-semibold transition cursor-pointer ${role === "alumni" ? "bg-white text-[#517565] shadow-sm" : "text-neutral-600 hover:text-neutral-800"}`}
             type="button"
             onClick={() => setValue("role", "alumni", { shouldValidate: true })}
           >
-            Alumni
+            {t("alumni")}
           </button>
         </div>
 
-        <div className="grid grid-cols-2 border-b border-primary/10">
+        {/* Contact Method Tabs */}
+        <div className="grid grid-cols-2 border-b border-[#517565]/10 pb-1">
           <button
-            className={`pb-2 text-sm cursor-pointer font-semibold transition ${contactMethod === "email" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
+            className={`pb-2 text-sm cursor-pointer font-bold transition ${contactMethod === "email" ? "border-b-2 border-[#517565] text-[#517565]" : "text-neutral-500 hover:text-neutral-700"}`}
             type="button"
             onClick={() =>
               setValue("contactMethod", "email", { shouldValidate: true })
             }
           >
-            Via Email
+            {t("viaEmail")}
           </button>
           <button
-            className={`pb-2 text-sm cursor-pointer font-semibold transition ${contactMethod === "phone" ? "border-b-2 border-primary text-primary" : "text-neutral-500"}`}
+            className={`pb-2 text-sm cursor-pointer font-bold transition ${contactMethod === "phone" ? "border-b-2 border-[#517565] text-[#517565]" : "text-neutral-500 hover:text-neutral-700"}`}
             type="button"
             onClick={() =>
               setValue("contactMethod", "phone", { shouldValidate: true })
             }
           >
-            Via Phone
+            {t("viaPhone")}
           </button>
         </div>
 
+        {/* Contact Input */}
         {contactMethod === "phone" ? (
-          <div>
+          <div className="flex flex-col gap-1.5 text-start">
             <label
-              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              className="text-xs font-bold uppercase tracking-wider text-neutral-600"
               htmlFor="phoneNumber"
             >
-              Phone Number
+              {t("phoneLabel")}
             </label>
-            <div className="flex rounded-md border border-primary/15 focus-within:border-primary">
-              <div className="flex items-center gap-1 border-r border-primary/15 px-3 text-sm text-neutral-600">
+            <div className="flex rounded-xl border border-neutral-200 focus-within:border-[#517565] focus-within:ring-2 focus-within:ring-[#517565]/15 bg-white transition-all overflow-hidden">
+              <div className="flex items-center gap-1.5 border-e border-neutral-200 px-4 text-sm text-neutral-600 bg-neutral-50/50 select-none">
                 <span>🇪🇬</span>
-                <span>+20</span>
+                <span dir="ltr">+20</span>
               </div>
               <input
-                className="w-full px-3 py-2 text-sm outline-none"
+                className="w-full px-4 h-11 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none text-start"
                 id="phoneNumber"
                 inputMode="numeric"
                 maxLength={10}
-                placeholder="1012345678"
+                placeholder={t("phonePlaceholder")}
                 type="tel"
                 {...register("phoneNumber", {
                   setValueAs: (value: string) =>
@@ -146,165 +154,191 @@ export function CreateAccountForm() {
               />
             </div>
             {errors.phoneNumber ? (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="text-xs text-red-600 font-medium">
                 {errors.phoneNumber.message}
               </p>
             ) : null}
           </div>
         ) : (
-          <div>
+          <div className="flex flex-col gap-1.5 text-start">
             <label
-              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              className="text-xs font-bold uppercase tracking-wider text-neutral-600"
               htmlFor="email"
             >
-              Email
+              {t("emailLabel")}
             </label>
-            <input
-              className="w-full rounded-md border border-primary/15 px-3 py-2 text-sm outline-none transition focus:border-primary"
-              id="email"
-              placeholder="you@university.edu"
-              type="email"
-              {...register("email")}
-            />
+            <div className="flex items-center rounded-xl border border-neutral-200 focus-within:border-[#517565] focus-within:ring-2 focus-within:ring-[#517565]/15 bg-white transition-all">
+              <input
+                className="w-full px-4 h-11 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none rounded-xl text-start"
+                id="email"
+                placeholder={t("emailPlaceholder")}
+                type="email"
+                {...register("email")}
+              />
+            </div>
             {errors.email ? (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="text-xs text-red-600 font-medium">
                 {errors.email.message}
               </p>
             ) : null}
           </div>
         )}
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div>
+        {/* First & Last Name fields */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-1.5 text-start">
             <label
-              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              className="text-xs font-bold uppercase tracking-wider text-neutral-600"
               htmlFor="firstName"
             >
-              First Name
+              {t("firstNameLabel")}
             </label>
-            <input
-              className="w-full rounded-md border border-primary/35 px-3 py-2 text-sm outline-none transition focus:border-primary"
-              id="firstName"
-              placeholder="Ziad"
-              type="text"
-              {...register("firstName")}
-            />
+            <div className="flex items-center rounded-xl border border-neutral-200 focus-within:border-[#517565] focus-within:ring-2 focus-within:ring-[#517565]/15 bg-white transition-all">
+              <input
+                className="w-full px-4 h-11 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none rounded-xl text-start"
+                id="firstName"
+                placeholder={t("firstNamePlaceholder")}
+                type="text"
+                {...register("firstName")}
+              />
+            </div>
             {errors.firstName ? (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="text-xs text-red-600 font-medium">
                 {errors.firstName.message}
               </p>
             ) : null}
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1.5 text-start">
             <label
-              className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+              className="text-xs font-bold uppercase tracking-wider text-neutral-600"
               htmlFor="lastName"
             >
-              Last Name
+              {t("lastNameLabel")}
             </label>
-            <input
-              className="w-full rounded-md border border-primary/35 px-3 py-2 text-sm outline-none transition focus:border-primary"
-              id="lastName"
-              placeholder="Nasser"
-              type="text"
-              {...register("lastName")}
-            />
+            <div className="flex items-center rounded-xl border border-neutral-200 focus-within:border-[#517565] focus-within:ring-2 focus-within:ring-[#517565]/15 bg-white transition-all">
+              <input
+                className="w-full px-4 h-11 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none rounded-xl text-start"
+                id="lastName"
+                placeholder={t("lastNamePlaceholder")}
+                type="text"
+                {...register("lastName")}
+              />
+            </div>
             {errors.lastName ? (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="text-xs text-red-600 font-medium">
                 {errors.lastName.message}
               </p>
             ) : null}
           </div>
         </div>
 
-        <div>
+        {/* Password */}
+        <div className="flex flex-col gap-1.5 text-start">
           <label
-            className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+            className="text-xs font-bold uppercase tracking-wider text-neutral-600"
             htmlFor="password"
           >
-            Password
+            {t("passwordLabel")}
           </label>
-          <div className="flex items-center rounded-md border border-primary/15 pr-2 focus-within:border-primary">
+          <div className="flex items-center rounded-xl border border-neutral-200 focus-within:border-[#517565] focus-within:ring-2 focus-within:ring-[#517565]/15 bg-white transition-all pe-4">
             <input
-              className="w-full px-3 py-2 text-sm outline-none"
+              className="w-full px-4 h-11 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none rounded-xl text-start"
               id="password"
-              placeholder="........"
+              placeholder="••••••••"
               type={showPassword ? "text" : "password"}
               {...register("password")}
             />
             <button
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="material-symbols-outlined cursor-pointer text-neutral-500"
+              className="cursor-pointer text-neutral-500 hover:text-neutral-700 transition-colors flex items-center"
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
             >
-              {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+              {showPassword ? <IoEyeOutline className="text-lg" /> : <IoEyeOffOutline className="text-lg" />}
             </button>
           </div>
           {errors.password ? (
-            <p className="mt-1 text-xs text-red-600">
+            <p className="text-xs text-red-600 font-medium">
               {errors.password.message}
             </p>
           ) : null}
         </div>
 
-        <div>
+        {/* Confirm Password */}
+        <div className="flex flex-col gap-1.5 text-start">
           <label
-            className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#131615]"
+            className="text-xs font-bold uppercase tracking-wider text-neutral-600"
             htmlFor="confirmPassword"
           >
-            Confirm Password
+            {t("confirmPasswordLabel")}
           </label>
-          <div className="flex items-center rounded-md border border-primary/35 pr-2 focus-within:border-primary">
+          <div className="flex items-center rounded-xl border border-neutral-200 focus-within:border-[#517565] focus-within:ring-2 focus-within:ring-[#517565]/15 bg-white transition-all">
             <input
-              className="w-full px-3 py-2 text-sm outline-none"
+              className="w-full px-4 h-11 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none rounded-xl text-start"
               id="confirmPassword"
-              placeholder="........"
+              placeholder="••••••••"
               type="password"
               {...register("confirmPassword")}
             />
           </div>
           {errors.confirmPassword ? (
-            <p className="mt-1 text-xs text-red-600">
+            <p className="text-xs text-red-600 font-medium">
               {errors.confirmPassword.message}
             </p>
           ) : null}
         </div>
 
-        <label className="flex items-start gap-2 text-sm text-neutral-600">
-          <input
-            className="mt-0.5"
-            type="checkbox"
-            {...register("acceptedPolicy")}
-          />
-          <span>
-            I agree to the{" "}
-            <span className="font-medium text-primary">Terms & Conditions</span>{" "}
-            and <span className="font-medium text-primary">Privacy Policy</span>
-          </span>
-        </label>
-        {errors.acceptedPolicy ? (
-          <p className="text-xs text-red-600">
-            {errors.acceptedPolicy.message}
-          </p>
-        ) : null}
+        {/* Policy Checkbox */}
+        <div className="flex flex-col gap-1.5">
+          <label className="flex items-start gap-2.5 text-sm text-neutral-600 cursor-pointer select-none text-start">
+            <input
+              className="mt-1 rounded border-neutral-300 text-[#517565] focus:ring-[#517565] cursor-pointer"
+              type="checkbox"
+              {...register("acceptedPolicy")}
+            />
+            <span>
+              {locale === "ar" ? (
+                <>
+                  أوافق على{" "}
+                  <Link className="font-bold text-[#517565] hover:underline" href="/terms">الشروط والأحكام</Link>{" "}
+                  و{" "}
+                  <Link className="font-bold text-[#517565] hover:underline" href="/privacy">سياسة الخصوصية</Link>
+                </>
+              ) : (
+                <>
+                  I agree to the{" "}
+                  <Link className="font-bold text-[#517565] hover:underline" href="/terms">Terms & Conditions</Link>{" "}
+                  and{" "}
+                  <Link className="font-bold text-[#517565] hover:underline" href="/privacy">Privacy Policy</Link>
+                </>
+              )}
+            </span>
+          </label>
+          {errors.acceptedPolicy ? (
+            <p className="text-xs text-red-600 font-medium text-start">
+              {errors.acceptedPolicy.message}
+            </p>
+          ) : null}
+        </div>
 
+        {/* Submit */}
         <button
-          className="w-full rounded-full cursor-pointer bg-primary py-3 text-base font-semibold text-white shadow-md shadow-primary/25 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+          className="w-full cursor-pointer rounded-xl bg-[#517565] hover:bg-[#517565]/90 text-white h-12 text-base font-bold shadow-lg shadow-[#517565]/20 transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 mt-4"
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? "Creating account..." : "Create Account"}
+          {isSubmitting ? t("registerLoading") : t("registerCta")}
         </button>
 
-        <p className="text-center text-sm text-neutral-500">
-          Already have an account?{" "}
+        {/* Log In Link */}
+        <p className="text-center text-sm text-neutral-500 font-normal mt-4">
+          {t("alreadyHaveAccount")}{" "}
           <Link
-            className="font-semibold text-primary hover:underline"
+            className="font-bold text-[#517565] hover:underline"
             href="/login"
           >
-            Log In
+            {t("loginCta")}
           </Link>
         </p>
       </form>
