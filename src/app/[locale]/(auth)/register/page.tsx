@@ -14,49 +14,123 @@ const RegisterIllustration = ({ isAr }: { isAr: boolean }) => (
         <stop offset="0%" stopColor="#517565" stopOpacity="0.85" />
         <stop offset="100%" stopColor="#a4c3b2" stopOpacity="0.85" />
       </linearGradient>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.1" />
+      </filter>
     </defs>
     
     <style>{`
-      @keyframes float-ring-1 {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-8px) rotate(180deg); }
+      @keyframes crawl-trail {
+        to { stroke-dashoffset: -24; }
       }
       @keyframes scale-node {
         0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.06); }
+        50% { transform: scale(1.04); }
+      }
+      @keyframes pulse-sparkle {
+        0%, 100% { opacity: 0.4; transform: scale(0.9); }
+        50% { opacity: 1; transform: scale(1.25); }
       }
     `}</style>
 
-    {/* Connecting Curved Pathway */}
-    <path d="M 80 150 Q 200 50, 320 150 Q 200 250, 80 150" stroke="#517565" strokeWidth="2" strokeDasharray="5 7" className="animate-[float-ring-1_20s_linear_infinite] origin-center" style={{ transformOrigin: '200px 150px' }} />
+    {/* Connecting Curved Pathway - Wavy treasure map style */}
+    <path 
+      d="M 105 150 C 110 110, 160 70, 200 55 C 240 40, 280 110, 295 150 C 310 190, 260 230, 200 245 C 140 260, 100 190, 105 150" 
+      stroke="rgba(81, 117, 101, 0.12)" 
+      strokeWidth="5" 
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path 
+      d="M 105 150 C 110 110, 160 70, 200 55 C 240 40, 280 110, 295 150 C 310 190, 260 230, 200 245 C 140 260, 100 190, 105 150" 
+      stroke="url(#registerGrad)" 
+      strokeWidth="2.5" 
+      strokeDasharray="4 8" 
+      strokeLinecap="round"
+      className="animate-[crawl-trail_8s_linear_infinite]" 
+      fill="none"
+    />
+
+    {/* Value Sparks on the wavy path */}
+    {/* Top Left Spark */}
+    <g className="animate-[pulse-sparkle_3s_ease-in-out_infinite] origin-center" style={{ transformOrigin: '152px 98px' }}>
+      <path d="M 152 98 Q 152 98, 152 94 Q 152 98, 156 98 Q 152 98, 152 102 Q 152 98, 148 98 Z" fill="#517565" />
+    </g>
+    {/* Top Right Spark */}
+    <g className="animate-[pulse-sparkle_3s_ease-in-out_infinite_0.75s] origin-center" style={{ transformOrigin: '252px 98px' }}>
+      <path d="M 252 98 Q 252 98, 252 94 Q 252 98, 256 98 Q 252 98, 252 102 Q 252 98, 248 98 Z" fill="#a4c3b2" />
+    </g>
+    {/* Bottom Right Spark */}
+    <g className="animate-[pulse-sparkle_3s_ease-in-out_infinite_1.5s] origin-center" style={{ transformOrigin: '252px 202px' }}>
+      <path d="M 252 202 Q 252 202, 252 198 Q 252 202, 256 202 Q 252 202, 252 206 Q 252 202, 248 202 Z" fill="#a4c3b2" />
+    </g>
+    {/* Bottom Left Spark */}
+    <g className="animate-[pulse-sparkle_3s_ease-in-out_infinite_2.25s] origin-center" style={{ transformOrigin: '152px 202px' }}>
+      <path d="M 152 202 Q 152 202, 152 198 Q 152 202, 156 202 Q 152 202, 152 206 Q 152 202, 148 202 Z" fill="#517565" />
+    </g>
 
     {/* Glowing Center Node */}
     <g className="animate-[scale-node_5s_ease-in-out_infinite]" style={{ transformOrigin: '200px 150px' }}>
-      <circle cx="200" cy="150" r="35" fill="url(#registerGrad)" className="shadow-lg" />
-      {/* Handshake/Trust Line Art icon */}
-      <path d="M188 152 C188 145, 192 143, 200 143 C208 143, 212 145, 212 152 M194 157 C197 155, 203 155, 206 157" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="194" cy="152" r="2" fill="white" />
-      <circle cx="206" cy="152" r="2" fill="white" />
+      <circle cx="200" cy="150" r="35" fill="url(#registerGrad)" filter="url(#shadow)" />
+      
+      {/* Seedling & Heart of Care symbol */}
+      <path 
+        d="M 200 162 C 182 147, 174 137, 174 128 C 174 118, 182 110, 192 110 C 197 110, 200 115, 200 120 C 200 115, 203 110, 208 110 C 218 110, 226 118, 226 128 C 226 137, 218 147, 200 162 Z" 
+        stroke="white" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        fill="rgba(255, 255, 255, 0.15)" 
+      />
+      {/* Sprout stem */}
+      <path d="M 200 154 V 140" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+      {/* Left leaf */}
+      <path d="M 200 148 Q 192 144, 193 138 Q 200 141, 200 148" fill="white" />
+      {/* Right leaf */}
+      <path d="M 200 144 Q 208 140, 207 134 Q 200 137, 200 144" fill="white" />
     </g>
 
-    {/* Outer Orbit Nodes representing collaboration */}
-    <circle cx="80" cy="150" r="20" fill="white" stroke="#517565" strokeWidth="2" />
-    {/* Book */}
-    <path d="M75 146 H85 V154 H75 Z" stroke="#517565" strokeWidth="1.5" />
+    {/* Outer Orbit Nodes representing student life and sharing */}
+    {/* Left Node: Knowledge Sharing (Open Book) */}
+    <g filter="url(#shadow)">
+      <circle cx="105" cy="150" r="20" fill="white" stroke="#517565" strokeWidth="2" />
+      <path d="M 95 147 C 99 144, 103 146, 105 150 C 105 146, 109 144, 113 147 V 156 C 109 153, 105 155, 105 155 C 105 155, 101 153, 95 156 Z" stroke="#517565" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+      <path d="M 105 150 V 155" stroke="#517565" strokeWidth="1.5" />
+    </g>
     
-    <circle cx="320" cy="150" r="20" fill="white" stroke="#a4c3b2" strokeWidth="2" />
-    {/* Sprout */}
-    <path d="M320 156 V145" stroke="#a4c3b2" strokeWidth="1.5" />
-    <path d="M320 148 Q324 146, 324 142" stroke="#a4c3b2" strokeWidth="1.5" />
+    {/* Right Node: Engineering Tools (Drafting Compass) */}
+    <g filter="url(#shadow)">
+      <circle cx="295" cy="150" r="20" fill="white" stroke="#a4c3b2" strokeWidth="2" />
+      {/* Compass head */}
+      <circle cx="295" cy="140" r="2.5" stroke="#a4c3b2" strokeWidth="1.5" fill="white" />
+      <path d="M 295 142.5 V 145" stroke="#a4c3b2" strokeWidth="1.5" />
+      {/* Legs */}
+      <path d="M 295 145 L 288 158" stroke="#a4c3b2" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M 295 145 L 302 158" stroke="#a4c3b2" strokeWidth="1.8" strokeLinecap="round" />
+      {/* Arc/cross bar */}
+      <path d="M 291 152 Q 295 154, 299 152" stroke="#a4c3b2" strokeWidth="1.2" fill="none" />
+    </g>
 
-    <circle cx="200" cy="50" r="20" fill="white" stroke="#517565" strokeWidth="2" />
-    {/* Student cap */}
-    <path d="M192 50 L200 45 L208 50 L200 55 Z" fill="none" stroke="#517565" strokeWidth="1.5" />
-    <path d="M196 52.5 V56" stroke="#517565" strokeWidth="1.5" />
+    {/* Top Node: Academic Achievement (Graduation Cap) */}
+    <g filter="url(#shadow)">
+      <circle cx="200" cy="55" r="20" fill="white" stroke="#517565" strokeWidth="2" />
+      <path d="M 188 55 L 200 49 L 212 55 L 200 61 Z" fill="none" stroke="#517565" strokeWidth="1.8" strokeLinejoin="round" />
+      <path d="M 194 57.5 V 60.5 C 194 60.5, 196 63, 200 63 C 204 63, 206 60.5, 206 60.5 V 57.5" stroke="#517565" strokeWidth="1.5" fill="none" />
+      <path d="M 209 55 V 61.5" stroke="#517565" strokeWidth="1.2" />
+      <circle cx="209" cy="62" r="1" fill="#517565" />
+    </g>
 
-    <circle cx="200" cy="250" r="20" fill="white" stroke="#a4c3b2" strokeWidth="2" />
-    {/* Messaging/Globe */}
-    <circle cx="200" cy="250" r="6" stroke="#a4c3b2" strokeWidth="1.5" />
+    {/* Bottom Node: Science & Labs (Erlenmeyer Flask) */}
+    <g filter="url(#shadow)">
+      <circle cx="200" cy="245" r="20" fill="white" stroke="#a4c3b2" strokeWidth="2" />
+      {/* Liquid fill */}
+      <path d="M 193 250 L 191 254 H 209 L 207 250 Z" fill="#a4c3b2" opacity="0.5" />
+      {/* Flask outline */}
+      <path d="M 197 236 H 203 M 198 236 V 242 L 191 254 C 190 256, 192 257, 194 257 H 206 C 208 257, 210 256, 209 254 L 202 242 V 236" stroke="#a4c3b2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      {/* Bubbles */}
+      <circle cx="197" cy="246" r="1" fill="#a4c3b2" />
+      <circle cx="202" cy="248" r="1.5" fill="#a4c3b2" />
+    </g>
   </svg>
 );
 
