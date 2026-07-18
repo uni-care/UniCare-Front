@@ -13,6 +13,7 @@ vi.mock("next-intl", () => ({
     };
     return messages[key] || key;
   },
+  useLocale: () => "en",
 }));
 
 // Mock routing router

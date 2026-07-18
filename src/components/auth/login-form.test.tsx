@@ -23,15 +23,28 @@ vi.mock("@/hooks/useAuth", () => ({
 
 // Mock routing router
 const mockPush = vi.fn();
-vi.mock("@/i18n/routing", () => ({
-  useRouter: () => ({
-    push: mockPush,
-    replace: vi.fn(),
-    back: vi.fn(),
-    prefetch: vi.fn(),
-  }),
-  usePathname: () => "/",
-}));
+vi.mock("@/i18n/routing", async () => {
+  const react = await import("react");
+  return {
+    useRouter: () => ({
+      push: mockPush,
+      replace: vi.fn(),
+      back: vi.fn(),
+      prefetch: vi.fn(),
+    }),
+    usePathname: () => "/",
+    Link: react.forwardRef<
+      HTMLAnchorElement,
+      React.AnchorHTMLAttributes<HTMLAnchorElement>
+    >(({ children, href, ...props }, ref) =>
+      react.createElement(
+        "a",
+        { ref, href: href?.toString(), ...props },
+        children,
+      ),
+    ),
+  };
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -57,7 +70,9 @@ describe("LoginForm", () => {
   it("should render email login form by default", () => {
     renderWithProviders(<LoginForm />);
 
-    expect(screen.getByText("Welcome back. Please enter your details.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Enter your credentials to access your UniCare account."),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText(/email address/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Log In" })).toBeInTheDocument();

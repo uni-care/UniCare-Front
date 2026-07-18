@@ -44,7 +44,18 @@ vi.mock("sonner", () => ({
   },
 }));
 
-// Mock next-intl translations
-vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
-}));
+// Mock next-intl: resolve real English messages so components render the same
+// copy users see. Namespace-aware, mirroring `useTranslations("Namespace")`.
+vi.mock("next-intl", async () => {
+  const messages = (await import("../../messages/en.json")).default as Record<
+    string,
+    Record<string, string>
+  >;
+  return {
+    useTranslations: (namespace?: string) => (key: string) => {
+      const scope = namespace ? messages[namespace] : undefined;
+      return scope?.[key] ?? key;
+    },
+    useLocale: () => "en",
+  };
+});

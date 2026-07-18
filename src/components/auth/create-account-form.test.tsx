@@ -16,15 +16,28 @@ vi.mock("@/api/auth-api", () => ({
 
 // Mock routing router
 const mockPush = vi.fn();
-vi.mock("@/i18n/routing", () => ({
-  useRouter: () => ({
-    push: mockPush,
-    replace: vi.fn(),
-    back: vi.fn(),
-    prefetch: vi.fn(),
-  }),
-  usePathname: () => "/",
-}));
+vi.mock("@/i18n/routing", async () => {
+  const react = await import("react");
+  return {
+    useRouter: () => ({
+      push: mockPush,
+      replace: vi.fn(),
+      back: vi.fn(),
+      prefetch: vi.fn(),
+    }),
+    usePathname: () => "/",
+    Link: react.forwardRef<
+      HTMLAnchorElement,
+      React.AnchorHTMLAttributes<HTMLAnchorElement>
+    >(({ children, href, ...props }, ref) =>
+      react.createElement(
+        "a",
+        { ref, href: href?.toString(), ...props },
+        children,
+      ),
+    ),
+  };
+});
 
 describe("CreateAccountForm", () => {
   beforeEach(() => {
@@ -36,7 +49,7 @@ describe("CreateAccountForm", () => {
   it("should render student role and phone contact by default", () => {
     render(<CreateAccountForm />);
 
-    expect(screen.getByRole("heading", { name: "Create Account" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Join the Ecosystem" })).toBeInTheDocument();
     expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument();
@@ -53,13 +66,13 @@ describe("CreateAccountForm", () => {
     const alumniButton = screen.getByRole("button", { name: "Alumni" });
     const studentButton = screen.getByRole("button", { name: "Student" });
 
-    // Click Alumni
+    // Click Alumni -> becomes the active (highlighted) option
     await user.click(alumniButton);
-    expect(alumniButton).toHaveClass("bg-white text-primary");
+    expect(alumniButton).toHaveClass("bg-white", "shadow-sm");
 
-    // Click Student
+    // Click Student -> active state moves back to Student
     await user.click(studentButton);
-    expect(studentButton).toHaveClass("bg-primary/10");
+    expect(studentButton).toHaveClass("bg-white", "shadow-sm");
   });
 
   it("should switch contact methods", async () => {
