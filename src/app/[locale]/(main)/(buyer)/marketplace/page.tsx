@@ -5,7 +5,7 @@ import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import ItemCard from "@/components/marketplace/ItemCard";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
-import { DUMMY_ITEMS, toMarketplaceItem, type MarketplaceItem } from "./data";
+import { toMarketplaceItem, type MarketplaceItem } from "./data";
 import { categoriesApi } from "@/api/categories-api";
 import type { CategoryResponse } from "@/types/categories";
 import { chatApi } from "@/api/chat-api";

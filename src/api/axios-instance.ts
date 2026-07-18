@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message =
+    const _message =
       error?.response?.data?.message ??
       error?.response?.data?.error ??
       "Something went wrong. Please try again.";

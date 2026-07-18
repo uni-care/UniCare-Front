@@ -2,7 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import { useRouter } from "@/i18n/routing";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { toast } from "sonner";
 import { itemsApi } from "@/api/items-api";
 import { categoriesApi } from "@/api/categories-api";
@@ -20,8 +20,7 @@ import {
     MdOutlineLocationOn,
     MdCloudUpload,
     MdDelete,
-    MdOutlineDateRange,
-    MdInfo
+    MdOutlineDateRange
 } from "react-icons/md";
 
 interface Props {

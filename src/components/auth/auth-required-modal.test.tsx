@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AuthRequiredModal from "./auth-required-modal";
 import { vi, describe, it, expect, beforeEach } from "vitest";

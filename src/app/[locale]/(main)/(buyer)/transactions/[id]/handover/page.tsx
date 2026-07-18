@@ -41,7 +41,7 @@ export default function HandoverPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [transactionId, user?.id]);
+    }, [transactionId, user]);
 
     useEffect(() => {
         fetchCode();

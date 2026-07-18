@@ -103,7 +103,7 @@ export default function ContributePage() {
                                 </p>
                             </div>
                             <div className={cn("w-full bg-[#f6fff8] p-3 rounded-xl border border-neutral-100/80 text-xs text-neutral-600 font-light italic leading-normal", isAr ? "text-right" : "text-left")}>
-                                "{t("shareMessage")}..."
+                                &quot;{t("shareMessage")}&quot;...
                             </div>
                         </div>
                         <div className="pt-6">
