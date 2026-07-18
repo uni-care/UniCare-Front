@@ -56,7 +56,7 @@ export default function Navbar() {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden md:flex items-center gap-8">
+                <nav className="hidden lg:flex items-center gap-8">
                     <Link
                         href="/marketplace"
                         className={cn("group font-bold flex items-center gap-2 cursor-pointer transition-colors", isAr ? "text-[16px]" : "text-[13px] tracking-wide", isActive("/marketplace") ? "text-primary" : "text-neutral-700 hover:text-primary")}
@@ -81,7 +81,7 @@ export default function Navbar() {
                 </nav>
 
                 {/* Desktop Actions */}
-                <div className="hidden md:flex items-center gap-4">
+                <div className="hidden lg:flex items-center gap-4">
                     {/* Language Switcher */}
                     <button
                         onClick={toggleLanguage}
@@ -242,7 +242,7 @@ export default function Navbar() {
                 {/* Mobile Menu Toggle Button */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden z-50 flex flex-col items-center justify-center gap-1 h-10 w-10 bg-primary/10 rounded-full cursor-pointer transition-colors hover:bg-primary/20"
+                    className="lg:hidden z-50 flex flex-col items-center justify-center gap-1 h-10 w-10 bg-primary/10 rounded-full cursor-pointer transition-colors hover:bg-primary/20"
                     aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
                     aria-expanded={isOpen}
                 >
@@ -253,7 +253,7 @@ export default function Navbar() {
 
                 {/* Mobile Nav Dropdown */}
                 <div
-                    className={`absolute top-20 left-0 right-0 bg-background-light/95 backdrop-blur-xl border border-primary/10 rounded-3xl p-6 flex flex-col gap-6 shadow-2xl md:hidden transition-all duration-300 origin-top ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}
+                    className={`absolute top-20 left-0 right-0 bg-background-light/95 backdrop-blur-xl border border-primary/10 rounded-3xl p-6 flex flex-col gap-6 shadow-2xl lg:hidden transition-all duration-300 origin-top ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}
                 >
                     <nav className="flex flex-col gap-2">
                         {/* Mobile Language Switcher */}

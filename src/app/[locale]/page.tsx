@@ -23,8 +23,8 @@ export default function Page() {
 
       <div className="relative z-10 flex flex-col min-h-screen pt-4">
         <div className="flex-1 flex flex-col items-center justify-center px-6 lg:px-20 py-24">
-          <div className="max-w-300 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className={`lg:col-span-5 flex flex-col gap-8 order-2 lg:order-1 ${isAr ? "text-right items-end" : "text-left items-start"}`}>
+          <div className="max-w-300 w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+            <div className="md:col-span-6 flex flex-col gap-8 order-2 md:order-1 text-start items-start">
               <div className="flex flex-col gap-4">
                 <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-[#345144] w-fit text-xs font-bold tracking-widest uppercase">
                   {isAr ? "يديره المجتمع" : "Community Driven"}
@@ -45,17 +45,17 @@ export default function Page() {
                 </p>
               </div>
 
-              <div className={`flex flex-wrap gap-4 ${isAr ? "flex-row-reverse" : ""}`}>
-                <Link href="/marketplace" className={`group flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/40 hover:translate-y-0.5 transition-all cursor-pointer ${isAr ? "flex-row-reverse" : ""}`}>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/marketplace" className="group flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold shadow-2xl shadow-primary/40 hover:translate-y-0.5 transition-all cursor-pointer">
                   {isAr ? "دخول المنظومة" : "Enter the Ecosystem"}
-                  <MdArrowForward className={`group-hover:translate-x-1 transition-transform text-xl ${isAr ? "rotate-180" : ""}`} />
+                  <MdArrowForward className={`transition-transform text-xl ${isAr ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
                 </Link>
                 <Link href="/marketplace" className="flex items-center gap-3 px-8 py-4 rounded-full text-lg font-bold border border-primary/20 hover:bg-white/50 transition-all cursor-pointer">
                   {isAr ? "استكشاف الموارد" : "Explore Assets"}
                 </Link>
               </div>
 
-              <div className={`flex flex-wrap items-center gap-y-4 gap-x-6 md:gap-x-8 mt-4 ${isAr ? "flex-row-reverse text-right" : ""}`}>
+              <div className="flex flex-wrap items-center gap-y-4 gap-x-6 md:gap-x-8 mt-4 text-start">
                 <div className="flex flex-col gap-0.5">
                   <p className="text-sm font-bold text-primary">
                     {isAr ? "تبادل طلابي موثق" : "Student Verified"}
@@ -85,27 +85,31 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 order-1 lg:order-2 flex justify-center relative">
-              <div className="w-full max-w-125 aspect-square rounded-xl overflow-hidden shadow-[0_20px_50px_-12px_rgba(106,144,127,0.25)] relative group">
-                <Image
-                  fill
-                  alt="Abstract 3D shapes"
-                  className="w-full h-full object-cover grayscale-20 group-hover:scale-110 transition-transform duration-700"
-                  src="/hero-image.png"
-                  sizes="(max-width: 768px) 100vw, 500px"
-                  priority
-                />
-                <div className="absolute inset-0 bg-linear-to-tr from-primary/40 to-transparent"></div>
-              </div>
+            <div className="md:col-span-6 order-1 md:order-2 flex justify-center md:justify-end">
+              <div className="w-full max-w-120 aspect-square relative group">
+                {/* Image wrapper with overflow-hidden to keep scale animations cropped */}
+                <div className="w-full h-full rounded-xl overflow-hidden relative shadow-[0_20px_50px_-12px_rgba(106,144,127,0.25)]">
+                  <Image
+                    fill
+                    alt="Abstract 3D shapes"
+                    className="w-full h-full object-cover grayscale-20 group-hover:scale-110 transition-transform duration-700"
+                    src="/hero-image.png"
+                    sizes="(max-width: 768px) 100vw, 480px"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-linear-to-tr from-primary/40 to-transparent"></div>
+                </div>
 
-              <div className={`absolute -bottom-8 md:bottom-10 ${isAr ? "right-0 md:-right-4 text-right" : "left-0 md:-left-4 text-left"} glass-card p-6 rounded-3xl border border-white/40 shadow-2xl max-w-60 z-20 animate-[pulse_4s_ease-in-out_infinite] hover:-translate-y-2 transition-transform duration-500`}>
-                <p className={`flex items-center gap-2 font-semibold uppercase tracking-widest text-[#2d4339] mb-2 ${isAr ? "flex-row-reverse" : ""}`}>
-                  <span className="size-2 rounded-full bg-[#2d4339] animate-pulse"></span>
-                  {isAr ? "تأثير مجتمعي" : "Community Driven"}
-                </p>
-                <p className={`text-lg italic font-serif-art text-[#1e3227] ${isAr ? "font-amiri" : ""}`}>
-                  {isAr ? "«تنمو جذور طلاب الجامعة في تربة الفنون والرعاية المتبادلة.»" : '"The roots of Uni Students grow through the soil of art."'}
-                </p>
+                {/* Badge Overlay */}
+                <div className={`absolute -bottom-8 md:bottom-10 ${isAr ? "right-0 md:-right-6 text-right" : "left-0 md:-left-6 text-left"} glass-card p-6 rounded-3xl border border-white/40 shadow-2xl max-w-60 z-20 animate-[pulse_4s_ease-in-out_infinite] hover:-translate-y-2 transition-transform duration-500`}>
+                  <p className="flex items-center gap-2 font-semibold uppercase tracking-widest text-[#2d4339] mb-2">
+                    <span className="size-2 rounded-full bg-[#2d4339] animate-pulse"></span>
+                    {isAr ? "تأثير مجتمعي" : "Community Driven"}
+                  </p>
+                  <p className={`text-lg italic font-serif-art text-[#1e3227] ${isAr ? "font-amiri" : ""}`}>
+                    {isAr ? "«تنمو جذور طلاب الجامعة في تربة الفنون والرعاية المتبادلة.»" : '"The roots of Uni Students grow through the soil of art."'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -148,8 +152,8 @@ export default function Page() {
               </p>
             </div>
 
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24 ${isAr ? "direction-rtl" : ""}`}>
-              <div className={`flex flex-col items-start space-y-6 md:translate-y-8 ${isAr ? "items-end text-right" : "items-start text-left"}`}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24">
+              <div className="flex flex-col items-start text-start space-y-6 md:translate-y-8">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-full scale-150 transition-transform group-hover:scale-110"></div>
                   <div className="relative w-48 h-48 flex items-center justify-center">
@@ -175,7 +179,7 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className={`flex flex-col items-start space-y-6 md:-translate-y-8 ${isAr ? "items-end text-right" : "items-start text-left"}`}>
+              <div className="flex flex-col items-start text-start space-y-6 md:-translate-y-8">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-muted-teal/15 blur-2xl rounded-full scale-150 transition-transform group-hover:scale-110"></div>
                   <div className="relative w-48 h-48 flex items-center justify-center">
@@ -201,7 +205,7 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className={`flex flex-col items-start space-y-6 md:translate-y-12 ${isAr ? "items-end text-right" : "items-start text-left"}`}>
+              <div className="flex flex-col items-start text-start space-y-6 md:translate-y-12">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 transition-transform group-hover:scale-110"></div>
                   <div className="relative w-48 h-48 flex items-center justify-center">
@@ -232,7 +236,7 @@ export default function Page() {
 
         <section className="px-6 lg:px-20 py-24 bg-primary/5">
           <div className="max-w-300 mx-auto">
-            <div className={`flex items-end justify-between mb-12 ${isAr ? "flex-row-reverse" : ""}`}>
+            <div className="flex items-end justify-between mb-12">
               <div className={`flex flex-col gap-2 ${isAr ? "text-right" : "text-left"}`}>
                 <h3 className="text-3xl font-bold tracking-tight">
                   {isAr ? "طوّر مجموعة أدواتك" : "Cultivate Your Toolkit"}
@@ -241,7 +245,7 @@ export default function Page() {
                   {isAr ? "اكتشف المناهج الدراسية، الأدوات، ومستلزمات السكن الجامعي المشاركة من الطلاب." : "Discover textbooks, tools, and dorm items shared by peer students."}
                 </p>
               </div>
-              <Link href="/marketplace" className={`flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer ${isAr ? "flex-row-reverse" : ""}`}>
+              <Link href="/marketplace" className="flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer">
                 {isAr ? "عرض الكل" : "View all"} <MdTrendingFlat className={`text-xl ${isAr ? "rotate-180" : ""}`} />
               </Link>
             </div>
