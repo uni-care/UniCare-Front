@@ -164,3 +164,46 @@ File: `src/components/auth/login-form.tsx`
 5. **Step 5**: Write hooks test setup and tests for `useAuth.ts`.
 6. **Step 6**: Implement tests for UI Components (beginning with forms like `LoginForm` and `CreateAccountForm`).
 7. **Step 7**: Update `package.json` to include `"test": "vitest"` and `"test:run": "vitest run"`.
+
+---
+
+## 5. End-to-End Testing (Playwright)
+
+Alongside the Vitest unit suite, the project has a **Playwright** end-to-end suite in
+[`e2e/`](e2e/) that drives a real browser against the app.
+
+### Design
+
+- **Runs against a production build.** `playwright.config.ts` boots the app with
+  `npm run build && npm run start`. The Next.js dev server compiles routes on
+  demand, which makes the `load` event and hydration timing flaky under parallel
+  test load; `next start` serves pre-rendered pages that load and hydrate fast and
+  deterministically.
+- **No live backend required.** Tests intercept backend calls at the network layer
+  with `page.route` via the helpers in [`e2e/utils/mocks.ts`](e2e/utils/mocks.ts)
+  (auth token/profile, login success/failure, categories, items). So the suite is
+  hermetic and does not depend on `NEXT_PUBLIC_API_URL`.
+
+### Coverage
+
+| Spec | What it covers |
+| :--- | :--- |
+| `landing.spec.ts` | Root → default-locale redirect, hero content, CTA links, console-error check |
+| `navigation.spec.ts` | Navbar routing (marketplace/about/contribute), signed-out state, 404 page |
+| `i18n.spec.ts` | `en`/`ar` `lang`+`dir` attributes, RTL content, language switcher |
+| `auth.spec.ts` | Login form render, email/phone toggle, Zod validation, password visibility, success redirect, failure toast, register link |
+| `marketplace.spec.ts` | Renders mocked items, client-side search filter, empty state |
+
+### Commands
+
+```bash
+npm run test:e2e          # run the full suite (headless)
+npm run test:e2e:ui       # interactive Playwright UI mode
+npm run test:e2e:report   # open the last HTML report
+```
+
+First-time setup installs the browser binary:
+
+```bash
+npx playwright install chromium
+```
