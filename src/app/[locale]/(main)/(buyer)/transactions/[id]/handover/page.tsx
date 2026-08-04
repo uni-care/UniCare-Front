@@ -31,6 +31,7 @@ export default function HandoverPage() {
 
     const [code, setCode] = useState<HandoverCode | null>(null);
     const [transaction, setTransaction] = useState<ActiveTransaction | null>(null);
+    const [counterpartName, setCounterpartName] = useState<string>("");
     const [isPendingApproval, setIsPendingApproval] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isRegenerating, setIsRegenerating] = useState(false);
@@ -81,6 +82,7 @@ export default function HandoverPage() {
             // Resolve Owner ID & Requester ID
             let ownerId = matchedTx?.ownerId;
             let requesterId = matchedTx?.requesterId;
+            let nameCandidate = matchedTx?.isOwner ? matchedTx?.requesterFullName : matchedTx?.ownerFullName;
 
             // Fetch item details if ownerId is missing
             if (!ownerId && matchedTx?.itemId) {
@@ -103,8 +105,8 @@ export default function HandoverPage() {
                 requesterId = user.id;
             }
 
-            // If current user is owner and requesterId is missing, resolve from loans list
-            if (isOwner && !requesterId) {
+            // If current user is owner and requesterId/name is missing, resolve from loans list
+            if (isOwner && (!requesterId || !nameCandidate)) {
                 try {
                     const loansRes = await loansApi.getLoans({}, token);
                     const items = loansRes?.data?.items;
@@ -113,10 +115,17 @@ export default function HandoverPage() {
                         if (loanMatch?.borrowerId) {
                             requesterId = loanMatch.borrowerId;
                         }
+                        if (loanMatch?.borrowerFullName) {
+                            nameCandidate = loanMatch.borrowerFullName;
+                        }
                     }
                 } catch {
                     // ignore
                 }
+            }
+
+            if (nameCandidate) {
+                setCounterpartName(nameCandidate);
             }
 
             // Ensure distinct IDs for backend validation
@@ -285,9 +294,9 @@ export default function HandoverPage() {
                     <div className="flex flex-col gap-8">
                         {(() => {
                             const isOwner = transaction?.isOwner ?? (user?.id === transaction?.ownerId);
-                            const partyName = isOwner
+                            const partyName = counterpartName || (isOwner
                                 ? (transaction?.requesterFullName || (isAr ? "المستعير" : "Borrower"))
-                                : (transaction?.ownerFullName || (isAr ? "المالك" : "Owner"));
+                                : (transaction?.ownerFullName || (isAr ? "المالك" : "Owner")));
                             const partyInitials = partyName ? partyName.charAt(0).toUpperCase() : "U";
 
                             return (
@@ -303,19 +312,19 @@ export default function HandoverPage() {
                                     />
 
                                     {isOwner ? (
-                                        /* Owner View: Show clear presentation instructions */
+                                        /* Owner View: Show clear presentation instructions with borrower name */
                                         <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 text-center flex flex-col items-center gap-2">
                                             <span className="text-xs font-bold text-primary uppercase tracking-wider">
                                                 {isAr ? "تعليمات تسليم المالك" : "Owner Handover Instructions"}
                                             </span>
                                             <p className="text-neutral-700 text-sm leading-relaxed">
                                                 {isAr
-                                                    ? "أظهر هذا الرقم (PIN) أو رمز QR للمستعير عند تسليم المورد. سيقوم المستعير بإدخال الرمز على جهازه لتأكيد الاستلام."
-                                                    : "Show this 6-digit PIN or QR code to the borrower during handover. The borrower will enter it on their device to confirm receipt."}
+                                                    ? `أظهر هذا الرقم (PIN) أو رمز QR لـ ${partyName} عند تسليم المورد. سيقوم ${partyName} بإدخال الرمز على جهازه لتأكيد الاستلام.`
+                                                    : `Show this 6-digit PIN or QR code to ${partyName} during handover. ${partyName} will enter it on their device to confirm receipt.`}
                                             </p>
                                         </div>
                                     ) : (
-                                        /* Borrower View: Input PIN to verify receipt */
+                                        /* Borrower View: Input PIN to verify receipt with owner name */
                                         <div className="flex flex-col gap-6">
                                             <div className="flex items-center gap-4">
                                                 <div className="flex-1 h-px bg-neutral-200" />
@@ -328,8 +337,8 @@ export default function HandoverPage() {
                                             <div className="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
                                                 <p className="text-xs text-neutral-500 mb-4 text-center">
                                                     {isAr
-                                                        ? "أدخل الرقم التأكيدي المكون من 6 أرقام الظاهر على شاشة المالك لتأكيد استلام المورد:"
-                                                        : "Enter the 6-digit PIN shown on the owner's screen to confirm receipt:"}
+                                                        ? `أدخل الرقم التأكيدي المكون من 6 أرقام الظاهر على شاشة ${partyName} لتأكيد استلام المورد:`
+                                                        : `Enter the 6-digit PIN shown on ${partyName}'s screen to confirm receipt:`}
                                                 </p>
                                                 <PinVerifyForm onVerify={handleVerify} isVerifying={isVerifying} />
                                             </div>
