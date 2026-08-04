@@ -21,6 +21,7 @@ import {
     MdTaskAlt,
     MdErrorOutline,
 } from "react-icons/md";
+import Image from "next/image";
 
 export default function HandoverPage() {
     const params = useParams();
@@ -294,8 +295,8 @@ export default function HandoverPage() {
                 ) : verified ? (
                     /* Success State */
                     <div className="flex flex-col items-center text-center gap-6 py-10">
-                        <div className="size-20 bg-emerald-100 rounded-full flex items-center justify-center ring-4 ring-emerald-200">
-                            <MdTaskAlt className="text-emerald-600 text-5xl" />
+                        <div className=" rounded-full flex items-center justify-center">
+                            <Image src="/Logo.svg" alt="UniCare" width={192} height={192} className="" />
                         </div>
                         <h2 className="text-2xl font-bold text-neutral-900">{isAr ? "تم اكتمال التسليم!" : "Handover Complete!"}</h2>
                         <p className="text-neutral-500 max-w-sm">
@@ -352,8 +353,8 @@ export default function HandoverPage() {
                     /* Borrower View: Enter PIN shown on Owner's screen */
                     <div className="flex flex-col gap-6">
                         <div className="bg-white rounded-2xl border border-neutral-200 p-8 shadow-sm text-center flex flex-col items-center gap-6">
-                            <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center text-primary text-3xl font-black">
-                                🔑
+                            <div className="rounded-full flex items-center justify-center text-primary text-3xl font-black">
+                                <Image src={"/Logo.svg"} alt="UniCare" width={128} height={128} className="" />
                             </div>
                             <div className="space-y-2 max-w-sm">
                                 <h3 className="text-xl font-bold text-neutral-900">
@@ -373,6 +374,6 @@ export default function HandoverPage() {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

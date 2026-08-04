@@ -194,9 +194,9 @@ export default function ProfileTransactionsPage() {
         prev.map((t) =>
           t.transactionId === transactionId
             ? {
-                ...t,
-                status: isApproved ? 2 : 5, // 2 = AwaitingHandover, 5 = Cancelled
-              }
+              ...t,
+              status: isApproved ? 2 : 5, // 2 = AwaitingHandover, 5 = Cancelled
+            }
             : t
         )
       );
@@ -256,7 +256,7 @@ export default function ProfileTransactionsPage() {
                 id={tx.transactionId}
                 title={displayTitle}
                 image={itemCache?.image}
-                counterpartName={tx.isOwner ? (isAr ? "أنت المالك" : "Owner (You)") : (isAr ? "أنت الطالب" : "Requester (You)")}
+                counterpartName={tx.isOwner ? (isAr ? "أنت المالك" : "Owner") : (isAr ? "أنت الطالب" : "Requester")}
                 counterpartRole={tx.isOwner ? "owner" : "requester"}
                 agreedPrice={tx.agreedPrice}
                 dateLabel={isAr ? "تاريخ المعاملة" : "Date"}
