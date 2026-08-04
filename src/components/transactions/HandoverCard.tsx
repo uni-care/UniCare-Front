@@ -2,6 +2,7 @@
 
 import { QRCodeSVG } from "qrcode.react";
 import type { HandoverCode } from "@/types/transactions";
+import { MdWarning, MdVerifiedUser, MdSchedule, MdAutorenew } from "react-icons/md";
 
 interface Props {
     code: HandoverCode;
@@ -29,7 +30,7 @@ export default function HandoverCard({
         <div className="flex flex-col items-center gap-6">
             {/* Warning Notice */}
             <div className="w-full rounded-lg bg-red-50 border border-red-200 p-4 flex gap-3 items-start">
-                <span className="material-symbols-outlined text-red-500 text-xl mt-0.5">warning</span>
+                <MdWarning className="text-red-500 text-xl mt-0.5 shrink-0" />
                 <div>
                     <p className="font-bold text-red-800 text-sm">Important Notice</p>
                     <p className="text-red-700 text-sm mt-0.5">
@@ -44,7 +45,7 @@ export default function HandoverCard({
             <div className="bg-primary/5 rounded-2xl p-6 md:p-8 w-full max-w-sm flex flex-col items-center gap-6 border border-primary/10">
                 {/* Label */}
                 <div className="flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-widest">
-                    <span className="material-symbols-outlined text-base">verified_user</span>
+                    <MdVerifiedUser className="text-base" />
                     {roleLabel}
                 </div>
 
@@ -62,7 +63,7 @@ export default function HandoverCard({
 
                 {isExpired && (
                     <div className="flex items-center gap-2 text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm font-medium">
-                        <span className="material-symbols-outlined text-lg">schedule</span>
+                        <MdSchedule className="text-lg" />
                         Code expired — please regenerate
                     </div>
                 )}
@@ -105,7 +106,7 @@ export default function HandoverCard({
                     {isRegenerating ? (
                         <div className="size-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                     ) : (
-                        <span className="material-symbols-outlined text-xl">autorenew</span>
+                        <MdAutorenew className="text-xl" />
                     )}
                     Regenerate Code
                 </button>

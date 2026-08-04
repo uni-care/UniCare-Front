@@ -5,6 +5,8 @@ import { Link, useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import { itemsApi } from "@/api/items-api";
 import { chatApi } from "@/api/chat-api";
+import { transactionsApi } from "@/api/transactions-api";
+import { TransactionType } from "@/types/transactions";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import RequestItemModal from "@/components/marketplace/request-item-modal";
 import AuthRequiredModal from "@/components/auth/auth-required-modal";
@@ -70,19 +72,31 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
     fetchItemClient();
   }, [id, item]);
 
-  // Sync client states on mount
+  // Check if item is already requested from backend DB
   useEffect(() => {
-    if (!item) return;
-    // Check if item is already requested from localStorage
-    const existingRaw = localStorage.getItem(REQUESTED_ITEMS_STORAGE_KEY);
-    if (existingRaw) {
-      const requestedItems: RequestedItemRecord[] = JSON.parse(existingRaw);
-      const alreadyRequested = requestedItems.some(
-        (entry) => entry.transactionId === item.transactionId
-      );
-      setIsRequested(alreadyRequested);
+    if (!item?.id) return;
+    const token = getAuthToken();
+    if (!token) return;
+
+    let cancelled = false;
+    async function checkRequested() {
+      try {
+        const txs = await transactionsApi.getAll(token!);
+        if (!cancelled && Array.isArray(txs)) {
+          const currentItemId = item?.id;
+          const currentTxId = item?.transactionId;
+          const alreadyRequested = txs.some((tx) => tx && ((currentItemId && tx.itemId === currentItemId) || (currentTxId && tx.transactionId === currentTxId)));
+          setIsRequested(alreadyRequested);
+        }
+      } catch (err) {
+        console.error("Failed to check item request status:", err);
+      }
     }
-  }, [item?.transactionId, item]);
+    checkRequested();
+    return () => {
+      cancelled = true;
+    };
+  }, [item?.id, item?.transactionId, user?.id]);
 
   // Handle favorite toggle
   const handleFavoriteToggle = async () => {
@@ -122,6 +136,11 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
       return false;
     }
 
+    if (isRequested) {
+      toast.info(isAr ? "لقد قمت بطلب هذا العنصر بالفعل." : "You have already requested this item.");
+      return false;
+    }
+
     if (item.ownerId === user.id) {
       toast.error(isAr ? "لا يمكنك طلب المورد الخاص بك." : "You cannot request your own item.");
       return false;
@@ -129,52 +148,67 @@ export default function ItemDetailClient({ initialItem, id }: ItemDetailClientPr
 
     setIsSubmittingRequest(true);
     try {
-      const chat = await chatApi.getOrCreateForTransaction({
-        transactionId: item.transactionId,
-        ownerId: item.ownerId,
-        requesterId: user.id,
-      });
-
-      if (!chat.chatId) {
-        throw new Error("Unable to start chat for this request.");
+      const token = getAuthToken();
+      if (!token) {
+        toast.error(isAr ? "يرجى تسجيل الدخول أولاً." : "Please sign in first.");
+        router.push("/login");
+        return false;
       }
 
-      const firstMessage = note.trim()
-        ? `Hi! I'd like to request "${item.title}" for ${duration.trim()}. ${note.trim()}`
-        : `Hi! I'd like to request "${item.title}" for ${duration.trim()}.`;
+      // 1. Create real transaction in backend DB
+      const txType = item.type === "LEND" ? TransactionType.Lending : TransactionType.Sale;
+      const priceVal = typeof item.price === "number" ? item.price : parseFloat(String(item.price)) || 0;
+      const agreedPrice = priceVal > 0 ? priceVal : 1;
+      const returnDue = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      const targetOwnerId = item.ownerId || "";
 
-      await chatApi.sendMessage(chat.chatId, {
-        senderId: user.id,
-        body: firstMessage,
-      });
+      const tx = await transactionsApi.create(
+        {
+          itemId: item.id,
+          ownerId: targetOwnerId,
+          requesterId: user.id,
+          type: txType,
+          agreedPrice: agreedPrice,
+          rentalReturnDue: txType === TransactionType.Lending ? returnDue : undefined,
+        },
+        token
+      );
 
-      // Update state & storage
+      // 2. Initialize chat for the real transaction
+      let chatId = "";
+      try {
+        const chat = await chatApi.getOrCreateForTransaction({
+          transactionId: tx.transactionId,
+          ownerId: targetOwnerId,
+          requesterId: user.id,
+        });
+
+        if (chat.chatId) {
+          chatId = chat.chatId;
+          const firstMessage = note.trim()
+            ? `Hi! I'd like to request "${item.title}" for ${duration.trim()}. ${note.trim()}`
+            : `Hi! I'd like to request "${item.title}" for ${duration.trim()}.`;
+
+          await chatApi.sendMessage(chat.chatId, {
+            senderId: user.id,
+            body: firstMessage,
+          });
+        }
+      } catch (chatErr) {
+        console.warn("Chat init deferred:", chatErr);
+      }
+
       setIsRequested(true);
 
-      const existingRaw = localStorage.getItem(REQUESTED_ITEMS_STORAGE_KEY);
-      const existingItems: RequestedItemRecord[] = existingRaw ? JSON.parse(existingRaw) : [];
-      const alreadySaved = existingItems.some((entry) => entry.transactionId === item.transactionId);
-
-      if (!alreadySaved) {
-        localStorage.setItem(
-          REQUESTED_ITEMS_STORAGE_KEY,
-          JSON.stringify([
-            ...existingItems,
-            {
-              transactionId: item.transactionId,
-              itemTitle: item.title,
-              chatId: chat.chatId,
-              requestedAt: new Date().toISOString(),
-            },
-          ])
-        );
-      }
-
-      toast.success(isAr ? "تم إرسال الطلب. جاري فتح المحادثة..." : "Request sent. Opening chat...");
-      router.push(`/chat?chatId=${chat.chatId}&itemTitle=${encodeURIComponent(item.title)}`);
+      toast.success(isAr ? "تم إرسال الطلب بنجاح!" : "Request sent successfully!");
+      const targetUrl = chatId
+        ? `/chat?chatId=${chatId}&itemTitle=${encodeURIComponent(item.title)}&ownerName=${encodeURIComponent(item.user.name)}`
+        : `/chat?itemTitle=${encodeURIComponent(item.title)}&ownerName=${encodeURIComponent(item.user.name)}`;
+      router.push(targetUrl);
       return true;
-    } catch (error) {
-      const message = error instanceof Error ? error.message : (isAr ? "فشل إرسال الطلب." : "Failed to send request.");
+    } catch (error: any) {
+      console.error("Request creation failed:", error);
+      const message = error?.response?.data?.error || error?.message || (isAr ? "فشل إرسال الطلب." : "Failed to send request.");
       toast.error(message);
       return false;
     } finally {

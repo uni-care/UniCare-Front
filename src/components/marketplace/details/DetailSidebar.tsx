@@ -2,6 +2,7 @@
 
 import { MdSend } from "react-icons/md";
 import { useLocale } from "next-intl";
+import { useRouter } from "@/i18n/routing";
 
 interface DetailSidebarProps {
   user: {
@@ -24,6 +25,7 @@ export default function DetailSidebar({
 }: DetailSidebarProps) {
   const locale = useLocale();
   const isAr = locale === "ar";
+  const router = useRouter();
 
   return (
     <div className={`bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-neutral-100 flex flex-col gap-6 ${isAr ? "text-right" : "text-left"}`}>
@@ -50,17 +52,22 @@ export default function DetailSidebar({
         ) : (
           <button
             type="button"
-            disabled={isRequested}
-            onClick={onRequestClick}
-            className={`w-full flex items-center justify-center gap-2 font-bold text-base py-4 rounded-xl transition-all duration-200 shadow-md ${
+            onClick={() => {
+              if (isRequested) {
+                router.push("/profile/borrows");
+              } else {
+                onRequestClick();
+              }
+            }}
+            className={`w-full flex items-center justify-center gap-2 font-bold text-base py-4 rounded-xl transition-all duration-200 shadow-md cursor-pointer ${
               isRequested
-                ? "bg-amber-100 text-amber-700 border border-amber-200 shadow-none cursor-not-allowed"
-                : "bg-primary text-white hover:bg-primary/95 shadow-primary/10 cursor-pointer"
+                ? "bg-amber-100 text-amber-800 border border-amber-300 hover:bg-amber-200"
+                : "bg-primary text-white hover:bg-primary/95 shadow-primary/10"
             } ${isAr ? "flex-row-reverse" : ""}`}
           >
             <MdSend className="text-lg" />
             {isRequested
-              ? (isAr ? "تم إرسال الطلب بالفعل" : "Requested Already")
+              ? (isAr ? "عرض طلباتك والمحادثة" : "View Requests & Chat")
               : itemType === "LEND"
               ? (isAr ? "طلب استعارة" : "Request to Borrow")
               : (isAr ? "شراء المورد" : "Buy Item")}

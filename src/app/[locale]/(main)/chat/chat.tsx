@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { MdArrowBack, MdPerson } from "react-icons/md";
+import { useRouter } from "@/i18n/routing";
 
 import { useAuth } from "@/hooks/useAuth";
 import { chatApi } from "@/api/chat-api";
@@ -11,7 +13,27 @@ import type { ConversationMessage, ConversationResponse } from "@/types/chat";
 import { ensureSignalRStarted, getSignalRConnection } from "@/lib/signalr";
 import { useLocale } from "next-intl";
 
+function formatMessageTime(sentAt?: string, isAr = false) {
+  if (!sentAt) return "";
+  try {
+    let normalized = sentAt.trim();
+    if (!normalized.endsWith("Z") && !/[+-]\d{2}:\d{2}$/.test(normalized)) {
+      normalized += "Z";
+    }
+    const date = new Date(normalized);
+    if (isNaN(date.getTime())) return "";
+    return date.toLocaleTimeString(isAr ? "ar-EG" : "en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  } catch {
+    return "";
+  }
+}
+
 export default function ChatPageClient() {
+  const router = useRouter();
   const [message, setMessage] = useState("");
   const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
   const [signalRErrorShown, setSignalRErrorShown] = useState(false);
@@ -23,6 +45,7 @@ export default function ChatPageClient() {
 
   const chatId = searchParams.get("chatId");
   const itemTitle = searchParams.get("itemTitle") ?? (isAr ? "المورد المطلوب" : "Requested Item");
+  const ownerName = searchParams.get("ownerName") ?? searchParams.get("userName");
 
   const conversationQuery = useQuery({
     queryKey: ["chat", "conversation", chatId, user?.id],
@@ -185,13 +208,30 @@ export default function ChatPageClient() {
   }
 
   return (
-    <div className=" bg-neutral-100 px-4 pb-50 pt-50 md:px-8">
+    <div className=" bg-neutral-100 px-4 pb-50 pt-36 md:px-8">
       <div className="mx-auto flex max-w-3xl flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm">
-        <div className={`border-b border-neutral-200 bg-neutral-50 px-5 py-4 ${isAr ? "text-right" : "text-left"}`}>
-          <p className="text-lg font-bold text-neutral-800">{itemTitle}</p>
-          <p className="text-sm text-neutral-500">
-            {isAr ? `معرّف المحادثة: ${chatId}` : `Chat ID: ${chatId}`}
-          </p>
+        <div className={`border-b border-neutral-200 bg-white px-5 py-4 flex items-center justify-between ${isAr ? "flex-row-reverse" : ""}`}>
+          <div className={`flex items-center gap-3 ${isAr ? "flex-row-reverse" : ""}`}>
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-neutral-100 text-neutral-600 transition-colors hover:bg-neutral-200 shrink-0"
+              title={isAr ? "رجوع" : "Back"}
+            >
+              <MdArrowBack className={`text-xl ${isAr ? "rotate-180" : ""}`} />
+            </button>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-bold text-primary">
+              {ownerName ? ownerName.charAt(0).toUpperCase() : <MdPerson className="text-xl" />}
+            </div>
+            <div className={isAr ? "text-right" : "text-left"}>
+              <h2 className="text-base font-bold leading-tight text-neutral-800">{itemTitle}</h2>
+              {ownerName && (
+                <p className="text-xs font-medium text-neutral-500">
+                  {isAr ? `مع: ${ownerName}` : `With: ${ownerName}`}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="flex min-h-105 flex-col gap-3 bg-neutral-100 px-4 py-5">
@@ -225,7 +265,7 @@ export default function ChatPageClient() {
                 >
                   <p>{entry.body || "..."}</p>
                   <p className={`mt-1 text-[11px] ${isMine ? "text-white/80" : "text-neutral-500"}`}>
-                    {new Date(entry.sentAt).toLocaleTimeString(isAr ? "ar-EG" : "en-US", { hour: "2-digit", minute: "2-digit" })}
+                    {formatMessageTime(entry.sentAt, isAr)}
                   </p>
                 </div>
               );

@@ -7,6 +7,7 @@ import type {
   HandoverStatus,
   VerifyCodePayload,
   VerifyCodeResponse,
+  RespondToTransactionResponse,
 } from "@/types/transactions";
 
 const BASE = "/api/v1/transactions";
@@ -27,6 +28,22 @@ export const transactionsApi = {
     return data;
   },
 
+  /** POST /api/v1/transactions/{id}/respond — owner approve or decline request */
+  respond: async (
+    transactionId: string,
+    isApproved: boolean,
+    token: string
+  ): Promise<RespondToTransactionResponse> => {
+    const { data } = await axiosInstance.post<RespondToTransactionResponse>(
+      `${BASE}/${transactionId}/respond`,
+      { isApproved },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return data;
+  },
+
   /** GET /api/transactions/active — list active transactions */
   getActive: async (
     userId: string,
@@ -36,6 +53,19 @@ export const transactionsApi = {
       `${BASE}/active`,
       {
         params: { userId },
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return data;
+  },
+
+  /** GET /api/v1/transactions/all — list all user transactions (pending, active, etc.) */
+  getAll: async (
+    token: string,
+  ): Promise<ActiveTransaction[]> => {
+    const { data } = await axiosInstance.get<ActiveTransaction[]>(
+      `${BASE}/all`,
+      {
         headers: { Authorization: `Bearer ${token}` },
       },
     );

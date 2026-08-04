@@ -4,7 +4,6 @@ import { useLocale } from "next-intl";
 import {
   MdArrowForward,
   MdOutlineInventory,
-  MdHandshake,
   MdLocalFlorist,
   MdTrendingFlat,
   MdAdd
@@ -191,7 +190,7 @@ export default function Page() {
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuB007sAwvnJz9vk8xtdV5MgqWS-M3mkoybrbVibkrx1RM9tgIPmQfJqM18m6OvUalIwLpz_Locp0lu0fBSKTVpmnNs5695oDxzTC_fXrHF-inMqHRCb-SpA6-V9eaLT-MkNCHEqcwYvDSe38vSvXx0OFZjLxXC7OVYsW1YAct8YKneA04_RtmbfgWF_P7oUvhXO5toWX5Syq55Auj5eyntyhpeJCMKJrxmSg-myxdDkKl7ZTsjOnl-8IBlWmMSYgeEW5Jj4dJV6iQtz"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <MdHandshake className="text-5xl text-primary/40" />
+                      <Image src="/Logo.svg" alt="UniCare" width={64} height={40} className="h-10 w-auto object-contain opacity-60" />
                     </div>
                   </div>
                 </div>

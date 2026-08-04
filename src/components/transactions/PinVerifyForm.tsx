@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MdKey, MdVerified } from "react-icons/md";
 
 interface Props {
     onVerify: (pin: string) => Promise<void>;
@@ -21,7 +22,7 @@ export default function PinVerifyForm({ onVerify, isVerifying }: Props) {
             <div>
                 <label className="text-sm font-bold text-neutral-700 mb-2 block">Enter Handover PIN</label>
                 <div className="relative">
-                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400">pin</span>
+                    <MdKey className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-xl" />
                     <input
                         type="text"
                         value={pin}
@@ -45,7 +46,7 @@ export default function PinVerifyForm({ onVerify, isVerifying }: Props) {
                     </>
                 ) : (
                     <>
-                        <span className="material-symbols-outlined text-xl">verified</span>
+                        <MdVerified className="text-xl" />
                         Verify Handover
                     </>
                 )}

@@ -9,6 +9,8 @@ import { toMarketplaceItem, type MarketplaceItem } from "./data";
 import { categoriesApi } from "@/api/categories-api";
 import type { CategoryResponse } from "@/types/categories";
 import { chatApi } from "@/api/chat-api";
+import { transactionsApi } from "@/api/transactions-api";
+import { TransactionType } from "@/types/transactions";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import { itemsApi } from "@/api/items-api";
 import AuthRequiredModal from "@/components/auth/auth-required-modal";
@@ -25,14 +27,6 @@ import {
 } from "react-icons/md";
 
 const REQUESTED_TRANSACTIONS_STORAGE_KEY = "marketplace-requested-transactions";
-const REQUESTED_ITEMS_STORAGE_KEY = "marketplace-requested-items";
-
-interface RequestedItemRecord {
-  transactionId: string;
-  itemTitle: string;
-  chatId: string;
-  requestedAt: string;
-}
 
 export default function MarketplacePage() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -143,39 +137,32 @@ export default function MarketplacePage() {
     return () => { cancelled = true; };
   }, []);
 
+  // Fetch requested item IDs directly from backend API for current logged in user
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(REQUESTED_TRANSACTIONS_STORAGE_KEY);
-      if (!raw) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setRequestedTransactionIds([]);
-        setIsRequestedStateHydrated(true);
-        return;
+    if (!user?.id) return;
+    const token = getAuthToken();
+    if (!token) return;
+
+    let cancelled = false;
+    async function fetchUserRequests() {
+      try {
+        const txs = await transactionsApi.getAll(token!);
+        if (!cancelled && Array.isArray(txs)) {
+          const itemIds = txs.map((tx) => tx.itemId).filter(Boolean);
+          setRequestedTransactionIds(itemIds);
+        }
+      } catch (err) {
+        console.error("Failed to fetch requested items:", err);
+      } finally {
+        if (!cancelled) setIsRequestedStateHydrated(true);
       }
-
-      const parsed = JSON.parse(raw) as unknown;
-      if (!Array.isArray(parsed)) {
-        setRequestedTransactionIds([]);
-        setIsRequestedStateHydrated(true);
-        return;
-      }
-
-      const values = parsed.filter((value): value is string => typeof value === "string" && value.length > 0);
-      setRequestedTransactionIds(values);
-    } catch {
-      setRequestedTransactionIds([]);
-    } finally {
-      setIsRequestedStateHydrated(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isRequestedStateHydrated) {
-      return;
     }
 
-    localStorage.setItem(REQUESTED_TRANSACTIONS_STORAGE_KEY, JSON.stringify(requestedTransactionIds));
-  }, [isRequestedStateHydrated, requestedTransactionIds]);
+    fetchUserRequests();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   const filteredItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -406,21 +393,26 @@ export default function MarketplacePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
-            {slicedItems.map((item) => (
-              <ItemCard
-                key={item.id}
-                {...item}
-                isRequested={requestedTransactionIds.includes(item.transactionId)}
-                onRequestClick={() => {
-                  if (!isAuthenticated) {
-                    setShowAuthModal(true);
-                  } else {
-                    setSelectedItem(item);
-                  }
-                }}
-                onFavoriteClick={handleFavoriteToggle}
-              />
-            ))}
+            {slicedItems.map((item) => {
+              const isAlreadyRequested = requestedTransactionIds.includes(item.id) || (Boolean(item.transactionId) && requestedTransactionIds.includes(item.transactionId!));
+              return (
+                <ItemCard
+                  key={item.id}
+                  {...item}
+                  isRequested={isAlreadyRequested}
+                  onRequestClick={() => {
+                    if (!isAuthenticated) {
+                      setShowAuthModal(true);
+                    } else if (isAlreadyRequested) {
+                      toast.info(isAr ? "لقد قمت بطلب هذا العنصر بالفعل." : "You have already requested this item.");
+                    } else {
+                      setSelectedItem(item);
+                    }
+                  }}
+                  onFavoriteClick={handleFavoriteToggle}
+                />
+              );
+            })}
           </div>
         )}
 
@@ -473,53 +465,66 @@ export default function MarketplacePage() {
 
           setIsSubmittingRequest(true);
           try {
-            const chat = await chatApi.getOrCreateForTransaction({
-              transactionId: selectedItem.transactionId,
-              ownerId: selectedItem.ownerId,
-              requesterId: user.id,
-            });
-
-            if (!chat.chatId) {
-              throw new Error("Unable to start chat for this request.");
+            const token = getAuthToken();
+            if (!token) {
+              toast.error(isAr ? "يرجى تسجيل الدخول لتقديم طلب." : "Please sign in to send a request.");
+              router.push("/login");
+              return false;
             }
 
-            const firstMessage = note.trim()
-              ? `Hi! I'd like to request "${selectedItem.title}" for ${duration.trim()}. ${note.trim()}`
-              : `Hi! I'd like to request "${selectedItem.title}" for ${duration.trim()}.`;
+            const txType = selectedItem.type === "SALE" ? TransactionType.Sale : TransactionType.Lending;
+            const priceVal = typeof selectedItem.price === "number" ? selectedItem.price : parseFloat(String(selectedItem.price)) || 0;
+            const agreedPrice = priceVal > 0 ? priceVal : 1;
+            const returnDue = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+            const targetOwnerId = selectedItem.ownerId || "";
 
-            await chatApi.sendMessage(chat.chatId, {
-              senderId: user.id,
-              body: firstMessage,
-            });
-
-            setRequestedTransactionIds((prev) =>
-              prev.includes(selectedItem.transactionId) ? prev : [...prev, selectedItem.transactionId]
+            const tx = await transactionsApi.create(
+              {
+                itemId: selectedItem.id,
+                ownerId: targetOwnerId,
+                requesterId: user.id,
+                type: txType,
+                agreedPrice: agreedPrice,
+                rentalReturnDue: txType === TransactionType.Lending ? returnDue : undefined,
+              },
+              token
             );
 
-            const existingRaw = localStorage.getItem(REQUESTED_ITEMS_STORAGE_KEY);
-            const existingItems: RequestedItemRecord[] = existingRaw ? JSON.parse(existingRaw) : [];
-            const alreadySaved = existingItems.some((entry) => entry.transactionId === selectedItem.transactionId);
+            let chatId = "";
+            try {
+              const chat = await chatApi.getOrCreateForTransaction({
+                transactionId: tx.transactionId,
+                ownerId: targetOwnerId,
+                requesterId: user.id,
+              });
+              if (chat.chatId) {
+                chatId = chat.chatId;
+                const firstMessage = note.trim()
+                  ? `Hi! I'd like to request "${selectedItem.title}" for ${duration.trim()}. ${note.trim()}`
+                  : `Hi! I'd like to request "${selectedItem.title}" for ${duration.trim()}.`;
 
-            if (!alreadySaved) {
-              localStorage.setItem(
-                REQUESTED_ITEMS_STORAGE_KEY,
-                JSON.stringify([
-                  ...existingItems,
-                  {
-                    transactionId: selectedItem.transactionId,
-                    itemTitle: selectedItem.title,
-                    chatId: chat.chatId,
-                    requestedAt: new Date().toISOString(),
-                  },
-                ])
-              );
+                await chatApi.sendMessage(chat.chatId, {
+                  senderId: user.id,
+                  body: firstMessage,
+                });
+              }
+            } catch (chatErr) {
+              console.warn("Chat init deferred:", chatErr);
             }
 
-            toast.success("Request sent. Opening chat...");
-            router.push(`/chat?chatId=${chat.chatId}&itemTitle=${encodeURIComponent(selectedItem.title)}`);
+            setRequestedTransactionIds((prev) =>
+              prev.includes(selectedItem.id) ? prev : [...prev, selectedItem.id, tx.transactionId].filter(Boolean)
+            );
+
+            toast.success(isAr ? "تم إرسال الطلب بنجاح!" : "Request sent successfully!");
+            const targetUrl = chatId
+              ? `/chat?chatId=${chatId}&itemTitle=${encodeURIComponent(selectedItem.title)}&ownerName=${encodeURIComponent(selectedItem.user.name)}`
+              : `/chat?itemTitle=${encodeURIComponent(selectedItem.title)}&ownerName=${encodeURIComponent(selectedItem.user.name)}`;
+            router.push(targetUrl);
             return true;
-          } catch (error) {
-            const message = error instanceof Error ? error.message : "Failed to send request.";
+          } catch (error: any) {
+            console.error("Request creation failed:", error);
+            const message = error?.response?.data?.error || error?.message || (isAr ? "فشل إرسال الطلب." : "Failed to send request.");
             toast.error(message);
             return false;
           } finally {

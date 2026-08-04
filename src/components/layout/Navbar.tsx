@@ -130,77 +130,77 @@ export default function Navbar() {
                                         setIsUserMenuOpen(false);
                                         setIsActivityOpen(false);
                                     }}
-                                    className={cn("flex items-center gap-2 rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10", isAr ? "text-[16px] flex-row-reverse" : "text-sm")}
+                                    className={cn("flex items-center gap-2.5 rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10", isAr ? "text-[16px] text-right" : "text-sm text-left")}
                                 >
-                                    <MdOutlinePerson className="text-[22px]" />
-                                    {t("profile")}
+                                    <MdOutlinePerson className="text-[22px] shrink-0" />
+                                    <span>{t("profile")}</span>
                                 </Link>
 
                                 <div className="border-t border-neutral-100 my-1 pt-1">
                                     <button
                                         type="button"
                                         onClick={() => setIsActivityOpen((prev) => !prev)}
-                                        className={cn("flex w-full items-center justify-between rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10 cursor-pointer", isAr ? "text-[16px] flex-row-reverse" : "text-sm")}
+                                        className={cn("flex w-full items-center justify-between rounded-xl px-3 py-2 font-semibold text-neutral-700 transition-colors hover:bg-primary/10 cursor-pointer", isAr ? "text-[16px] text-right" : "text-sm text-left")}
                                         aria-expanded={isActivityOpen}
                                     >
-                                        <span className={cn("flex items-center gap-2", isAr ? "flex-row-reverse" : "")}>
-                                            <MdOutlineExplore className="text-[22px] text-neutral-500" />
+                                        <span className="flex items-center gap-2.5">
+                                            <MdOutlineExplore className="text-[22px] text-neutral-500 shrink-0" />
                                             <span>{isAr ? "نشاطاتي" : "My Activity"}</span>
                                         </span>
-                                        <MdExpandMore className={cn("text-[18px] text-neutral-400 transition-transform duration-200", isActivityOpen ? "rotate-180" : "")} />
+                                        <MdExpandMore className={cn("text-[18px] text-neutral-400 transition-transform duration-200 shrink-0", isActivityOpen ? "rotate-180" : "")} />
                                     </button>
 
                                     {isActivityOpen && (
                                         <div className="mt-1 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
                                             <Link
-                                                href="/profile?section=borrows"
+                                                href="/profile/borrows"
                                                 onClick={() => {
                                                     setIsUserMenuOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-lg py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] text-right pr-6 pl-2" : "text-xs text-left pl-6 pr-2")}
                                             >
-                                                <MdCreditCard className="text-[16px] text-neutral-400" />
-                                                {t("myBorrows")}
+                                                <MdCreditCard className="text-[16px] text-neutral-400 shrink-0" />
+                                                <span>{t("myBorrows")}</span>
                                             </Link>
                                             <Link
-                                                href="/profile?section=loans"
+                                                href="/profile/loans"
                                                 onClick={() => {
                                                     setIsUserMenuOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-lg py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] text-right pr-6 pl-2" : "text-xs text-left pl-6 pr-2")}
                                             >
-                                                <MdSell className="text-[16px] text-neutral-400" />
-                                                {t("myLoans")}
+                                                <MdSell className="text-[16px] text-neutral-400 shrink-0" />
+                                                <span>{t("myLoans")}</span>
                                             </Link>
                                             <Link
-                                                href="/my-items"
+                                                href="/profile/my-items"
                                                 onClick={() => {
                                                     setIsUserMenuOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-lg py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] text-right pr-6 pl-2" : "text-xs text-left pl-6 pr-2")}
                                             >
-                                                <MdOutlineStorefront className="text-[16px] text-neutral-400" />
-                                                {t("myItems")}
+                                                <MdOutlineStorefront className="text-[16px] text-neutral-400 shrink-0" />
+                                                <span>{t("myItems")}</span>
                                             </Link>
                                             <Link
-                                                href="/wishlist"
+                                                href="/profile/wishlist"
                                                 onClick={() => {
                                                     setIsUserMenuOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-lg py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] text-right pr-6 pl-2" : "text-xs text-left pl-6 pr-2")}
                                             >
-                                                <MdOutlineFavoriteBorder className="text-[16px] text-neutral-400" />
-                                                {t("wishlist")}
+                                                <MdOutlineFavoriteBorder className="text-[16px] text-neutral-400 shrink-0" />
+                                                <span>{t("wishlist")}</span>
                                             </Link>
                                             <Link
-                                                href="/transactions"
+                                                href="/profile/transactions"
                                                 onClick={() => {
                                                     setIsUserMenuOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] flex-row-reverse pr-4 pl-0" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-lg py-1.5 font-bold text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-900", isAr ? "text-[14px] text-right pr-6 pl-2" : "text-xs text-left pl-6 pr-2")}
                                             >
-                                                <MdOutlineReceiptLong className="text-[16px] text-neutral-400" />
-                                                {t("transactions")}
+                                                <MdOutlineReceiptLong className="text-[16px] text-neutral-400 shrink-0" />
+                                                <span>{t("transactions")}</span>
                                             </Link>
                                         </div>
                                     )}
@@ -214,10 +214,10 @@ export default function Navbar() {
                                         setIsActivityOpen(false);
                                         router.push("/login");
                                     }}
-                                    className={cn("flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-2 font-semibold text-red-600 transition-colors hover:bg-red-50 border-t border-neutral-100 mt-1 pt-2", isAr ? "text-[16px] text-right flex-row-reverse" : "text-left text-sm")}
+                                    className={cn("flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2 font-semibold text-red-600 transition-colors hover:bg-red-50 border-t border-neutral-100 mt-1 pt-2", isAr ? "text-[16px] text-right" : "text-left text-sm")}
                                 >
-                                    <MdOutlineLogout className="text-[22px]" />
-                                    {t("logout")}
+                                    <MdOutlineLogout className="text-[22px] shrink-0" />
+                                    <span>{t("logout")}</span>
                                 </button>
                             </div>
                         </div>
@@ -277,26 +277,26 @@ export default function Navbar() {
                         <Link
                             href="/marketplace"
                             onClick={() => setIsOpen(false)}
-                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] flex-row-reverse" : "text-base", isActive("/marketplace") ? "text-[#345144] bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
+                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] text-right" : "text-base text-left", isActive("/marketplace") ? "text-[#345144] bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
                         >
-                            <MdOutlineStorefront className={cn("text-2xl transition-colors", isActive("/marketplace") ? "text-[#345144]" : "text-primary/60 group-hover:text-primary")} />
-                            {t("marketplace")}
+                            <MdOutlineStorefront className={cn("text-2xl transition-colors shrink-0", isActive("/marketplace") ? "text-[#345144]" : "text-primary/60 group-hover:text-primary")} />
+                            <span>{t("marketplace")}</span>
                         </Link>
                         <Link
                             href="/contribute"
                             onClick={() => setIsOpen(false)}
-                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] flex-row-reverse" : "text-base", isActive("/contribute") ? "text-[#345144] bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
+                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] text-right" : "text-base text-left", isActive("/contribute") ? "text-[#345144] bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
                         >
-                            <MdOutlineEngineering className={cn("text-2xl transition-colors", isActive("/contribute") ? "text-[#345144]" : "text-primary/60 group-hover:text-primary")} />
-                            {t("contribute")}
+                            <MdOutlineEngineering className={cn("text-2xl transition-colors shrink-0", isActive("/contribute") ? "text-[#345144]" : "text-primary/60 group-hover:text-primary")} />
+                            <span>{t("contribute")}</span>
                         </Link>
                         <Link
                             href="/about"
                             onClick={() => setIsOpen(false)}
-                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] flex-row-reverse" : "text-base", isActive("/about") ? "text-[#345144] bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
+                            className={cn("group font-bold transition-colors flex items-center gap-3 p-3 rounded-xl", isAr ? "text-[18px] text-right" : "text-base text-left", isActive("/about") ? "text-[#345144] bg-primary/10" : "text-neutral-700 hover:text-primary hover:bg-primary/5")}
                         >
-                            <MdOutlineDiversity3 className={cn("text-2xl transition-colors", isActive("/about") ? "text-[#345144]" : "text-primary/60 group-hover:text-primary")} />
-                            {t("about")}
+                            <MdOutlineDiversity3 className={cn("text-2xl transition-colors shrink-0", isActive("/about") ? "text-[#345144]" : "text-primary/60 group-hover:text-primary")} />
+                            <span>{t("about")}</span>
                         </Link>
                     </nav>
 
@@ -308,7 +308,7 @@ export default function Navbar() {
                                 <Link
                                     href="/profile"
                                     onClick={() => setIsOpen(false)}
-                                    className={cn("flex items-center justify-between rounded-2xl border border-primary/20 bg-white/70 px-4 py-3", isAr ? "flex-row-reverse" : "")}
+                                    className="flex items-center justify-between rounded-2xl border border-primary/20 bg-white/70 px-4 py-3"
                                 >
                                     <span className={cn("font-bold text-neutral-700", isAr ? "text-[18px]" : "text-sm")}>{user.fullName}</span>
                                     {user.profilePictureUrl ? (
@@ -331,72 +331,72 @@ export default function Navbar() {
                                     <button
                                         type="button"
                                         onClick={() => setIsMobileActivityOpen((prev) => !prev)}
-                                        className={cn("flex w-full items-center justify-between px-4 py-3 font-bold text-neutral-700 cursor-pointer", isAr ? "text-[18px] flex-row-reverse" : "text-sm")}
+                                        className={cn("flex w-full items-center justify-between px-4 py-3 font-bold text-neutral-700 cursor-pointer", isAr ? "text-[18px] text-right" : "text-sm text-left")}
                                         aria-expanded={isMobileActivityOpen}
                                     >
-                                        <span className={cn("flex items-center gap-3", isAr ? "flex-row-reverse" : "")}>
-                                            <MdOutlineExplore className="text-primary text-2xl" />
+                                        <span className="flex items-center gap-3">
+                                            <MdOutlineExplore className="text-primary text-2xl shrink-0" />
                                             <span>{isAr ? "نشاطاتي" : "My Activity"}</span>
                                         </span>
-                                        <MdExpandMore className={cn("text-xl text-neutral-500 transition-transform duration-200", isMobileActivityOpen ? "rotate-180" : "")} />
+                                        <MdExpandMore className={cn("text-xl text-neutral-500 transition-transform duration-200 shrink-0", isMobileActivityOpen ? "rotate-180" : "")} />
                                     </button>
 
                                     {isMobileActivityOpen && (
                                         <div className="flex flex-col border-t border-primary/10 bg-white/40 p-2 gap-1 animate-in fade-in slide-in-from-top-1 duration-150">
                                             <Link
-                                                href="/profile?section=borrows"
+                                                href="/profile/borrows"
                                                 onClick={() => {
                                                     setIsOpen(false);
                                                     setIsMobileActivityOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] text-right pr-6" : "text-xs text-left pl-6")}
                                             >
-                                                <MdCreditCard className="text-[18px] text-neutral-400" />
-                                                {t("myBorrows")}
+                                                <MdCreditCard className="text-[18px] text-neutral-400 shrink-0" />
+                                                <span>{t("myBorrows")}</span>
                                             </Link>
                                             <Link
-                                                href="/profile?section=loans"
+                                                href="/profile/loans"
                                                 onClick={() => {
                                                     setIsOpen(false);
                                                     setIsMobileActivityOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] text-right pr-6" : "text-xs text-left pl-6")}
                                             >
-                                                <MdSell className="text-[18px] text-neutral-400" />
-                                                {t("myLoans")}
+                                                <MdSell className="text-[18px] text-neutral-400 shrink-0" />
+                                                <span>{t("myLoans")}</span>
                                             </Link>
                                             <Link
-                                                href="/my-items"
+                                                href="/profile/my-items"
                                                 onClick={() => {
                                                     setIsOpen(false);
                                                     setIsMobileActivityOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] text-right pr-6" : "text-xs text-left pl-6")}
                                             >
-                                                <MdOutlineStorefront className="text-[18px] text-neutral-400" />
-                                                {t("myItems")}
+                                                <MdOutlineStorefront className="text-[18px] text-neutral-400 shrink-0" />
+                                                <span>{t("myItems")}</span>
                                             </Link>
                                             <Link
-                                                href="/wishlist"
+                                                href="/profile/wishlist"
                                                 onClick={() => {
                                                     setIsOpen(false);
                                                     setIsMobileActivityOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] text-right pr-6" : "text-xs text-left pl-6")}
                                             >
-                                                <MdOutlineFavoriteBorder className="text-[18px] text-neutral-400" />
-                                                {t("wishlist")}
+                                                <MdOutlineFavoriteBorder className="text-[18px] text-neutral-400 shrink-0" />
+                                                <span>{t("wishlist")}</span>
                                             </Link>
                                             <Link
-                                                href="/transactions"
+                                                href="/profile/transactions"
                                                 onClick={() => {
                                                     setIsOpen(false);
                                                     setIsMobileActivityOpen(false);
                                                 }}
-                                                className={cn("flex items-center gap-2 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] flex-row-reverse pr-6" : "text-xs pl-8")}
+                                                className={cn("flex items-center gap-2.5 rounded-xl px-4 py-2.5 font-bold text-neutral-600 hover:bg-primary/5 transition-colors", isAr ? "text-[16px] text-right pr-6" : "text-xs text-left pl-6")}
                                             >
-                                                <MdOutlineReceiptLong className="text-[18px] text-neutral-400" />
-                                                {t("transactions")}
+                                                <MdOutlineReceiptLong className="text-[18px] text-neutral-400 shrink-0" />
+                                                <span>{t("transactions")}</span>
                                             </Link>
                                         </div>
                                     )}
@@ -410,10 +410,10 @@ export default function Navbar() {
                                         setIsMobileActivityOpen(false);
                                         router.push("/login");
                                     }}
-                                    className={cn("flex w-full items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 py-3 font-bold text-red-600 transition-colors hover:bg-red-100", isAr ? "text-[18px] flex-row-reverse" : "text-sm")}
+                                    className={cn("flex w-full items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 py-3 font-bold text-red-600 transition-colors hover:bg-red-100", isAr ? "text-[18px] text-right" : "text-sm text-left")}
                                 >
-                                    <MdOutlineLogout className="text-[22px]" />
-                                    {t("logout")}
+                                    <MdOutlineLogout className="text-[22px] shrink-0" />
+                                    <span>{t("logout")}</span>
                                 </button>
                             </>
                         ) : (

@@ -9,7 +9,7 @@ import { LoginForm } from "@/components/auth/login-form";
 import { cn } from "@/lib/utils";
 
 const LoginIllustration = ({ isAr }: { isAr: boolean }) => (
-  <svg viewBox="0 0 400 300" className="w-full max-w-[360px] h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 400 300" className="w-full max-w-90 h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="loginGrad" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#517565" stopOpacity="0.8" />
@@ -134,17 +134,17 @@ function LoginContent() {
   return (
     <div className="flex min-h-screen bg-background-light overflow-hidden">
       {/* Decorative Brand Column - Hidden on mobile/tablet */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 xl:px-20 relative bg-gradient-to-br from-[#f6fff8] via-[#e8f5ed] to-[#f6fff8] border-e border-[#517565]/10 overflow-hidden">
+      <div className="hidden lg:flex pt-28 lg:w-1/2 flex-col justify-center px-12 xl:px-20 relative bg-linear-to-br from-[#f6fff8] via-[#e8f5ed] to-[#f6fff8] border-e border-primary/10 overflow-hidden">
         {/* Abstract Warm Background Gradients */}
-        <div className="absolute top-[-20%] start-[-20%] size-[60%] rounded-full bg-[#a4c3b2]/20 blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] end-[-10%] size-[50%] rounded-full bg-[#517565]/10 blur-[80px] pointer-events-none" />
+        <div className="absolute top-[-20%] inset-s-[-20%] size-[60%] rounded-full bg-muted-teal/20 blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] inset-e-[-10%] size-[50%] rounded-full bg-primary/10 blur-[80px] pointer-events-none" />
 
         <div className="relative z-10 flex flex-col gap-6 max-w-lg">
-          <Link href="/" className="text-2xl font-black tracking-tight text-[#517565] w-fit hover:opacity-90 transition-opacity">
+          <Link href="/" className="text-2xl font-black tracking-tight text-primary w-fit hover:opacity-90 transition-opacity">
             UniCare
           </Link>
           <div className="flex flex-col gap-3 text-start items-start">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#517565] px-3 py-1 rounded-full bg-[#517565]/10">
+            <span className="text-xs font-bold uppercase tracking-widest text-primary px-3 py-1 rounded-full bg-primary/10">
               {isAr ? "مجتمع جامعي تشاركي" : "Campus Sharing Ecosystem"}
             </span>
             <h2 className={cn(
@@ -168,14 +168,14 @@ function LoginContent() {
       </div>
 
       {/* Form Column - centered on mobile, split-width on desktop */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 md:px-8 py-20 relative bg-[#f6fff8]/30">
-        <div className="absolute top-1/4 start-1/4 size-[120px] rounded-full bg-[#a4c3b2]/10 blur-[40px] pointer-events-none animate-pulse" />
-        <div className="absolute bottom-1/4 end-1/4 size-[160px] rounded-full bg-[#517565]/8 blur-[50px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 md:px-8 py-20 pt-24 relative bg-[#f6fff8]/30">
+        <div className="absolute top-1/4 inset-s-1/4 size-30 rounded-full bg-muted-teal/10 blur-2xl pointer-events-none animate-pulse" />
+        <div className="absolute bottom-1/4 inset-e-1/4 size-40 rounded-full bg-primary/8 blur-[50px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
 
         <div className="relative z-10 w-full max-w-md">
           {/* Mobile logo header */}
           <div className="flex flex-col items-center mb-8 lg:hidden">
-            <Link href="/" className="text-3xl font-black tracking-tight text-[#517565] mb-2">
+            <Link href="/" className="text-3xl font-black tracking-tight text-primary mb-2">
               UniCare
             </Link>
             <p className="text-neutral-500 text-sm text-center">

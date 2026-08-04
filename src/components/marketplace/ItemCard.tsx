@@ -296,18 +296,21 @@ export default function ItemCard({
                 ) : (
                     <button
                         type="button"
-                        disabled={isRequested}
                         onClick={(e) => {
                             e.stopPropagation();
-                            onRequestClick?.(id);
+                            if (isRequested) {
+                                router.push("/profile/borrows");
+                            } else {
+                                onRequestClick?.(id);
+                            }
                         }}
-                        className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 ${isRequested
-                            ? "bg-amber-100 text-amber-700 cursor-not-allowed"
-                            : "bg-primary/10 hover:bg-primary text-primary hover:text-white cursor-pointer"
+                        className={`mt-4 w-full flex items-center justify-center gap-2 font-bold text-sm py-3 rounded-lg transition-all duration-200 cursor-pointer ${isRequested
+                            ? "bg-amber-100 text-amber-800 hover:bg-amber-200/80 border border-amber-200"
+                            : "bg-primary/10 hover:bg-primary text-primary hover:text-white"
                             } ${isAr ? "flex-row-reverse" : ""}`}
                     >
                         <MdSend className="text-lg" />
-                        {isRequested ? (isAr ? "تم الطلب" : "Requested") : (isAr ? "طلب الأدوات" : "Request Item")}
+                        {isRequested ? (isAr ? "تم الطلب (عرض الطلبات)" : "Requested (View Requests)") : (isAr ? "طلب الأدوات" : "Request Item")}
                     </button>
                 )}
             </div>

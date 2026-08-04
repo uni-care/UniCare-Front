@@ -1,5 +1,10 @@
-/* ─── Transaction type enum values ─── */
-export const TransactionType = { Lending: 1, Sale: 2, Return: 3 } as const;
+/* ─── Transaction type enum values (matches backend C# TransactionType: Sale = 1, Rental = 2) ─── */
+export const TransactionType = {
+  Sale: 1,
+  Rental: 2,
+  Lending: 2,
+  Return: 3,
+} as const;
 export const TransactionStatus = {
   Pending: 1,
   Active: 2,
@@ -25,10 +30,26 @@ export interface TransactionResponse {
   createdAt: string;
 }
 
+/* ─── POST /api/v1/transactions/{id}/respond ─── */
+export interface RespondToTransactionPayload {
+  isApproved: boolean;
+}
+
+export interface RespondToTransactionResponse {
+  transactionId: string;
+  status: number;
+  updatedAt: string;
+}
+
 /* ─── GET /api/transactions/active ─── */
 export interface ActiveTransaction {
   transactionId: string;
   itemId: string;
+  itemTitle?: string;
+  ownerId?: string;
+  ownerFullName?: string;
+  requesterId?: string;
+  requesterFullName?: string;
   type: number;
   status: number;
   agreedPrice: number;

@@ -1,7 +1,7 @@
 export interface CreateChatPayload {
   transactionId: string;
-  ownerId: string;
-  requesterId: string;
+  ownerId?: string;
+  requesterId?: string;
 }
 
 export interface CreateChatResponse {

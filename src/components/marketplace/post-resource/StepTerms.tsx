@@ -1,7 +1,7 @@
 import type { StepProps } from "./types";
+import Image from "next/image";
 import { useLocale } from "next-intl";
 import {
-    MdHandshake,
     MdAttachMoney,
     MdOutlineCalendarMonth,
     MdOutlineVerifiedUser,
@@ -58,7 +58,7 @@ export default function StepTerms({ form, update, onNext, onBack, isSubmitting =
                                 onClick={() => update("exchangeType", "lend")}
                                 className={`flex-1 h-full rounded-lg flex items-center justify-center gap-2 text-sm font-bold transition-all cursor-pointer ${form.exchangeType === "lend" ? "bg-white shadow-sm text-primary" : "text-neutral-500"}`}
                             >
-                                <MdHandshake className="text-[18px]" />
+                                <Image src="/Logo.svg" alt="UniCare" width={20} height={14} className="h-4.5 w-auto object-contain inline-block" />
                                 {isAr ? "إعارة (مجاني)" : "Lend (Free)"}
                             </button>
                             <button

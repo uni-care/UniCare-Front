@@ -8,7 +8,7 @@ import { CreateAccountForm } from "@/components/auth/create-account-form";
 import { cn } from "@/lib/utils";
 
 const RegisterIllustration = ({ isAr }: { isAr: boolean }) => (
-  <svg viewBox="0 0 400 300" className="w-full max-w-[360px] h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 400 300" className="w-full max-w-90 h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="registerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#517565" stopOpacity="0.85" />
@@ -18,7 +18,7 @@ const RegisterIllustration = ({ isAr }: { isAr: boolean }) => (
         <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.1" />
       </filter>
     </defs>
-    
+
     <style>{`
       @keyframes crawl-trail {
         to { stroke-dashoffset: -24; }
@@ -34,20 +34,20 @@ const RegisterIllustration = ({ isAr }: { isAr: boolean }) => (
     `}</style>
 
     {/* Connecting Curved Pathway - Wavy treasure map style */}
-    <path 
-      d="M 105 150 C 110 110, 160 70, 200 55 C 240 40, 280 110, 295 150 C 310 190, 260 230, 200 245 C 140 260, 100 190, 105 150" 
-      stroke="rgba(81, 117, 101, 0.12)" 
-      strokeWidth="5" 
+    <path
+      d="M 105 150 C 110 110, 160 70, 200 55 C 240 40, 280 110, 295 150 C 310 190, 260 230, 200 245 C 140 260, 100 190, 105 150"
+      stroke="rgba(81, 117, 101, 0.12)"
+      strokeWidth="5"
       strokeLinecap="round"
       fill="none"
     />
-    <path 
-      d="M 105 150 C 110 110, 160 70, 200 55 C 240 40, 280 110, 295 150 C 310 190, 260 230, 200 245 C 140 260, 100 190, 105 150" 
-      stroke="url(#registerGrad)" 
-      strokeWidth="2.5" 
-      strokeDasharray="4 8" 
+    <path
+      d="M 105 150 C 110 110, 160 70, 200 55 C 240 40, 280 110, 295 150 C 310 190, 260 230, 200 245 C 140 260, 100 190, 105 150"
+      stroke="url(#registerGrad)"
+      strokeWidth="2.5"
+      strokeDasharray="4 8"
       strokeLinecap="round"
-      className="animate-[crawl-trail_8s_linear_infinite]" 
+      className="animate-[crawl-trail_8s_linear_infinite]"
       fill="none"
     />
 
@@ -72,15 +72,15 @@ const RegisterIllustration = ({ isAr }: { isAr: boolean }) => (
     {/* Glowing Center Node */}
     <g className="animate-[scale-node_5s_ease-in-out_infinite]" style={{ transformOrigin: '200px 150px' }}>
       <circle cx="200" cy="150" r="35" fill="url(#registerGrad)" filter="url(#shadow)" />
-      
+
       {/* Seedling & Heart of Care symbol */}
-      <path 
-        d="M 200 162 C 182 147, 174 137, 174 128 C 174 118, 182 110, 192 110 C 197 110, 200 115, 200 120 C 200 115, 203 110, 208 110 C 218 110, 226 118, 226 128 C 226 137, 218 147, 200 162 Z" 
-        stroke="white" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
-        fill="rgba(255, 255, 255, 0.15)" 
+      <path
+        d="M 200 162 C 182 147, 174 137, 174 128 C 174 118, 182 110, 192 110 C 197 110, 200 115, 200 120 C 200 115, 203 110, 208 110 C 218 110, 226 118, 226 128 C 226 137, 218 147, 200 162 Z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="rgba(255, 255, 255, 0.15)"
       />
       {/* Sprout stem */}
       <path d="M 200 154 V 140" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
@@ -97,7 +97,7 @@ const RegisterIllustration = ({ isAr }: { isAr: boolean }) => (
       <path d="M 95 147 C 99 144, 103 146, 105 150 C 105 146, 109 144, 113 147 V 156 C 109 153, 105 155, 105 155 C 105 155, 101 153, 95 156 Z" stroke="#517565" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
       <path d="M 105 150 V 155" stroke="#517565" strokeWidth="1.5" />
     </g>
-    
+
     {/* Right Node: Engineering Tools (Drafting Compass) */}
     <g filter="url(#shadow)">
       <circle cx="295" cy="150" r="20" fill="white" stroke="#a4c3b2" strokeWidth="2" />
@@ -157,17 +157,17 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen bg-background-light overflow-hidden">
       {/* Decorative Brand Column - Hidden on mobile/tablet */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 xl:px-20 relative bg-gradient-to-br from-[#f6fff8] via-[#e8f5ed] to-[#f6fff8] border-e border-[#517565]/10 overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 xl:px-20 relative bg-linear-to-br from-[#f6fff8] via-[#e8f5ed] to-[#f6fff8] border-e border-primary/10 overflow-hidden">
         {/* Abstract Warm Background Gradients */}
-        <div className="absolute top-[-20%] start-[-20%] size-[60%] rounded-full bg-[#a4c3b2]/20 blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] end-[-10%] size-[50%] rounded-full bg-[#517565]/10 blur-[80px] pointer-events-none" />
-        
+        <div className="absolute top-[-20%] inset-s-[-20%] size-[60%] rounded-full bg-muted-teal/20 blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] inset-e-[-10%] size-[50%] rounded-full bg-primary/10 blur-[80px] pointer-events-none" />
+
         <div className="relative z-10 flex flex-col gap-6 max-w-lg">
-          <Link href="/" className="text-2xl font-black tracking-tight text-[#517565] w-fit hover:opacity-90 transition-opacity">
+          <Link href="/" className="text-2xl font-black tracking-tight text-primary w-fit hover:opacity-90 transition-opacity">
             UniCare
           </Link>
           <div className="flex flex-col gap-3 text-start items-start">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#517565] px-3 py-1 rounded-full bg-[#517565]/10">
+            <span className="text-xs font-bold uppercase tracking-widest text-primary px-3 py-1 rounded-full bg-primary/10">
               {isAr ? "تنمية روح التعاون" : "Student Collaboration Ecosystem"}
             </span>
             <h2 className={cn(
@@ -177,12 +177,12 @@ export default function RegisterPage() {
               {isAr ? "شارك مواردك، ساند زملائك، وحقّق أثرًا" : "Share Resources, Support Peers, and Create Impact"}
             </h2>
             <p className="text-neutral-600 text-base font-light leading-relaxed mt-2">
-              {isAr 
+              {isAr
                 ? "أنشئ حسابك الجامعي الموثوق الآن لتبدأ في عرض كتبك وأدواتك، أو استعارة وتلقي ما تحتاجه للفصل الدراسي الجديد بكل سهولة."
                 : "Create your student account to borrow, lend, or sell textbooks, calculators, and equipment with verified university peers."}
             </p>
           </div>
-          
+
           {/* Animated Abstract SVG Graphic */}
           <div className="w-full flex justify-center py-4">
             <RegisterIllustration isAr={isAr} />
@@ -191,14 +191,14 @@ export default function RegisterPage() {
       </div>
 
       {/* Form Column - centered on mobile, split-width on desktop */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 md:px-8 py-20 relative bg-[#f6fff8]/30">
-        <div className="absolute top-1/4 start-1/4 size-[120px] rounded-full bg-[#a4c3b2]/10 blur-[40px] pointer-events-none animate-pulse" />
-        <div className="absolute bottom-1/4 end-1/4 size-[160px] rounded-full bg-[#517565]/8 blur-[50px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
-        
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 md:px-8 py-20 pt-24 relative bg-[#f6fff8]/30">
+        <div className="absolute top-1/4 inset-s-1/4 size-30 rounded-full bg-muted-teal/10 blur-2xl pointer-events-none animate-pulse" />
+        <div className="absolute bottom-1/4 inset-e-1/4 size-40 rounded-full bg-primary/8 blur-[50px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
+
         <div className="relative z-10 w-full max-w-md">
           {/* Mobile logo header */}
           <div className="flex flex-col items-center mb-8 lg:hidden">
-            <Link href="/" className="text-3xl font-black tracking-tight text-[#517565] mb-2">
+            <Link href="/" className="text-3xl font-black tracking-tight text-primary mb-2">
               UniCare
             </Link>
             <p className="text-neutral-500 text-sm text-center">
