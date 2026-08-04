@@ -13,14 +13,10 @@ import { TransactionType, type ActiveTransaction } from "@/types/transactions";
 import TransactionStatusBadge from "@/components/transactions/TransactionStatusBadge";
 import UnifiedItemCard from "@/components/common/UnifiedItemCard";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import {
   MdReceiptLong,
   MdArrowForward,
-  MdSell,
-  MdAssignmentReturn,
   MdChevronRight,
-  MdChat,
   MdCheck,
   MdClose,
 } from "react-icons/md";

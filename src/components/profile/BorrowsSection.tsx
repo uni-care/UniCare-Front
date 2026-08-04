@@ -13,19 +13,14 @@ import { itemsApi } from "@/api/items-api";
 import { LoanSortBy, LoanStatus } from "@/types/loans";
 import type { BorrowItemResult } from "@/types/borrows";
 import {
-  MdChat,
   MdChevronRight,
-  MdOutlineCalendarMonth,
-  MdPerson,
   MdRefresh,
   MdArrowBack,
   MdArrowForward,
   MdUnfoldMore,
   MdArrowDownward,
   MdArrowUpward,
-  MdError,
-  MdWarning,
-  MdLoop
+  MdError
 } from "react-icons/md";
 import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";

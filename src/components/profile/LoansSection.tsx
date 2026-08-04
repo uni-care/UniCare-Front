@@ -12,10 +12,7 @@ import { itemsApi } from "@/api/items-api";
 import { transactionsApi } from "@/api/transactions-api";
 import { LoanSortBy, LoanStatus, type LoanItemResult } from "@/types/loans";
 import {
-  MdChat,
   MdChevronRight,
-  MdOutlineCalendarMonth,
-  MdPerson,
   MdRefresh,
   MdArrowBack,
   MdArrowForward,
@@ -23,8 +20,6 @@ import {
   MdArrowDownward,
   MdArrowUpward,
   MdError,
-  MdWarning,
-  MdLoop,
   MdCheck,
   MdClose
 } from "react-icons/md";

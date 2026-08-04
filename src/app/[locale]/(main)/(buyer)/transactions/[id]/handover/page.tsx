@@ -18,7 +18,6 @@ import {
     MdArrowForward,
     MdHourglassTop,
     MdRefresh,
-    MdTaskAlt,
     MdErrorOutline,
 } from "react-icons/md";
 import Image from "next/image";
