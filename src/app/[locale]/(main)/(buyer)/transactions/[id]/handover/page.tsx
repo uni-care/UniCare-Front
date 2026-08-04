@@ -128,22 +128,27 @@ export default function HandoverPage() {
                 setCounterpartName(nameCandidate);
             }
 
-            // Ensure distinct IDs for backend validation
-            const genForId = ownerId || (isOwner ? user.id : "00000000-0000-0000-0000-000000000001");
-            let verByUserId = requesterId || (!isOwner ? user.id : "00000000-0000-0000-0000-000000000002");
+            if (isOwner) {
+                // Ensure distinct IDs for backend validation
+                const genForId = ownerId || user.id;
+                let verByUserId = requesterId || "00000000-0000-0000-0000-000000000002";
 
-            if (genForId === verByUserId) {
-                verByUserId = "00000000-0000-0000-0000-000000000002";
+                if (genForId === verByUserId) {
+                    verByUserId = "00000000-0000-0000-0000-000000000002";
+                }
+
+                // Owner generates code FOR the Owner to be VERIFIED BY the Requester
+                const data = await transactionsApi.getCode(
+                    transactionId,
+                    genForId,
+                    verByUserId,
+                    token
+                );
+                setCode(data);
+            } else {
+                // Borrower does NOT generate code (so the Owner's generated PIN remains active)
+                setCode(null);
             }
-
-            // Always generate code FOR the Owner to be VERIFIED BY the Requester
-            const data = await transactionsApi.getCode(
-                transactionId,
-                genForId,
-                verByUserId,
-                token
-            );
-            setCode(data);
             setIsPendingApproval(false);
         } catch (error: any) {
             const errMsg = error?.response?.data?.error || error?.message || "";
@@ -206,6 +211,12 @@ export default function HandoverPage() {
         }
     };
 
+    const isOwner = transaction?.isOwner ?? (user?.id === transaction?.ownerId);
+    const partyName = counterpartName || (isOwner
+        ? (transaction?.requesterFullName || (isAr ? "المستعير" : "Borrower"))
+        : (transaction?.ownerFullName || (isAr ? "المالك" : "Owner")));
+    const partyInitials = partyName ? partyName.charAt(0).toUpperCase() : "U";
+
     return (
         <div className="bg-neutral-50 min-h-screen pt-28 pb-20 px-4 md:px-8">
             <div className="max-w-lg mx-auto flex flex-col gap-8">
@@ -231,7 +242,7 @@ export default function HandoverPage() {
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-16 gap-4">
                         <div className="size-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-                        <p className="text-neutral-500 font-medium">{isAr ? "جاري تحميل تفاصيل التسليم..." : "Loading handover code..."}</p>
+                        <p className="text-neutral-500 font-medium">{isAr ? "جاري تحميل تفاصيل التسليم..." : "Loading handover details..."}</p>
                     </div>
                 ) : isPendingApproval ? (
                     /* Pending Approval State */
@@ -289,77 +300,67 @@ export default function HandoverPage() {
                             {isAr ? <MdArrowBack className="text-sm" /> : <MdArrowForward className="text-sm" />}
                         </Link>
                     </div>
-                ) : code ? (
-                    /* QR + PIN View */
-                    <div className="flex flex-col gap-8">
-                        {(() => {
-                            const isOwner = transaction?.isOwner ?? (user?.id === transaction?.ownerId);
-                            const partyName = counterpartName || (isOwner
-                                ? (transaction?.requesterFullName || (isAr ? "المستعير" : "Borrower"))
-                                : (transaction?.ownerFullName || (isAr ? "المالك" : "Owner")));
-                            const partyInitials = partyName ? partyName.charAt(0).toUpperCase() : "U";
+                ) : isOwner ? (
+                    /* Owner View: Present QR + PIN Code to Borrower */
+                    code ? (
+                        <div className="flex flex-col gap-8">
+                            <HandoverCard
+                                code={code}
+                                itemTitle={transaction?.itemTitle || (isAr ? "المورد المطلوب" : "Resource Item")}
+                                otherPartyName={partyName}
+                                otherPartyInitials={partyInitials}
+                                isOwnerView={true}
+                                onRegenerate={handleRegenerate}
+                                isRegenerating={isRegenerating}
+                            />
 
-                            return (
-                                <>
-                                    <HandoverCard
-                                        code={code}
-                                        itemTitle={transaction?.itemTitle || (isAr ? "المورد المطلوب" : "Resource Item")}
-                                        otherPartyName={partyName}
-                                        otherPartyInitials={partyInitials}
-                                        isOwnerView={isOwner}
-                                        onRegenerate={handleRegenerate}
-                                        isRegenerating={isRegenerating}
-                                    />
-
-                                    {isOwner ? (
-                                        /* Owner View: Show clear presentation instructions with borrower name */
-                                        <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 text-center flex flex-col items-center gap-2">
-                                            <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                                                {isAr ? "تعليمات تسليم المالك" : "Owner Handover Instructions"}
-                                            </span>
-                                            <p className="text-neutral-700 text-sm leading-relaxed">
-                                                {isAr
-                                                    ? `أظهر هذا الرقم (PIN) أو رمز QR لـ ${partyName} عند تسليم المورد. سيقوم ${partyName} بإدخال الرمز على جهازه لتأكيد الاستلام.`
-                                                    : `Show this 6-digit PIN or QR code to ${partyName} during handover. ${partyName} will enter it on their device to confirm receipt.`}
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        /* Borrower View: Input PIN to verify receipt with owner name */
-                                        <div className="flex flex-col gap-6">
-                                            <div className="flex items-center gap-4">
-                                                <div className="flex-1 h-px bg-neutral-200" />
-                                                <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest">
-                                                    {isAr ? "إدخال رمز التحقق" : "Enter Verification PIN"}
-                                                </span>
-                                                <div className="flex-1 h-px bg-neutral-200" />
-                                            </div>
-
-                                            <div className="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
-                                                <p className="text-xs text-neutral-500 mb-4 text-center">
-                                                    {isAr
-                                                        ? `أدخل الرقم التأكيدي المكون من 6 أرقام الظاهر على شاشة ${partyName} لتأكيد استلام المورد:`
-                                                        : `Enter the 6-digit PIN shown on ${partyName}'s screen to confirm receipt:`}
-                                                </p>
-                                                <PinVerifyForm onVerify={handleVerify} isVerifying={isVerifying} />
-                                            </div>
-                                        </div>
-                                    )}
-                                </>
-                            );
-                        })()}
-                    </div>
+                            <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 text-center flex flex-col items-center gap-2">
+                                <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                                    {isAr ? "تعليمات تسليم المالك" : "Owner Handover Instructions"}
+                                </span>
+                                <p className="text-neutral-700 text-sm leading-relaxed">
+                                    {isAr
+                                        ? `أظهر هذا الرقم (PIN) أو رمز QR لـ ${partyName} عند تسليم المورد. سيقوم ${partyName} بإدخال الرمز على جهازه لتأكيد الاستلام.`
+                                        : `Show this 6-digit PIN or QR code to ${partyName} during handover. ${partyName} will enter it on their device to confirm receipt.`}
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        /* Error State for Owner */
+                        <div className="flex flex-col items-center text-center gap-4 py-10">
+                            <MdErrorOutline className="text-5xl text-neutral-300" />
+                            <p className="text-neutral-500 font-medium">{isAr ? "عذراً، تعذر تحميل رمز التسليم." : "Unable to load handover code."}</p>
+                            <button
+                                onClick={fetchCode}
+                                className="flex items-center gap-2 bg-primary/10 text-primary px-6 py-3 rounded-lg font-bold hover:bg-primary hover:text-white transition-all cursor-pointer"
+                            >
+                                <MdRefresh className="text-xl" />
+                                {isAr ? "إعادة المحاولة" : "Try Again"}
+                            </button>
+                        </div>
+                    )
                 ) : (
-                    /* Error State */
-                    <div className="flex flex-col items-center text-center gap-4 py-10">
-                        <MdErrorOutline className="text-5xl text-neutral-300" />
-                        <p className="text-neutral-500 font-medium">{isAr ? "عذراً، تعذر تحميل رمز التسليم." : "Unable to load handover code."}</p>
-                        <button
-                            onClick={fetchCode}
-                            className="flex items-center gap-2 bg-primary/10 text-primary px-6 py-3 rounded-lg font-bold hover:bg-primary hover:text-white transition-all cursor-pointer"
-                        >
-                            <MdRefresh className="text-xl" />
-                            {isAr ? "إعادة المحاولة" : "Try Again"}
-                        </button>
+                    /* Borrower View: Enter PIN shown on Owner's screen */
+                    <div className="flex flex-col gap-6">
+                        <div className="bg-white rounded-2xl border border-neutral-200 p-8 shadow-sm text-center flex flex-col items-center gap-6">
+                            <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center text-primary text-3xl font-black">
+                                🔑
+                            </div>
+                            <div className="space-y-2 max-w-sm">
+                                <h3 className="text-xl font-bold text-neutral-900">
+                                    {isAr ? "تأكيد استلام المورد" : "Confirm Item Receipt"}
+                                </h3>
+                                <p className="text-sm text-neutral-500 leading-relaxed">
+                                    {isAr
+                                        ? `أدخل الرقم التأكيدي المكون من 6 أرقام الظاهر على شاشة ${partyName} لتأكيد استلام المورد:`
+                                        : `Enter the 6-digit PIN shown on ${partyName}'s screen to confirm receipt:`}
+                                </p>
+                            </div>
+
+                            <div className="w-full max-w-xs pt-2">
+                                <PinVerifyForm onVerify={handleVerify} isVerifying={isVerifying} />
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
