@@ -474,10 +474,10 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
             return (
               <div
                 key={loan.transactionId}
-                className={cn("group border border-neutral-200 bg-white rounded-3xl p-5 hover:shadow-md hover:border-primary/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5", isAr ? "sm:flex-row-reverse text-right" : "")}
+                className="group border border-neutral-200 bg-white rounded-3xl p-5 hover:shadow-md hover:border-primary/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5"
               >
                 {/* Left: Item image & title */}
-                <div className={cn("flex items-center gap-4 min-w-0 flex-1", isAr ? "flex-row-reverse" : "")}>
+                <div className="flex items-center gap-4 min-w-0 flex-1">
                   <div className="relative h-16 w-16 overflow-hidden rounded-2xl bg-neutral-50 border border-neutral-150 flex items-center justify-center shrink-0">
                     {typeof itemDetail?.image === "string" && itemDetail.image.trim().length > 0 && (itemDetail.image.startsWith("http://") || itemDetail.image.startsWith("https://") || itemDetail.image.startsWith("/")) ? (
                       <Image src={itemDetail.image} alt={itemDetail.title} fill className="object-cover" />
@@ -490,7 +490,7 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
                       {itemDetail?.title || (isAr ? "جاري تحميل اسم العنصر..." : "Loading item title...")}
                     </h4>
                     {/* Borrower avatar & name */}
-                    <div className={cn("mt-1 flex items-center gap-2", isAr ? "flex-row-reverse" : "")}>
+                    <div className="mt-1 flex items-center gap-2">
                       <span className="flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 text-[9px] font-black text-neutral-700">
                         {initials || <MdPerson />}
                       </span>
@@ -502,20 +502,20 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
                 </div>
 
                 {/* Middle: Pricing & Dates */}
-                <div className={cn("flex flex-col gap-1 text-xs text-neutral-500 shrink-0", isAr ? "items-end text-right" : "")}>
+                <div className="flex flex-col gap-1 text-xs text-neutral-500 shrink-0">
                   {loan.agreedPrice > 0 && (
                     <span className="text-sm font-extrabold text-primary mb-0.5">
                       {isAr ? `${loan.agreedPrice} جنيه` : `EGP ${loan.agreedPrice}`}
                     </span>
                   )}
-                  <div className={cn("flex items-center gap-1", isAr ? "flex-row-reverse" : "")}>
+                  <div className="flex items-center gap-1">
                     <MdOutlineCalendarMonth className="text-neutral-400 text-[14px]" />
                     <span>
                       {isAr ? `تاريخ العرض: ${new Date(loan.loanedAt).toLocaleDateString()}` : `Shared: ${new Date(loan.loanedAt).toLocaleDateString()}`}
                     </span>
                   </div>
                   {loan.returnDueDate ? (
-                    <div className={cn(`flex items-center gap-1 font-medium ${loan.isOverdue ? "text-rose-600 font-bold" : ""}`, isAr ? "flex-row-reverse" : "")}>
+                    <div className={`flex items-center gap-1 font-medium ${loan.isOverdue ? "text-rose-600 font-bold" : ""}`}>
                       {loan.isOverdue ? (
                         <MdWarning className="text-[14px] leading-none text-rose-500" />
                       ) : (
@@ -532,7 +532,7 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
                 </div>
 
                 {/* Right: Status pill and Action buttons */}
-                <div className={cn("flex flex-row sm:flex-col items-center gap-3 shrink-0 justify-between sm:justify-start border-t border-neutral-100 sm:border-t-0 pt-3 sm:pt-0", isAr ? "sm:items-start" : "sm:items-end")}>
+                <div className="flex flex-row sm:flex-col items-center gap-3 shrink-0 justify-between sm:justify-start border-t border-neutral-100 sm:border-t-0 pt-3 sm:pt-0">
                   <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${badgeClass}`}>
                     {loan.statusLabel}
                   </span>
@@ -543,7 +543,6 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
                       onClick={() => handleChatWithBorrower(loan)}
                       disabled={isStartingChat === loan.transactionId}
                       title={isAr ? "محادثة المستعير" : "Chat with Borrower"}
-                      aria-label={isAr ? "محادثة المستعير" : "Chat with Borrower"}
                       className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-600 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-all cursor-pointer disabled:opacity-50"
                     >
                       {isStartingChat === loan.transactionId ? (
@@ -555,7 +554,7 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
 
                     {/* Approve / Decline controls for Pending requests */}
                     {loan.status === LoanStatus.PendingApproval ? (
-                      <div className={cn("flex items-center gap-1.5", isAr ? "flex-row-reverse" : "")}>
+                      <div className="flex items-center gap-1.5">
                         <button
                           type="button"
                           onClick={() => handleRespondToRequest(loan.transactionId, true)}

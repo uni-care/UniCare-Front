@@ -205,9 +205,9 @@ export default function ProfileTransactionsPage() {
               <Link
                 key={tx.transactionId}
                 href={`/transactions/${tx.transactionId}/handover`}
-                className={cn("group flex items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-4 transition-all hover:border-primary/30 hover:shadow-md", isAr ? "flex-row-reverse" : "")}
+                className="group flex items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-4 transition-all hover:border-primary/30 hover:shadow-md"
               >
-                <div className={cn("flex items-center gap-3.5", isAr ? "flex-row-reverse" : "")}>
+                <div className="flex items-center gap-3.5">
                   <div className="flex size-11 items-center justify-center rounded-full bg-primary/10 text-xl text-primary shrink-0">
                     {tx.type === TransactionType.Return ? (
                       <MdAssignmentReturn />
@@ -217,7 +217,7 @@ export default function ProfileTransactionsPage() {
                       <Image src="/Logo.svg" alt="UniCare" width={24} height={16} className="h-5 w-auto object-contain" />
                     )}
                   </div>
-                  <div className={cn("flex flex-col", isAr ? "text-right" : "")}>
+                  <div className="flex flex-col">
                     <span className="text-sm font-bold text-neutral-900 transition-colors group-hover:text-primary">
                       {displayTitle}
                     </span>
@@ -232,7 +232,7 @@ export default function ProfileTransactionsPage() {
                     )}
                   </div>
                 </div>
-                <div className={cn("flex items-center gap-3", isAr ? "flex-row-reverse" : "")}>
+                <div className="flex items-center gap-3">
                   <button
                     onClick={(e) => handleStartChat(e, tx)}
                     disabled={isChatLoading}
