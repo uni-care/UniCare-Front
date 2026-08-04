@@ -130,6 +130,27 @@ To display all user activity, the frontend is forced to execute 3 parallel API r
 1. Update `GetBorrowsQueryHandler` and `GetLoansQueryHandler` to query both `Transactions` and `Loans` tables directly in SQL.
 2. Implement true SQL-level status filtering (`WHERE Status = @Status`) and `OFFSET / FETCH NEXT` server-side pagination so a single clean endpoint (`GET /api/v1/borrows?status=1&pageNumber=1&pageSize=10`) satisfies all dashboard tab views.
 
+### Issue 6: Counterpart Name Metadata in Handover Code Endpoint (`GET /api/v1/transactions/{id}/code`)
+**Priority:** `P1 - High`
+
+#### Problem:
+When calling `GET /api/v1/transactions/{id}/code`, the response returns the handover token, PIN, type, and expiration, but omits the full names of the Issuer (`ownerFullName`) and Verifier (`requesterFullName`). The frontend currently has to perform fallback lookups across `loans` endpoints to display the borrower/owner's real name on the Handover page.
+
+#### Recommended Action:
+Include counterpart full names in `GenerateHandoverResult` DTO returned by `GET /api/v1/transactions/{id}/code`:
+```json
+{
+  "handoverId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "pin": "123456",
+  "type": 1,
+  "expiresAt": "2026-08-04T12:30:00Z",
+  "generatedForUserId": "e1b2c3d4-5678-90ab-cdef-1234567890ab",
+  "generatedForFullName": "Ahmed Hassan",
+  "verifiedByUserId": "f9e8d7c6-5432-10fe-dcba-0987654321ba",
+  "verifiedByFullName": "Sarah Mohamed"
+}
+```
+
 ---
 
 ## 3. SUMMARY ACTION TABLE FOR BACKEND TEAM
@@ -142,6 +163,7 @@ To display all user activity, the frontend is forced to execute 3 parallel API r
 | **P0** | `POST /api/v1/transactions` | Rejects `agreedPrice = 0` for free items. | Change `.GreaterThan(0)` to `.GreaterThanOrEqualTo(0)` in `CreateTransactionCommandValidator`. |
 | **P1** | `GET /api/v1/Items/{id}` | Null `ownerName` on item details. | Enforce user entity `JOIN` to always return valid owner name. |
 | **P1** | `GET /api/v1/borrows` & `GET /api/v1/loans` | Hybrid client-side filtering & missing pending requests. | Include pending transactions in SQL query and support true server-side status filtering & pagination. |
+| **P1** | `GET /api/v1/transactions/{id}/code` | Missing counterpart full names on handover card. | Include `generatedForFullName` and `verifiedByFullName` in `GenerateHandoverResult` response. |
 
 ---
 *Report created: August 4, 2026 — UniCare Frontend Engineering Team.*
