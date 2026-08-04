@@ -11,6 +11,7 @@ import { chatApi } from "@/api/chat-api";
 import { itemsApi } from "@/api/items-api";
 import { TransactionType, type ActiveTransaction } from "@/types/transactions";
 import TransactionStatusBadge from "@/components/transactions/TransactionStatusBadge";
+import UnifiedItemCard from "@/components/common/UnifiedItemCard";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import {
@@ -32,7 +33,7 @@ export default function ProfileTransactionsPage() {
 
   const [transactions, setTransactions] = useState<ActiveTransaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [itemsCache, setItemsCache] = useState<Record<string, string>>({});
+  const [itemsCache, setItemsCache] = useState<Record<string, { title: string; image: string }>>({});
   const [startingChatId, setStartingChatId] = useState<string | null>(null);
   const [respondingId, setRespondingId] = useState<string | null>(null);
 
@@ -61,7 +62,7 @@ export default function ProfileTransactionsPage() {
           const list = Array.from(map.values());
           setTransactions(list);
 
-          // Fetch missing item titles asynchronously
+          // Fetch missing item details asynchronously
           const missingItemIds = list
             .map((t) => t.itemId)
             .filter((id) => id && id.trim().length > 0);
@@ -70,13 +71,13 @@ export default function ProfileTransactionsPage() {
             Promise.allSettled(
               missingItemIds.map(async (id) => {
                 const item = await itemsApi.getById(id);
-                return { id, title: item.title };
+                return { id, title: item.title, image: item.imageUrls?.[0] || "" };
               })
             ).then((results) => {
-              const cache: Record<string, string> = {};
+              const cache: Record<string, { title: string; image: string }> = {};
               results.forEach((res) => {
                 if (res.status === "fulfilled" && res.value) {
-                  cache[res.value.id] = res.value.title;
+                  cache[res.value.id] = { title: res.value.title, image: res.value.image };
                 }
               });
               if (!cancelled) setItemsCache((prev) => ({ ...prev, ...cache }));
@@ -122,7 +123,7 @@ export default function ProfileTransactionsPage() {
     try {
       let ownerId = tx.ownerId || "";
       let requesterId = tx.requesterId || "";
-      let title = itemsCache[tx.itemId] || tx.itemTitle || getTypeLabel(tx.type);
+      let title = itemsCache[tx.itemId]?.title || tx.itemTitle || getTypeLabel(tx.type);
 
       if ((!ownerId || !requesterId) && tx.itemId) {
         try {
@@ -242,88 +243,67 @@ export default function ProfileTransactionsPage() {
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           {transactions.map((tx) => {
-            const displayTitle = itemsCache[tx.itemId] || tx.itemTitle || getTypeLabel(tx.type);
+            const itemCache = itemsCache[tx.itemId];
+            const displayTitle = itemCache?.title || tx.itemTitle || getTypeLabel(tx.type);
             const isChatLoading = startingChatId === tx.transactionId;
             const isPending = tx.status === 1 || String(tx.status).toLowerCase().includes("pending");
 
             return (
-              <Link
+              <UnifiedItemCard
                 key={tx.transactionId}
+                id={tx.transactionId}
+                title={displayTitle}
+                image={itemCache?.image}
+                counterpartName={tx.isOwner ? (isAr ? "أنت المالك" : "Owner (You)") : (isAr ? "أنت الطالب" : "Requester (You)")}
+                counterpartRole={tx.isOwner ? "owner" : "requester"}
+                agreedPrice={tx.agreedPrice}
+                dateLabel={isAr ? "تاريخ المعاملة" : "Date"}
+                dateValue={new Date(tx.createdAt).toLocaleDateString()}
+                statusBadge={<TransactionStatusBadge status={tx.status} />}
                 href={`/transactions/${tx.transactionId}/handover`}
-                className="group flex items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-4 transition-all hover:border-primary/30 hover:shadow-md"
-              >
-                <div className="flex items-center gap-3.5">
-                  <div className="flex size-11 items-center justify-center rounded-full bg-primary/10 text-xl text-primary shrink-0">
-                    {tx.type === TransactionType.Return ? (
-                      <MdAssignmentReturn />
-                    ) : tx.type === TransactionType.Sale ? (
-                      <MdSell />
-                    ) : (
-                      <Image src="/Logo.svg" alt="UniCare" width={24} height={16} className="h-5 w-auto object-contain" />
+                onChatClick={(e) => handleStartChat(e, tx)}
+                isChatLoading={isChatLoading}
+                isAr={isAr}
+                actions={
+                  <div className="flex items-center gap-2">
+                    {/* Approve / Decline Controls for Item Owner */}
+                    {tx.isOwner && isPending && (
+                      <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                        <button
+                          type="button"
+                          onClick={(e) => handleRespondToRequest(e, tx.transactionId, true)}
+                          disabled={respondingId === tx.transactionId}
+                          className="flex items-center gap-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          {respondingId === tx.transactionId ? (
+                            <div className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          ) : (
+                            <MdCheck className="text-sm" />
+                          )}
+                          {isAr ? "موافقة" : "Approve"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => handleRespondToRequest(e, tx.transactionId, false)}
+                          disabled={respondingId === tx.transactionId}
+                          className="flex items-center gap-1 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-1.5 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          <MdClose className="text-sm" /> {isAr ? "رفض" : "Decline"}
+                        </button>
+                      </div>
                     )}
+                    <Link
+                      href={`/transactions/${tx.transactionId}/handover`}
+                      className="flex items-center gap-1 rounded-full bg-primary/10 hover:bg-primary text-primary hover:text-white px-4 py-2 text-xs font-bold transition-all cursor-pointer"
+                    >
+                      <span>{isAr ? "التسليم" : "Handover"}</span>
+                      <MdChevronRight className={cn("text-[16px]", isAr ? "rotate-180" : "")} />
+                    </Link>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-bold text-neutral-900 transition-colors group-hover:text-primary">
-                      {displayTitle}
-                    </span>
-                    <span className="text-[11px] text-neutral-400">
-                      {tx.isOwner ? (isAr ? "أنت المالك" : "You are the owner") : (isAr ? "أنت الطالب" : "You are the requester")} •{" "}
-                      {new Date(tx.createdAt).toLocaleDateString()}
-                    </span>
-                    {tx.agreedPrice > 0 && (
-                      <span className="mt-0.5 text-xs font-bold text-primary">
-                        {isAr ? `${tx.agreedPrice} جنيه` : `EGP ${tx.agreedPrice}`}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={(e) => handleStartChat(e, tx)}
-                    disabled={isChatLoading}
-                    title={isAr ? "مراسلة" : "Open Chat"}
-                    className="flex size-9 items-center justify-center rounded-full bg-neutral-100 text-neutral-600 transition-all hover:bg-primary/15 hover:text-primary active:scale-95 disabled:opacity-50 cursor-pointer"
-                  >
-                    {isChatLoading ? (
-                      <div className="size-4 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
-                    ) : (
-                      <MdChat className="text-lg" />
-                    )}
-                  </button>
-
-                  {/* Approve / Decline Controls for Item Owner */}
-                  {tx.isOwner && isPending && (
-                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        type="button"
-                        onClick={(e) => handleRespondToRequest(e, tx.transactionId, true)}
-                        disabled={respondingId === tx.transactionId}
-                        className="flex items-center gap-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
-                      >
-                        {respondingId === tx.transactionId ? (
-                          <div className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        ) : (
-                          <MdCheck className="text-sm" />
-                        )}
-                        {isAr ? "موافقة" : "Approve"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => handleRespondToRequest(e, tx.transactionId, false)}
-                        disabled={respondingId === tx.transactionId}
-                        className="flex items-center gap-1 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-1.5 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
-                      >
-                        <MdClose className="text-sm" /> {isAr ? "رفض" : "Decline"}
-                      </button>
-                    </div>
-                  )}
-
-                  <TransactionStatusBadge status={tx.status} />
-                  <MdChevronRight className={cn("text-lg text-neutral-400 transition-colors group-hover:text-primary", isAr ? "rotate-180" : "")} />
-                </div>
-              </Link>
+                }
+              />
             );
           })}
         </div>
