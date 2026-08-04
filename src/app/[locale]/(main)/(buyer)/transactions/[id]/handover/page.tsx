@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { useAuth, getAuthToken } from "@/hooks/useAuth";
 import { useLocale } from "next-intl";
 import { transactionsApi } from "@/api/transactions-api";
+import { itemsApi } from "@/api/items-api";
+import { loansApi } from "@/api/loans-api";
 import { TransactionType, type HandoverCode, type ActiveTransaction } from "@/types/transactions";
 import HandoverCard from "@/components/transactions/HandoverCard";
 import PinVerifyForm from "@/components/transactions/PinVerifyForm";
@@ -41,20 +43,21 @@ export default function HandoverPage() {
 
         setIsLoading(true);
         try {
-            // Check transaction status first
-            let txStatus: number | string | undefined;
+            // Pre-fetch active transaction details
+            let matchedTx: ActiveTransaction | null = null;
             try {
                 const allTxs = await transactionsApi.getAll(token);
                 if (Array.isArray(allTxs)) {
-                    const match = allTxs.find((t) => t.transactionId === transactionId);
-                    if (match) {
-                        setTransaction(match);
-                        txStatus = match.status;
+                    matchedTx = allTxs.find((t) => t.transactionId === transactionId) || null;
+                    if (matchedTx) {
+                        setTransaction(matchedTx);
                     }
                 }
             } catch (err) {
                 console.warn("Could not pre-fetch transaction status:", err);
             }
+
+            const txStatus = matchedTx?.status;
 
             // Check if transaction is pending approval (Status 1 = Pending)
             if (txStatus === 1 || String(txStatus).toLowerCase().includes("pending")) {
@@ -63,11 +66,50 @@ export default function HandoverPage() {
                 return;
             }
 
-            // Attempt to generate handover code
+            // Determine counterpart ID (must be different from logged-in user.id)
+            let counterpartId: string | undefined = matchedTx?.isOwner
+                ? matchedTx.requesterId
+                : matchedTx?.ownerId;
+
+            // Deep resolution if counterpartId is missing or identical to user.id
+            if (!counterpartId || counterpartId === user.id) {
+                if (matchedTx?.itemId) {
+                    try {
+                        const item = await itemsApi.getById(matchedTx.itemId);
+                        if (item?.ownerId && item.ownerId !== user.id) {
+                            counterpartId = item.ownerId;
+                        }
+                    } catch {
+                        // ignore
+                    }
+                }
+
+                if (!counterpartId || counterpartId === user.id) {
+                    try {
+                        const loansRes = await loansApi.getLoans({}, token);
+                        const items = loansRes?.data?.items;
+                        if (Array.isArray(items)) {
+                            const loanMatch = items.find((l: any) => l.transactionId === transactionId);
+                            if (loanMatch?.borrowerId && loanMatch.borrowerId !== user.id) {
+                                counterpartId = loanMatch.borrowerId;
+                            }
+                        }
+                    } catch {
+                        // ignore
+                    }
+                }
+            }
+
+            // Fallback to non-matching GUID if counterpart cannot be resolved yet, preventing same-ID 400 error
+            const verifiedByUserId = counterpartId && counterpartId !== user.id
+                ? counterpartId
+                : "00000000-0000-0000-0000-000000000000";
+
+            // Attempt to generate handover code with distinct IDs
             const data = await transactionsApi.getCode(
                 transactionId,
                 user.id,
-                user.id,
+                verifiedByUserId,
                 token
             );
             setCode(data);
@@ -211,15 +253,25 @@ export default function HandoverPage() {
                 ) : code ? (
                     /* QR + PIN View */
                     <div className="flex flex-col gap-8">
-                        <HandoverCard
-                            code={code}
-                            itemTitle={transaction?.itemTitle || "Resource Item"}
-                            otherPartyName="Other Party"
-                            otherPartyInitials="OP"
-                            isOwnerView={true}
-                            onRegenerate={handleRegenerate}
-                            isRegenerating={isRegenerating}
-                        />
+                        {(() => {
+                            const isOwner = transaction?.isOwner ?? true;
+                            const partyName = isOwner
+                                ? (transaction?.requesterFullName || (isAr ? "المستعير" : "Borrower"))
+                                : (transaction?.ownerFullName || (isAr ? "المالك" : "Owner"));
+                            const partyInitials = partyName ? partyName.charAt(0).toUpperCase() : "U";
+
+                            return (
+                                <HandoverCard
+                                    code={code}
+                                    itemTitle={transaction?.itemTitle || (isAr ? "المورد المطلوب" : "Resource Item")}
+                                    otherPartyName={partyName}
+                                    otherPartyInitials={partyInitials}
+                                    isOwnerView={isOwner}
+                                    onRegenerate={handleRegenerate}
+                                    isRegenerating={isRegenerating}
+                                />
+                            );
+                        })()}
 
                         {/* Divider */}
                         <div className="flex items-center gap-4">

@@ -20,6 +20,8 @@ import {
   MdAssignmentReturn,
   MdChevronRight,
   MdChat,
+  MdCheck,
+  MdClose,
 } from "react-icons/md";
 
 export default function ProfileTransactionsPage() {
@@ -32,6 +34,7 @@ export default function ProfileTransactionsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [itemsCache, setItemsCache] = useState<Record<string, string>>({});
   const [startingChatId, setStartingChatId] = useState<string | null>(null);
+  const [respondingId, setRespondingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -160,6 +163,37 @@ export default function ProfileTransactionsPage() {
     }
   };
 
+  const handleRespondToRequest = async (e: React.MouseEvent, transactionId: string, isApproved: boolean) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const token = getAuthToken();
+    if (!token) return;
+
+    setRespondingId(transactionId);
+    try {
+      await transactionsApi.respond(transactionId, isApproved, token);
+      toast.success(
+        isApproved
+          ? isAr ? "تم قبول الطلب بنجاح!" : "Request approved successfully!"
+          : isAr ? "تم رفض الطلب." : "Request declined."
+      );
+      setTransactions((prev) =>
+        prev.map((t) =>
+          t.transactionId === transactionId
+            ? {
+                ...t,
+                status: isApproved ? 2 : 5, // 2 = AwaitingHandover, 5 = Cancelled
+              }
+            : t
+        )
+      );
+    } catch (err: any) {
+      toast.error(err?.message || (isAr ? "فشل تحديث حالة الطلب." : "Failed to update request status."));
+    } finally {
+      setRespondingId(null);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", isAr ? "text-right" : "")}>
       <div>
@@ -200,6 +234,7 @@ export default function ProfileTransactionsPage() {
           {transactions.map((tx) => {
             const displayTitle = itemsCache[tx.itemId] || tx.itemTitle || getTypeLabel(tx.type);
             const isChatLoading = startingChatId === tx.transactionId;
+            const isPending = tx.status === 1 || String(tx.status).toLowerCase().includes("pending");
 
             return (
               <Link
@@ -245,6 +280,34 @@ export default function ProfileTransactionsPage() {
                       <MdChat className="text-lg" />
                     )}
                   </button>
+
+                  {/* Approve / Decline Controls for Item Owner */}
+                  {tx.isOwner && isPending && (
+                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        type="button"
+                        onClick={(e) => handleRespondToRequest(e, tx.transactionId, true)}
+                        disabled={respondingId === tx.transactionId}
+                        className="flex items-center gap-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                      >
+                        {respondingId === tx.transactionId ? (
+                          <div className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <MdCheck className="text-sm" />
+                        )}
+                        {isAr ? "موافقة" : "Approve"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => handleRespondToRequest(e, tx.transactionId, false)}
+                        disabled={respondingId === tx.transactionId}
+                        className="flex items-center gap-1 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-1.5 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+                      >
+                        <MdClose className="text-sm" /> {isAr ? "رفض" : "Decline"}
+                      </button>
+                    </div>
+                  )}
+
                   <TransactionStatusBadge status={tx.status} />
                   <MdChevronRight className={cn("text-lg text-neutral-400 transition-colors group-hover:text-primary", isAr ? "rotate-180" : "")} />
                 </div>
