@@ -179,6 +179,13 @@ export default function ChatPageClient() {
             return previous;
           }
 
+          const exists = previous.messages.some(
+            (entry) => entry.messageId === newMessage.messageId
+          );
+          if (exists) {
+            return previous;
+          }
+
           return {
             ...previous,
             messages: [...previous.messages, newMessage],
@@ -252,7 +259,7 @@ export default function ChatPageClient() {
               const isMine = entry.senderId === user?.id;
               const messageKey =
                 entry.messageId && entry.messageId.trim().length > 0
-                  ? entry.messageId
+                  ? `${entry.messageId}-${index}`
                   : `${entry.senderId}-${entry.sentAt}-${index}`;
               return (
                 <div
