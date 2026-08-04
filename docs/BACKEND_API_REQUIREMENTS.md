@@ -91,6 +91,30 @@ Update `GetItemByIdQueryHandler` to perform a SQL `JOIN` or EF Core `.Include(x 
 
 ---
 
+### Issue 4: Validation Rejection for Free Items (`AgreedPrice = 0`) in `POST /api/v1/transactions`
+**Priority:** `P0 - Critical`
+
+#### Problem:
+In `CreateTransactionCommandValidator.cs`, the FluentValidation rule is currently set to:
+```csharp
+RuleFor(x => x.AgreedPrice)
+    .GreaterThan(0).WithMessage("AgreedPrice must be greater than zero.");
+```
+This forces free resource requests (`agreedPrice = 0`) to fail validation with a `400 Bad Request`. As a client-side workaround, the frontend was forced to pass `agreedPrice = 1` for free items.
+
+#### Negative Side-Effects of sending `1` instead of `0`:
+1. **Misleading UI & Receipts:** Free items display price as `1 EGP` / `1 جنيه` instead of `Free` / `مجاني` on receipts and handover verification screens.
+2. **Distorted Financial Reports:** System totals, user borrowing stats, and transaction ledgers miscalculate free peer-to-peer exchanges as paid transactions.
+
+#### Recommended Action:
+Update `CreateTransactionCommandValidator.cs` to allow zero:
+```csharp
+RuleFor(x => x.AgreedPrice)
+    .GreaterThanOrEqualTo(0).WithMessage("AgreedPrice cannot be negative.");
+```
+
+---
+
 ## 3. SUMMARY ACTION TABLE FOR BACKEND TEAM
 
 | Priority | Endpoint | Gap / Description | Required Action |
@@ -98,6 +122,7 @@ Update `GetItemByIdQueryHandler` to perform a SQL `JOIN` or EF Core `.Include(x 
 | **P0** | `GET /api/v1/transactions/all` | Missing user profile IDs & names. | Include `ownerId`, `ownerFullName`, `requesterId`, `requesterFullName`, `itemTitle`, and `chatId`. |
 | **P0** | `GET /api/v1/transactions/active` | Missing user profile IDs & names. | Include `ownerId`, `ownerFullName`, `requesterId`, `requesterFullName`, `itemTitle`, and `chatId`. |
 | **P0** | `POST /api/v1/chats/for-transaction` | Fails with 400 when body lacks `ownerId`. | Infer `ownerId` & `requesterId` from DB transaction entity server-side. |
+| **P0** | `POST /api/v1/transactions` | Rejects `agreedPrice = 0` for free items. | Change `.GreaterThan(0)` to `.GreaterThanOrEqualTo(0)` in `CreateTransactionCommandValidator`. |
 | **P1** | `GET /api/v1/Items/{id}` | Null `ownerName` on item details. | Enforce user entity `JOIN` to always return valid owner name. |
 
 ---
