@@ -33,3 +33,12 @@ export interface SendMessagePayload {
   senderId: string;
   body: string;
 }
+
+export interface ChatSummary {
+  chatId: string;
+  transactionId: string;
+  otherUserId: string;
+  lastMessageBody?: string;
+  lastMessageAt?: string;
+  unreadCount: number;
+}

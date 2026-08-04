@@ -5,6 +5,7 @@ import type {
   CreateChatPayload,
   CreateChatResponse,
   SendMessagePayload,
+  ChatSummary,
 } from "@/types/chat";
 
 const CHAT_ENDPOINTS = {
@@ -110,6 +111,22 @@ const normalizeSentMessage = (rawData: unknown): ConversationMessage => {
 };
 
 export const chatApi = {
+  getUserChats: async (): Promise<ChatSummary[]> => {
+    const { data } = await axiosInstance.get<unknown>(CHAT_ENDPOINTS.root);
+    const root = asRecord(data);
+    const list = asArray(root.data ?? root.value ?? root);
+    return list.map((item) => {
+      const rec = asRecord(item);
+      return {
+        chatId: String(rec.chatId ?? rec.ChatId ?? rec.id ?? rec.Id ?? ""),
+        transactionId: String(rec.transactionId ?? rec.TransactionId ?? ""),
+        otherUserId: String(rec.otherUserId ?? rec.OtherUserId ?? ""),
+        lastMessageBody: String(rec.lastMessageBody ?? rec.LastMessageBody ?? ""),
+        lastMessageAt: String(rec.lastMessageAt ?? rec.LastMessageAt ?? ""),
+        unreadCount: Number(rec.unreadCount ?? rec.UnreadCount ?? 0),
+      };
+    });
+  },
   getOrCreateForTransaction: async (payload: CreateChatPayload): Promise<CreateChatResponse> => {
     const { data } = await axiosInstance.post<unknown>(CHAT_ENDPOINTS.forTransaction, payload);
     const chatId = pickChatId(data);

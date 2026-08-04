@@ -9,6 +9,7 @@ import { useLocale } from "next-intl";
 import { transactionsApi } from "@/api/transactions-api";
 import { itemsApi } from "@/api/items-api";
 import { loansApi } from "@/api/loans-api";
+import { chatApi } from "@/api/chat-api";
 import { TransactionType, type HandoverCode, type ActiveTransaction } from "@/types/transactions";
 import HandoverCard from "@/components/transactions/HandoverCard";
 import PinVerifyForm from "@/components/transactions/PinVerifyForm";
@@ -128,20 +129,28 @@ export default function HandoverPage() {
                 setCounterpartName(nameCandidate);
             }
 
-            if (isOwner) {
-                // Ensure distinct IDs for backend validation
-                const genForId = ownerId || user.id;
-                let verByUserId = requesterId || "00000000-0000-0000-0000-000000000002";
-
-                if (genForId === verByUserId) {
-                    verByUserId = "00000000-0000-0000-0000-000000000002";
+            // If current user is owner and requesterId is missing, resolve real requesterId via existing user chat thread
+            if (isOwner && !requesterId) {
+                try {
+                    const userChats = await chatApi.getUserChats();
+                    const chatMatch = userChats.find((c) => c.transactionId === transactionId);
+                    if (chatMatch?.chatId) {
+                        const conv = await chatApi.getConversation(chatMatch.chatId, user.id);
+                        if (conv.requesterId && conv.requesterId !== user.id) {
+                            requesterId = conv.requesterId;
+                        }
+                    }
+                } catch {
+                    // ignore
                 }
+            }
 
-                // Owner generates code FOR the Owner to be VERIFIED BY the Requester
+            if (isOwner) {
+                // Owner generates code with real OwnerId and resolved RequesterId
                 const data = await transactionsApi.getCode(
                     transactionId,
-                    genForId,
-                    verByUserId,
+                    user.id,
+                    requesterId || user.id,
                     token
                 );
                 setCode(data);

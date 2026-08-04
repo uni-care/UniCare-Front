@@ -141,6 +141,18 @@ export default function ProfileTransactionsPage() {
         }
       }
 
+      // 1. Try to find an existing chat thread for this transaction first
+      try {
+        const existingChats = await chatApi.getUserChats();
+        const match = existingChats.find((c) => c.transactionId === tx.transactionId);
+        if (match?.chatId) {
+          router.push(`/chat?chatId=${match.chatId}&itemTitle=${encodeURIComponent(title)}`);
+          return;
+        }
+      } catch {
+        // ignore and fallback to create
+      }
+
       if (!tx.isOwner && !requesterId) requesterId = user.id;
       if (tx.isOwner && !ownerId) ownerId = user.id;
 
