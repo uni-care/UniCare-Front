@@ -115,6 +115,23 @@ RuleFor(x => x.AgreedPrice)
 
 ---
 
+### Issue 5: Unified Querying & Server-Side Status Filtering in `GET /api/v1/borrows` & `GET /api/v1/loans`
+**Priority:** `P1 - High`
+
+#### Problem:
+Currently, `GET /api/v1/borrows` and `GET /api/v1/loans` only return active or completed loan entities and omit pending transaction requests (`PendingApproval`). 
+To display all user activity, the frontend is forced to execute 3 parallel API requests (`borrows` + `transactions/active` + `transactions/all`), merge the arrays in client memory, and perform client-side filtering (`.filter(...)`) and pagination (`.slice(...)`).
+
+#### Negative Side-Effects of Client-Side Hybrid Filtering:
+1. **Inaccurate Server-Side Pagination:** When filtering on the client after fetching `pageSize = 10`, a filter tab may only display 2 items on Page 1 instead of a full page of 10 items.
+2. **Excess Network Traffic:** The frontend must download all historical user transactions for every tab or status filter change.
+
+#### Recommended Action:
+1. Update `GetBorrowsQueryHandler` and `GetLoansQueryHandler` to query both `Transactions` and `Loans` tables directly in SQL.
+2. Implement true SQL-level status filtering (`WHERE Status = @Status`) and `OFFSET / FETCH NEXT` server-side pagination so a single clean endpoint (`GET /api/v1/borrows?status=1&pageNumber=1&pageSize=10`) satisfies all dashboard tab views.
+
+---
+
 ## 3. SUMMARY ACTION TABLE FOR BACKEND TEAM
 
 | Priority | Endpoint | Gap / Description | Required Action |
@@ -124,6 +141,7 @@ RuleFor(x => x.AgreedPrice)
 | **P0** | `POST /api/v1/chats/for-transaction` | Fails with 400 when body lacks `ownerId`. | Infer `ownerId` & `requesterId` from DB transaction entity server-side. |
 | **P0** | `POST /api/v1/transactions` | Rejects `agreedPrice = 0` for free items. | Change `.GreaterThan(0)` to `.GreaterThanOrEqualTo(0)` in `CreateTransactionCommandValidator`. |
 | **P1** | `GET /api/v1/Items/{id}` | Null `ownerName` on item details. | Enforce user entity `JOIN` to always return valid owner name. |
+| **P1** | `GET /api/v1/borrows` & `GET /api/v1/loans` | Hybrid client-side filtering & missing pending requests. | Include pending transactions in SQL query and support true server-side status filtering & pagination. |
 
 ---
 *Report created: August 4, 2026 — UniCare Frontend Engineering Team.*
