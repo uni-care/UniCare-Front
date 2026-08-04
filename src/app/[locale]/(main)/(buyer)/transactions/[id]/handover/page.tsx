@@ -66,50 +66,72 @@ export default function HandoverPage() {
                 return;
             }
 
-            // Determine counterpart ID (must be different from logged-in user.id)
-            let counterpartId: string | undefined = matchedTx?.isOwner
-                ? matchedTx.requesterId
-                : matchedTx?.ownerId;
+            // Check if handover has already been verified & completed (Status 3 = Active, Status 4 = Completed)
+            if (
+                txStatus === 3 ||
+                txStatus === 4 ||
+                String(txStatus).toLowerCase().includes("active") ||
+                String(txStatus).toLowerCase().includes("completed")
+            ) {
+                setVerified(true);
+                setIsLoading(false);
+                return;
+            }
 
-            // Deep resolution if counterpartId is missing or identical to user.id
-            if (!counterpartId || counterpartId === user.id) {
-                if (matchedTx?.itemId) {
-                    try {
-                        const item = await itemsApi.getById(matchedTx.itemId);
-                        if (item?.ownerId && item.ownerId !== user.id) {
-                            counterpartId = item.ownerId;
-                        }
-                    } catch {
-                        // ignore
-                    }
-                }
+            // Resolve Owner ID & Requester ID
+            let ownerId = matchedTx?.ownerId;
+            let requesterId = matchedTx?.requesterId;
 
-                if (!counterpartId || counterpartId === user.id) {
-                    try {
-                        const loansRes = await loansApi.getLoans({}, token);
-                        const items = loansRes?.data?.items;
-                        if (Array.isArray(items)) {
-                            const loanMatch = items.find((l: any) => l.transactionId === transactionId);
-                            if (loanMatch?.borrowerId && loanMatch.borrowerId !== user.id) {
-                                counterpartId = loanMatch.borrowerId;
-                            }
-                        }
-                    } catch {
-                        // ignore
+            // Fetch item details if ownerId is missing
+            if (!ownerId && matchedTx?.itemId) {
+                try {
+                    const item = await itemsApi.getById(matchedTx.itemId);
+                    if (item?.ownerId) {
+                        ownerId = item.ownerId;
                     }
+                } catch {
+                    // ignore
                 }
             }
 
-            // Fallback to non-matching GUID if counterpart cannot be resolved yet, preventing same-ID 400 error
-            const verifiedByUserId = counterpartId && counterpartId !== user.id
-                ? counterpartId
-                : "00000000-0000-0000-0000-000000000000";
+            // Determine if current user is owner
+            const isOwner = user.id === ownerId || (matchedTx ? matchedTx.isOwner : false);
 
-            // Attempt to generate handover code with distinct IDs
+            if (isOwner) {
+                ownerId = user.id;
+            } else {
+                requesterId = user.id;
+            }
+
+            // If current user is owner and requesterId is missing, resolve from loans list
+            if (isOwner && !requesterId) {
+                try {
+                    const loansRes = await loansApi.getLoans({}, token);
+                    const items = loansRes?.data?.items;
+                    if (Array.isArray(items)) {
+                        const loanMatch = items.find((l: any) => l.transactionId === transactionId);
+                        if (loanMatch?.borrowerId) {
+                            requesterId = loanMatch.borrowerId;
+                        }
+                    }
+                } catch {
+                    // ignore
+                }
+            }
+
+            // Ensure distinct IDs for backend validation
+            const genForId = ownerId || (isOwner ? user.id : "00000000-0000-0000-0000-000000000001");
+            let verByUserId = requesterId || (!isOwner ? user.id : "00000000-0000-0000-0000-000000000002");
+
+            if (genForId === verByUserId) {
+                verByUserId = "00000000-0000-0000-0000-000000000002";
+            }
+
+            // Always generate code FOR the Owner to be VERIFIED BY the Requester
             const data = await transactionsApi.getCode(
                 transactionId,
-                user.id,
-                verifiedByUserId,
+                genForId,
+                verByUserId,
                 token
             );
             setCode(data);
@@ -160,8 +182,16 @@ export default function HandoverPage() {
                 toast.error(result.message || (isAr ? "فشل التحقق." : "Verification failed."));
             }
         } catch (error: any) {
-            const message = error?.response?.data?.error || error?.message || (isAr ? "فشل التحقق." : "Verification failed.");
-            toast.error(message);
+            const rawMessage = error?.response?.data?.error || error?.message || "";
+            if (rawMessage.toLowerCase().includes("not authorized") || rawMessage.toLowerCase().includes("unauthorized")) {
+                toast.error(
+                    isAr
+                        ? "هذا الرمز مخصص للعرض للطرف الآخر! يجب على الطرف الآخر إدخال الرمز من حسابه لتأكيد الاستلام."
+                        : "This code is generated for you to show to the other party! The other party must enter it on their device to confirm."
+                );
+            } else {
+                toast.error(rawMessage || (isAr ? "فشل التحقق." : "Verification failed."));
+            }
         } finally {
             setIsVerifying(false);
         }
