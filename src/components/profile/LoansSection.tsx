@@ -121,7 +121,7 @@ export default function LoansSection({ userId, isActive }: LoansSectionProps) {
 
     setIsStartingChat(loan.transactionId);
     try {
-      let borrowerId = loan.borrowerId;
+      const borrowerId = loan.borrowerId;
       let itemTitle = itemsCache[loan.itemId]?.title || itemsCache[loan.transactionId]?.title;
 
       if (!borrowerId && loan.itemId) {
